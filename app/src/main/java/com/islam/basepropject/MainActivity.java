@@ -1,45 +1,21 @@
 package com.islam.basepropject;
 
-import android.os.Bundle;
-
-import com.islam.basepropject.project_base.base.BaseViewModel;
 import com.islam.basepropject.project_base.base.POJO.NavigationType;
-import com.islam.basepropject.project_base.base.activities.BaseDrawerActivity;
+import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity;
 
-public class MainActivity extends BaseDrawerActivity<MainActivity.ViewModel> {
+public class MainActivity extends BaseNavigationActivity {
 
 
     @Override
     public void onLaunch() {
-        initNavigationDrawer(new Class[]{Fragment1.class, Fragment2.class, Fragment4.class},
+        initNavigation(new Class[]{Fragment1.class, Fragment2.class, Fragment4.class},
                 new int[]{R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow},
                 NavigationType.DrawerNavigation);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_main2;
+        return R.layout.activity_main;
     }
 
-    @Override
-    public Class<ViewModel> getViewModel() {
-        return ViewModel.class;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState, ViewModel viewModel) {
-
-
-    }
-
-
-    public static class ViewModel extends BaseViewModel {
-
-
-        public ViewModel() {
-            super();
-        }
-
-
-    }
 }

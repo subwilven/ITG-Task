@@ -24,16 +24,10 @@ import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
 
 import io.reactivex.functions.Consumer;
 
-public abstract class BaseActivity<V extends BaseViewModel> extends AppCompatActivity
+public abstract class BaseActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    private V mViewModel;
-
     public abstract int getLayoutId();
-
-    public abstract Class<V> getViewModel();
-
-    protected abstract void onCreate(Bundle savedInstanceState, V viewModel);
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -56,8 +50,6 @@ public abstract class BaseActivity<V extends BaseViewModel> extends AppCompatAct
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        mViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(getViewModel());
-        onCreate(savedInstanceState, mViewModel);
     }
 
 

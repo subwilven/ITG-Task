@@ -11,25 +11,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.BaseViewModel;
 import com.islam.basepropject.project_base.base.POJO.NavigationType;
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class BaseDrawerActivity<V extends BaseViewModel> extends BaseActivity<V> implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public abstract class BaseNavigationActivity extends BaseActivity {
 
 
     private NavigationType navigationType;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    private NavigationView navigationView;
+    private NavigationView drawerNavigationView;
     private BottomNavigationView bottomNavigationView;
     private List<Class<?>> fragmentsClassesList;
     private int[] menuItemIds;
@@ -44,7 +42,7 @@ public abstract class BaseDrawerActivity<V extends BaseViewModel> extends BaseAc
         }
     };
 
-    public void initNavigationDrawer(Class<?>[] fragmentsClasses, int[] menuItemIds, NavigationType navigationType) {
+    public void initNavigation(Class<?>[] fragmentsClasses, int[] menuItemIds, NavigationType navigationType) {
         this.fragmentsClassesList = Arrays.asList(fragmentsClasses);
         this.menuItemIds = menuItemIds;
         this.navigationType = navigationType;
@@ -52,6 +50,7 @@ public abstract class BaseDrawerActivity<V extends BaseViewModel> extends BaseAc
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        onLaunch();
         super.onCreate(savedInstanceState);
 
 
@@ -60,25 +59,26 @@ public abstract class BaseDrawerActivity<V extends BaseViewModel> extends BaseAc
         }
 
         if (navigationType == NavigationType.BottomNavigation)
-            setUpBottomNavigation();
+            setUpBottomNavigation(savedInstanceState);
         else if (navigationType == NavigationType.DrawerNavigation)
-            setUpNavigationDrawer();
+            setUpNavigationDrawer(savedInstanceState);
+
+    }
+
+    private void setUpBottomNavigation(Bundle savedInstanceState) {
+        bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(onBottomNavigationItemSelectedListener);
 
         //launch the frist fragment for the frist time
         if (savedInstanceState == null) {
-            navigationView.setCheckedItem(menuItemIds[0]);
-            onNavigationItemSelected(navigationView.getMenu().getItem(0));
+            bottomNavigationView.setSelectedItemId(menuItemIds[0]);
+            onBottomNavigationItemSelectedListener
+                    .onNavigationItemSelected(bottomNavigationView.getMenu().getItem(0));
         }
-
-    }
-
-    private void setUpBottomNavigation() {
-        //bottomNavigationView = findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
 
-    private void setUpNavigationDrawer() {
+    private void setUpNavigationDrawer(Bundle savedInstanceState) {
 
         drawer = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -88,29 +88,47 @@ public abstract class BaseDrawerActivity<V extends BaseViewModel> extends BaseAc
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        drawerNavigationView = findViewById(R.id.nav_view);
+        drawerNavigationView.setNavigationItemSelectedListener(onDrawerNavigationItemSelectedListener);
+
+        //launch the frist fragment for the frist time
+        if (savedInstanceState == null) {
+            drawerNavigationView.setCheckedItem(menuItemIds[0]);
+            onDrawerNavigationItemSelectedListener
+                    .onNavigationItemSelected(drawerNavigationView.getMenu().getItem(0));
+        }
     }
 
     @Override
     public void enableBackButton(boolean enableBackButton) {
 
-        if (enableBackButton) {
-            toggle.setDrawerIndicatorEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toggle.setToolbarNavigationClickListener(v -> onBackPressed());
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            toggle.setDrawerIndicatorEnabled(true);
-            toggle.setToolbarNavigationClickListener(null);
-            toggle.syncState();
-        }
+        if (navigationType == NavigationType.DrawerNavigation)
+            if (enableBackButton) {
+                toggle.setDrawerIndicatorEnabled(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                toggle.setToolbarNavigationClickListener(v -> onBackPressed());
+            } else {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                toggle.setDrawerIndicatorEnabled(true);
+                toggle.setToolbarNavigationClickListener(null);
+                toggle.syncState();
+            }
+
     }
 
+    NavigationView.OnNavigationItemSelectedListener
+            onDrawerNavigationItemSelectedListener = this::onItemSelected;
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    BottomNavigationView.OnNavigationItemSelectedListener
+            onBottomNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            return BaseNavigationActivity.this.onItemSelected(item);
+        }
+    };
+
+    public boolean onItemSelected(@NonNull MenuItem item) {
 
         Class<?> fragmentClass = null;
         int newFragmentIndex = -1;
@@ -149,12 +167,19 @@ public abstract class BaseDrawerActivity<V extends BaseViewModel> extends BaseAc
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (isDrawerFragment()) {// if any fragment of the drawer fragment active make the frist one active
-            navigationView.setCheckedItem(menuItemIds[0]);
-            onNavigationItemSelected(navigationView.getMenu().getItem(0));
+            if (navigationType == NavigationType.DrawerNavigation) {
+                drawerNavigationView.setCheckedItem(menuItemIds[0]);
+                onDrawerNavigationItemSelectedListener
+                        .onNavigationItemSelected(drawerNavigationView.getMenu().getItem(0));
+            } else if (navigationType == NavigationType.BottomNavigation) {
+                bottomNavigationView.setSelectedItemId(menuItemIds[0]);
+                onBottomNavigationItemSelectedListener
+                        .onNavigationItemSelected(bottomNavigationView.getMenu().getItem(0));
+            }
         } else {
             super.onBackPressed();
         }

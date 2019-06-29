@@ -10,9 +10,13 @@ import com.islam.basepropject.R;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
-    public BaseViewHolder(ViewGroup viewGroup,int layoutId) {
-        super(LayoutInflater.from(viewGroup.getContext()).inflate(layoutId,viewGroup,false));
+    public BaseViewHolder(ViewGroup viewGroup, int layoutId) {
+        super(LayoutInflater.from(viewGroup.getContext()).inflate(layoutId, viewGroup, false));
     }
 
     public abstract void onBind(T item);
+
+    public View getItemView() {
+        return itemView;
+    }
 }

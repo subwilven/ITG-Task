@@ -30,9 +30,6 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
 
-        if (modelClass.isAssignableFrom(MainActivity.ViewModel.class)) {
-            return (T) new MainActivity.ViewModel();
-        }
         if (modelClass.isAssignableFrom(Fragment1.ViewModel.class)) {
             return (T) new Fragment1.ViewModel();
         }

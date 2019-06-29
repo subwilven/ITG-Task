@@ -25,4 +25,7 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="server_cannot_be_reached">Server cannot be reached</string>
     <string name="please_try_again_later">Please try again later</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

@@ -45,7 +45,8 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
 
     protected abstract void setUpObservers();
 
-    protected void onRetry() {}
+    protected void onRetry() {
+    }
 
 
     protected void initContentView(int layoutId) {
@@ -103,7 +104,7 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
 
     @Override
     public final View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mSavedInstanceState =savedInstanceState;
+        mSavedInstanceState = savedInstanceState;
         return inflater.inflate(layoutId, container, false);
     }
 
@@ -114,7 +115,8 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
         view.setFocusableInTouchMode(true);
         view.requestFocus();
 
-        setUpToolbar();
+        if (getParentFragment() == null)
+            setUpToolbar();
         observeDefaults();
         onViewCreated(view, mViewModel, savedInstanceState);
     }
@@ -241,7 +243,7 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
         return mViewModel;
     }
 
-    public Bundle getSavedInstanceState(    ){
+    public Bundle getSavedInstanceState() {
         return mSavedInstanceState;
     }
 
