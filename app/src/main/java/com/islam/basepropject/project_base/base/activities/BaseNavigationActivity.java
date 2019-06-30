@@ -33,7 +33,7 @@ public abstract class BaseNavigationActivity extends BaseActivity {
     private int[] menuItemIds;
     private int currentFragmentIndex = -1;
 
-    public abstract void onLaunch();
+
 
     Handler closeDrawerHandler = new Handler();
     final Runnable r = new Runnable() {
@@ -50,7 +50,6 @@ public abstract class BaseNavigationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        onLaunch();
         super.onCreate(savedInstanceState);
 
 

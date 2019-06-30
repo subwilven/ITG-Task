@@ -28,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     public abstract int getLayoutId();
-
+    public abstract void onLaunch();
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocalManager.updateResources(newBase, LocalManager.getLanguage(newBase)));
@@ -44,6 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        onLaunch();
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         initToolbar();
