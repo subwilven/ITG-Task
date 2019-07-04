@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 
+import androidx.preference.PreferenceManager;
+
 import java.util.Locale;
 
 public class LocalManager {
@@ -23,8 +25,8 @@ public class LocalManager {
     }
 
     public static String getLanguage(Context c) {
-        //return AuthSharedDataSource.getShareLocale(c);
-        return "en";
+       // return c.getSharedPreferences("main",Context.MODE_PRIVATE).getString("language","");
+        return PreferenceManager.getDefaultSharedPreferences(c).getString("language","en");
     }
 
     private static void persistLanguage(Context c, String language) {

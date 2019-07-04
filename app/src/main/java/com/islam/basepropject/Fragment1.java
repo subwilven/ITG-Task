@@ -2,27 +2,18 @@ package com.islam.basepropject;
 
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.gson.JsonElement;
 import com.islam.basepropject.data.Repository;
 import com.islam.basepropject.project_base.base.BaseViewModel;
-import com.islam.basepropject.project_base.base.adapters.BaseAdapter;
-import com.islam.basepropject.project_base.base.adapters.BaseViewHolder;
 import com.islam.basepropject.project_base.base.fragments.BaseFragment;
-import com.islam.basepropject.project_base.utils.FragmentManagerUtil;
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
 import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +45,8 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
         (view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManagerUtil.replaceFragment(getFragmentManager(), new Fragment3(), true);
+                //FragmentManagerUtil.replaceFragment(getFragmentManager(), new Fragment3(), true);
+                getBaseActivity().recreate();
             }
         });
 

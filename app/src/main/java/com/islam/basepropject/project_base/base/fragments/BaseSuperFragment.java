@@ -64,8 +64,7 @@ public abstract class BaseSuperFragment<V extends BaseViewModel> extends BaseFra
 
         mViewPager.setAdapter(adapter);
 
-        new TabLayoutMediator(tabLayout, mViewPager, true, (tab, position) -> {
-        }).attach();
+        new TabLayoutMediator(tabLayout, mViewPager, true, (tab, position) -> {}).attach();
 
         for (int i = 0; i < tabsNames.length; i++) {
             tabLayout.getTabAt(i).setText(tabsNames[i]);
