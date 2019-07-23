@@ -1,4 +1,4 @@
-package com.islam.basepropject.project_base.base;
+package com.islam.basepropject.project_base.base.other;
 
 import androidx.lifecycle.ViewModel;
 
@@ -10,28 +10,22 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
-public class BaseViewModel<N> extends ViewModel {
+public abstract class BaseViewModel<N> extends ViewModel {
 
     private final SchedulerProvider mSchedulerProvider;
 
     private final CompositeDisposable mCompositeDisposable;
-
-    private WeakReference<N> mNavigator;
-
     private final PublishSubject<String> mSnackBarMessage;
-
     private final PublishSubject<String> mToastMessage;
-
     private final PublishSubject<String> mDialogMessage;
-
     private final PublishSubject<Boolean> mShowLoadingFullScreen;
-
     private final PublishSubject<ErrorModel> mShowErrorFullScreen;
-
     private final HashMap<String, ScreenStatus> registeredFragments;
+    private WeakReference<N> mNavigator;
     private String lastRegisteredFragment;
 
     public BaseViewModel() {
@@ -62,9 +56,10 @@ public class BaseViewModel<N> extends ViewModel {
         super.onCleared();
     }
 
-    protected CompositeDisposable getCompositeDisposable() {
-        return mCompositeDisposable;
+    protected void addDisposable(Disposable disposable) {
+        mCompositeDisposable.add(disposable);
     }
+
 
     public N getNavigator() {
         return mNavigator.get();
@@ -107,23 +102,24 @@ public class BaseViewModel<N> extends ViewModel {
 
 
     public void observeDialogMessage(Consumer<String> consumer) {
-        getCompositeDisposable().add(mDialogMessage.subscribe(consumer));
+        addDisposable(mDialogMessage.subscribe(consumer));
     }
 
     public void observeToastMessage(Consumer<String> consumer) {
-        getCompositeDisposable().add(mToastMessage.subscribe(consumer));
+        addDisposable(mToastMessage.subscribe(consumer));
     }
 
     public void observeSnackBarMessage(Consumer<String> consumer) {
-        getCompositeDisposable().add(mSnackBarMessage.subscribe(consumer));
+        addDisposable(mSnackBarMessage.subscribe(consumer));
     }
 
     public void observeShowLoadingFullScreen(Consumer<Boolean> consumer) {
-        getCompositeDisposable().add(mShowLoadingFullScreen.subscribe(consumer));
+        addDisposable(mShowLoadingFullScreen.subscribe(consumer));
+
     }
 
     public void observeShowNoConnectionFullScreen(Consumer<ErrorModel> consumer) {
-        getCompositeDisposable().add(mShowErrorFullScreen.subscribe(consumer));
+        addDisposable(mShowErrorFullScreen.subscribe(consumer));
     }
 
     public void unSubscribe() {

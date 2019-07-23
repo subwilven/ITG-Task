@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import com.islam.basepropject.project_base.base.POJO.NavigationType;
 import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity;
+import com.islam.basepropject.ui.Fragment2;
+import com.islam.basepropject.ui.ExViewPager.Fragment4;
 
 public class Main2Activity extends BaseNavigationActivity {
 

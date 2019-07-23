@@ -2,27 +2,18 @@ package com.islam.basepropject.project_base.base.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.islam.basepropject.MyApplication;
 import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.BaseViewModel;
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver;
-import com.islam.basepropject.project_base.utils.ActivityManager;
 import com.islam.basepropject.project_base.utils.LocalManager;
 import com.islam.basepropject.project_base.utils.NetworkManager;
-import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
-
-import io.reactivex.functions.Consumer;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {

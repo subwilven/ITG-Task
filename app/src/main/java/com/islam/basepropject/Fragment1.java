@@ -6,14 +6,13 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.gson.JsonElement;
 import com.islam.basepropject.data.Repository;
-import com.islam.basepropject.project_base.base.BaseViewModel;
 import com.islam.basepropject.project_base.base.fragments.BaseFragment;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
+import com.islam.basepropject.project_base.utils.FragmentManagerUtil;
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
-import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +28,7 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
     protected void onLaunch() {
         initContentView(R.layout.fragment_fragment1);
         initToolbar(R.string.title1, false);
-        initViewModel(ViewModelProviders.of(getActivity(), ViewModelFactory.getInstance()).get(Fragment1.ViewModel.class));
+        initViewModel(getActivity(), ViewModel.class);
     }
 
     @Override
@@ -41,12 +40,11 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
                 loadData();
             }
         });
-       // loadData();
+        // loadData();
         (view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //FragmentManagerUtil.replaceFragment(getFragmentManager(), new Fragment3(), true);
-                getBaseActivity().recreate();
+                FragmentManagerUtil.replaceFragment(getFragmentManager(), new Fragment3(), true);
             }
         });
 
@@ -67,8 +65,6 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
     }
 
 
-
-
     public static class ViewModel extends BaseViewModel {
 //        public ViewModel(SchedulerProvider schedulerProvider) {
 //            super(schedulerProvider);
@@ -76,16 +72,15 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
 
         public void loadProviders() {
             Repository repository = new Repository();
-            repository.getProvidresList()
+            addDisposable(repository.getProvidresList()
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
                     .subscribeWith(new RetrofitObserver<JsonElement>(this) {
                         @Override
-                        public void onSuccess(JsonElement o) {
-                            super.onSuccess(o);
+                        public void onResultSuccess(JsonElement o) {
                             Log.i("network", o.toString());
                         }
-                    });
+                    }));
 
         }
     }

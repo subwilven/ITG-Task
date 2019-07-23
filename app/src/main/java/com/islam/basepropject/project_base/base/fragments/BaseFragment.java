@@ -9,48 +9,56 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.BaseViewModel;
 import com.islam.basepropject.project_base.base.POJO.ErrorModel;
 import com.islam.basepropject.project_base.base.activities.BaseActivity;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.utils.ActivityManager;
+import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
 
 import io.reactivex.functions.Consumer;
 
 public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
 
+    protected V mViewModel;
     private BaseActivity mActivity;
-
-    private V mViewModel;
-
     private View mLoadingView;
 
     private View mNoConnectionView;
 
     private Bundle mSavedInstanceState;
 
+    //used to spicify this fragment should observe screen status or its children will take this responsibility
+    private boolean hasChildrenFragments = false;
+
     private boolean enableBackButton = false;
     private int toolbarTitle = -1;
     private int optionMenuId = -1;
     private int layoutId = -1;
 
-    protected abstract void onViewCreated(View view, V viewModel, Bundle instance);
 
     protected abstract void onLaunch();
+
+    protected abstract void onViewCreated(View view, V viewModel, Bundle instance);
 
     protected abstract void setUpObservers();
 
     protected void onRetry() {
     }
 
+    protected void initContentView(int layoutId, boolean hasChildrenFragments) {
+        this.layoutId = layoutId;
+        this.hasChildrenFragments = hasChildrenFragments;
+    }
 
     protected void initContentView(int layoutId) {
-        this.layoutId = layoutId;
+        initContentView(layoutId, false);
     }
 
     protected void initToolbar(int toolbarTitle, boolean enableBackButton, int menuId) {
@@ -63,8 +71,12 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
         initToolbar(toolbarTitle, enableBackButton, -1);
     }
 
-    protected void initViewModel(V viewModel) {
-        mViewModel = viewModel;
+    protected void initViewModel(Fragment fragment, Class<V> viewModel) {
+        mViewModel = ViewModelProviders.of(fragment, ViewModelFactory.getInstance()).get(viewModel);
+    }
+
+    protected void initViewModel(FragmentActivity activity, Class<V> viewModel) {
+        mViewModel = ViewModelProviders.of(activity, ViewModelFactory.getInstance()).get(viewModel);
     }
 
     //override this method if you need to indetif another view group if the
@@ -115,11 +127,17 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
         view.setFocusableInTouchMode(true);
         view.requestFocus();
 
-        if (getParentFragment() == null)
+        //only apply for the parent fragment
+        if (getParentFragment() == null) {
             setUpToolbar();
-        observeDefaults();
+            observeDefaults();
+
+        }
+        if (!hasChildrenFragments)
+            observeScreenStatus();
         onViewCreated(view, mViewModel, savedInstanceState);
     }
+
 
     private void observeDefaults() {
         if (mViewModel == null) return;
@@ -142,6 +160,10 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
         mViewModel.observeDialogMessage(s -> {
         });
 
+
+    }
+
+    protected void observeScreenStatus() {
         mViewModel.observeShowLoadingFullScreen(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {
@@ -166,32 +188,34 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
     }
 
     private void inflateLoadingFullScreenView() {
-        ViewGroup viewGroup = getFullScreenViewGroup();
-        if (mLoadingView != null) return;
-        mLoadingView = LayoutInflater.from(getContext()).inflate(R.layout.layout_progress_bar,
-                viewGroup, false);
-        viewGroup.addView(mLoadingView);
-
+        getBaseActivity().runOnUiThread(() -> {
+            ViewGroup viewGroup = getFullScreenViewGroup();
+            if (mLoadingView != null) return;
+            mLoadingView = LayoutInflater.from(getContext()).inflate(R.layout.layout_progress_bar,
+                    viewGroup, false);
+            viewGroup.addView(mLoadingView);
+        });
     }
 
     private void inflateNoConnectionFullScreenView(ErrorModel errorModel) {
-        ViewGroup viewGroup = getFullScreenViewGroup();
-        if (mNoConnectionView == null) {
-            mNoConnectionView = LayoutInflater.from(getContext()).inflate(R.layout.layout_no_connection,
-                    viewGroup, false);
+        getBaseActivity().runOnUiThread(() -> {
+            ViewGroup viewGroup = getFullScreenViewGroup();
+            if (mNoConnectionView == null) {
+                mNoConnectionView = LayoutInflater.from(getContext()).inflate(R.layout.layout_no_connection,
+                        viewGroup, false);
 
-            //to handel onRetry in each fragment individually
-            mNoConnectionView.findViewById(R.id.btn_retry).setOnClickListener(v -> {
-                if (isNetworkConnected())
-                    onRetry();
-            });
+                //to handel onRetry in each fragment individually
+                mNoConnectionView.findViewById(R.id.btn_retry).setOnClickListener(v -> {
+                    if (isNetworkConnected())
+                        onRetry();
+                });
 
-            viewGroup.addView(mNoConnectionView);
-        }
+                viewGroup.addView(mNoConnectionView);
+            }
 
-        ((TextView) mNoConnectionView.findViewById(R.id.tv_title)).setText(errorModel.getTitle());
-        ((TextView) mNoConnectionView.findViewById(R.id.tv_message)).setText(errorModel.getMessage());
-
+            ((TextView) mNoConnectionView.findViewById(R.id.tv_title)).setText(errorModel.getTitle());
+            ((TextView) mNoConnectionView.findViewById(R.id.tv_message)).setText(errorModel.getMessage());
+        });
     }
 
     @Override

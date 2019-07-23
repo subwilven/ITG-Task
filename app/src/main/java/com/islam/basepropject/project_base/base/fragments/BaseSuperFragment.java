@@ -1,8 +1,5 @@
 package com.islam.basepropject.project_base.base.fragments;
 
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -10,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.BaseViewModel;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.base.adapters.BaseAdapter;
 import com.islam.basepropject.project_base.base.adapters.ViewPagerAdapter;
 
@@ -20,20 +17,20 @@ public abstract class BaseSuperFragment<V extends BaseViewModel> extends BaseFra
     private RecyclerView mRecyclerView;
     private ViewPager2 mViewPager;
 
-    public void createRecyclerView(BaseAdapter baseAdapter) {
+    public void createRecyclerView(RecyclerView.Adapter baseAdapter) {
         createRecyclerView(baseAdapter, new LinearLayoutManager(getContext()), true);
     }
 
-    public void createRecyclerView(BaseAdapter baseAdapter, RecyclerView.LayoutManager layoutManager) {
+    public void createRecyclerView(RecyclerView.Adapter baseAdapter, RecyclerView.LayoutManager layoutManager) {
         createRecyclerView(baseAdapter, layoutManager, true);
     }
 
-    public void createRecyclerView(BaseAdapter baseAdapter, boolean hasFixedSize) {
+    public void createRecyclerView(RecyclerView.Adapter baseAdapter, boolean hasFixedSize) {
         createRecyclerView(baseAdapter, new LinearLayoutManager(getContext()), hasFixedSize);
     }
 
 
-    public void createRecyclerView(BaseAdapter baseAdapter, RecyclerView.LayoutManager layoutManager, boolean hasFixedSize) {
+    public void createRecyclerView(RecyclerView.Adapter baseAdapter, RecyclerView.LayoutManager layoutManager, boolean hasFixedSize) {
         mRecyclerView = getView().findViewById(R.id.recyclerView);
         if (mRecyclerView == null)
             throw new IllegalStateException("There is no RecyclerView included in xml with id \"recyclerView\" ");

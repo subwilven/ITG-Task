@@ -1,7 +1,6 @@
 package com.islam.basepropject.project_base.utils.network;
 
-import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.BaseViewModel;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.base.POJO.ErrorModel;
 import com.islam.basepropject.project_base.base.POJO.ScreenStatus;
 
@@ -10,11 +9,13 @@ import java.net.SocketTimeoutException;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
 
-public abstract class RetrofitObserver<T> implements SingleObserver<T> {
+public abstract class RetrofitObserver<T> extends DisposableSingleObserver<T> {
 
     private BaseViewModel baseViewModel;
 
+    public abstract void onResultSuccess(T o);
     public RetrofitObserver(BaseViewModel viewModel) {
         baseViewModel = viewModel;
 
@@ -22,11 +23,6 @@ public abstract class RetrofitObserver<T> implements SingleObserver<T> {
             baseViewModel.showNoConnectionFullScreen(ErrorModel.freeError());
             baseViewModel.showLoadingFullScreen(true);
         }
-    }
-
-    @Override
-    public void onSubscribe(Disposable d) {
-
     }
 
     private boolean isStartingFragment() {
@@ -56,9 +52,9 @@ public abstract class RetrofitObserver<T> implements SingleObserver<T> {
         }
     }
 
-    public void onSuccess(T o) {
+    public final void onSuccess(T o) {
         if (isStartingFragment())
             baseViewModel.showLoadingFullScreen(false);
-
+        onResultSuccess(o);
     }
 }

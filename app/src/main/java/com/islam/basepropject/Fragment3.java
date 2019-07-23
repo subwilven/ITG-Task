@@ -6,13 +6,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.islam.basepropject.project_base.base.BaseViewModel;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.base.adapters.BaseAdapter;
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder;
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment;
-import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
+import com.islam.basepropject.ui.Fragment2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class Fragment3 extends BaseSuperFragment<Fragment2.ViewModel> {
     protected void onLaunch() {
         initContentView(R.layout.fragment_fragment2);
         initToolbar(R.string.title2, true);
-        initViewModel(ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(Fragment2.ViewModel.class));
+        initViewModel(getActivity(), Fragment2.ViewModel.class);
     }
 
     @Override

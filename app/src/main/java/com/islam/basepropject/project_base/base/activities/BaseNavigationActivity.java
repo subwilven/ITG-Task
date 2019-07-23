@@ -120,12 +120,7 @@ public abstract class BaseNavigationActivity extends BaseActivity {
             onDrawerNavigationItemSelectedListener = this::onItemSelected;
 
     BottomNavigationView.OnNavigationItemSelectedListener
-            onBottomNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            return BaseNavigationActivity.this.onItemSelected(item);
-        }
-    };
+            onBottomNavigationItemSelectedListener = this::onItemSelected;
 
     public boolean onItemSelected(@NonNull MenuItem item) {
 

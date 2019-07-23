@@ -1,12 +1,11 @@
-package com.islam.basepropject;
+package com.islam.basepropject.ui.ExViewPager;
 
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.lifecycle.ViewModelProviders;
-
+import com.islam.basepropject.R;
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment;
-import com.islam.basepropject.project_base.utils.others.ViewModelFactory;
+import com.islam.basepropject.ui.Fragment2;
 
 public class FragmentTab2 extends BaseSuperFragment<Fragment2.ViewModel> {
 
@@ -14,7 +13,7 @@ public class FragmentTab2 extends BaseSuperFragment<Fragment2.ViewModel> {
     @Override
     protected void onLaunch() {
         initContentView(R.layout.fragment_tab2);
-        initViewModel(ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(Fragment2.ViewModel.class));
+        initViewModel(getParentFragment(),Fragment2.ViewModel.class);
     }
 
     @Override
