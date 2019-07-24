@@ -5,6 +5,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.islam.basepropject.project_base.views.MyRecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +14,15 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder<T>> extends Recyc
 
     protected List<T> list;
 
-    public BaseAdapter() {}
+    public BaseAdapter() {
+    }
 
     public BaseAdapter(List<T> list) {
         this.list = list;
+    }
+
+    public void registerAdapterDataObservertion(MyRecyclerView recyclerView) {
+        registerAdapterDataObserver(new AdapterDataObservation(recyclerView));
     }
 
     @NonNull
@@ -81,8 +88,8 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder<T>> extends Recyc
         notifyDataSetChanged();
     }
 
-    private void initList(){
-        if(list==null)
+    private void initList() {
+        if (list == null)
             list = new ArrayList<>();
     }
 }

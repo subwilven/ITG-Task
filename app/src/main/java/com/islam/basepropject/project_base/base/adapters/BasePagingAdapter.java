@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import com.islam.basepropject.R;
 import com.islam.basepropject.project_base.base.POJO.NetworkRequestState;
+import com.islam.basepropject.project_base.views.MyRecyclerView;
 
 
 public abstract class BasePagingAdapter<T,VH extends BaseViewHolder> extends PagedListAdapter<T,BaseViewHolder<T>> {
+
 
 
     private static final int TYPE_PROGRESS = 0;
@@ -34,6 +36,11 @@ public abstract class BasePagingAdapter<T,VH extends BaseViewHolder> extends Pag
     protected BasePagingAdapter() {
         super((DiffUtil.ItemCallback<T>) callback);
     }
+
+    public void registerAdapterDataObservertion(MyRecyclerView recyclerView) {
+        registerAdapterDataObserver(new AdapterDataObservation(recyclerView));
+    }
+
 
     public abstract VH getViewHolder(ViewGroup viewGroup);
 

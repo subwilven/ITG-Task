@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.islam.basepropject.Fragment1;
+import com.islam.basepropject.ui.Fragment1;
 import com.islam.basepropject.ui.ExViewPager.FragmentTab1;
 import com.islam.basepropject.ui.Fragment2;
 import com.islam.basepropject.ui.ExPaging.ExViewModel;

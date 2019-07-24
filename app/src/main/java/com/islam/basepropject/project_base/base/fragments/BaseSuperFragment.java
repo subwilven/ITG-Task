@@ -7,22 +7,25 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.base.adapters.BaseAdapter;
+import com.islam.basepropject.project_base.base.adapters.BaseListAdapter;
+import com.islam.basepropject.project_base.base.adapters.BasePagingAdapter;
 import com.islam.basepropject.project_base.base.adapters.ViewPagerAdapter;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
+import com.islam.basepropject.project_base.views.MyRecyclerView;
 
 public abstract class BaseSuperFragment<V extends BaseViewModel> extends BaseFragment<V> {
 
 
-    private RecyclerView mRecyclerView;
+    private MyRecyclerView mRecyclerView;
     private ViewPager2 mViewPager;
 
     public void createRecyclerView(RecyclerView.Adapter baseAdapter) {
-        createRecyclerView(baseAdapter, new LinearLayoutManager(getContext()), true);
+        createRecyclerView(baseAdapter, new LinearLayoutManager(getContext()), false);
     }
 
     public void createRecyclerView(RecyclerView.Adapter baseAdapter, RecyclerView.LayoutManager layoutManager) {
-        createRecyclerView(baseAdapter, layoutManager, true);
+        createRecyclerView(baseAdapter, layoutManager, false);
     }
 
     public void createRecyclerView(RecyclerView.Adapter baseAdapter, boolean hasFixedSize) {
@@ -37,6 +40,20 @@ public abstract class BaseSuperFragment<V extends BaseViewModel> extends BaseFra
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(baseAdapter);
         mRecyclerView.setHasFixedSize(hasFixedSize);
+
+        registerDataObservation(baseAdapter);
+
+    }
+
+    public void registerDataObservation(RecyclerView.Adapter baseAdapter) {
+        if (baseAdapter instanceof BaseAdapter)
+            ((BaseAdapter) baseAdapter).registerAdapterDataObservertion(mRecyclerView);
+
+        else if (baseAdapter instanceof BasePagingAdapter)
+            ((BasePagingAdapter) baseAdapter).registerAdapterDataObservertion(mRecyclerView);
+
+        else if (baseAdapter instanceof BaseListAdapter)
+            ((BaseListAdapter) baseAdapter).registerAdapterDataObservertion(mRecyclerView);
     }
 
     public void createTabLayout(Class<?>[] fragmentsClass, String[] tabsNames) {
@@ -61,7 +78,8 @@ public abstract class BaseSuperFragment<V extends BaseViewModel> extends BaseFra
 
         mViewPager.setAdapter(adapter);
 
-        new TabLayoutMediator(tabLayout, mViewPager, true, (tab, position) -> {}).attach();
+        new TabLayoutMediator(tabLayout, mViewPager, true, (tab, position) -> {
+        }).attach();
 
         for (int i = 0; i < tabsNames.length; i++) {
             tabLayout.getTabAt(i).setText(tabsNames[i]);
@@ -72,7 +90,7 @@ public abstract class BaseSuperFragment<V extends BaseViewModel> extends BaseFra
 
     }
 
-    public RecyclerView getRecyclerView() {
+    public MyRecyclerView getRecyclerView() {
         return mRecyclerView;
     }
 

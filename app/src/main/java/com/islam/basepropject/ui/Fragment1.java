@@ -1,4 +1,4 @@
-package com.islam.basepropject;
+package com.islam.basepropject.ui;
 
 
 import android.os.Bundle;
@@ -8,11 +8,13 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.JsonElement;
+import com.islam.basepropject.R;
 import com.islam.basepropject.data.Repository;
 import com.islam.basepropject.project_base.base.fragments.BaseFragment;
 import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil;
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
+import com.islam.basepropject.ui.ExAdapter.Fragment3;
 
 /**
  * A simple {@link Fragment} subclass.

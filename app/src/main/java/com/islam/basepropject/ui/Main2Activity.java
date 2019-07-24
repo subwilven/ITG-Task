@@ -1,9 +1,11 @@
-package com.islam.basepropject;
+package com.islam.basepropject.ui;
 
 import android.os.Bundle;
 
+import com.islam.basepropject.R;
 import com.islam.basepropject.project_base.base.POJO.NavigationType;
 import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity;
+import com.islam.basepropject.ui.Fragment1;
 import com.islam.basepropject.ui.Fragment2;
 import com.islam.basepropject.ui.ExViewPager.Fragment4;
 

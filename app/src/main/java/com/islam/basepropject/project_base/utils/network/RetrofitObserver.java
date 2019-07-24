@@ -35,21 +35,22 @@ public abstract class RetrofitObserver<T> extends DisposableSingleObserver<T> {
             baseViewModel.showLoadingFullScreen(false);
 
         if (e instanceof SocketTimeoutException) {
-            if (isStartingFragment())
-                baseViewModel.showNoConnectionFullScreen(ErrorModel.timeOut());
-            else
-                baseViewModel.showToastMessage("SocketTimeoutException");
-
+            showError("SocketTimeoutException",ErrorModel.timeOut());
         } else if (e instanceof ConnectivityInterceptor.NoConnectivityException) {
-            if (isStartingFragment())
-                baseViewModel.showNoConnectionFullScreen(ErrorModel.noConnection());
-            else
-                baseViewModel.showToastMessage("No network available, please check your WiFi or Data connection");
+            showError("No network available, please check your WiFi or Data connection",
+                    ErrorModel.noConnection());
         } else if (e instanceof IOException) {
             baseViewModel.showToastMessage("IOException");
         } else {
             baseViewModel.showToastMessage("Something Went wrong");
         }
+    }
+
+    public void showError(String msg,ErrorModel errorModel){
+        if (isStartingFragment())
+            baseViewModel.showNoConnectionFullScreen(errorModel);
+        else
+            baseViewModel.showToastMessage(msg);
     }
 
     public final void onSuccess(T o) {

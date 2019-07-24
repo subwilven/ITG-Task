@@ -16,12 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Main2Activity"
+            android:name=".ui.Main2Activity"
             android:label="@string/title_activity_main2"></activity>
         <activity
             android:name=".project_base.Main2Activity"
             android:label="@string/title_activity_main2"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

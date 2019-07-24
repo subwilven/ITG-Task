@@ -1,12 +1,14 @@
-package com.islam.basepropject;
+package com.islam.basepropject.ui.ExAdapter;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.islam.basepropject.R;
 import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.base.adapters.BaseAdapter;
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder;
@@ -33,9 +35,17 @@ public class Fragment3 extends BaseSuperFragment<Fragment2.ViewModel> {
         createRecyclerView(mAdapter);
 
         List<String> strings = new ArrayList<>();
-        strings.add("hhhh1");
-        strings.add("hhhh2");
         mAdapter.setData(strings);
+
+       new Handler().postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               strings.add("dsdsd");
+               strings.add("sdsdsdsdsd");
+               mAdapter.setData(strings);
+           }
+       },2000);
+
     }
 
     @Override

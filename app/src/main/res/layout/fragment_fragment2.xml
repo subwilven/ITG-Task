@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.Fragment2">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.islam.basepropject.project_base.views.MyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </com.islam.basepropject.project_base.views.MyRecyclerView>
 
 </FrameLayout>

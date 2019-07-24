@@ -35,4 +35,5 @@
     <string name="settings">إعدادات</string>
     <string name="choose_your_language">إختر اللغة</string>
     <string name="language">اللغة</string>
+    <string name="no_results_found">No results found</string>
 </resources>

@@ -6,10 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import com.islam.basepropject.project_base.views.MyRecyclerView;
+
 public abstract class BaseListAdapter<T, VH extends BaseViewHolder<T>> extends ListAdapter<T, VH> {
 
     protected BaseListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
         super(diffCallback);
+    }
+
+    public void registerAdapterDataObservertion(MyRecyclerView recyclerView) {
+        registerAdapterDataObserver(new AdapterDataObservation(recyclerView));
     }
 
     @NonNull
