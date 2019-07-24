@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui;
+package com.islam.basepropject.ui.ExFetchData;
 
 
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import com.islam.basepropject.project_base.base.fragments.BaseFragment;
 import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil;
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
-import com.islam.basepropject.ui.ExAdapter.Fragment3;
+import com.islam.basepropject.ui.ExRecyclerView.Fragment3;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,9 +68,6 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
 
 
     public static class ViewModel extends BaseViewModel {
-//        public ViewModel(SchedulerProvider schedulerProvider) {
-//            super(schedulerProvider);
-//        }
 
         public void loadProviders() {
             Repository repository = new Repository();

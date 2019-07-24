@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExAdapter;
+package com.islam.basepropject.ui.ExRecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
