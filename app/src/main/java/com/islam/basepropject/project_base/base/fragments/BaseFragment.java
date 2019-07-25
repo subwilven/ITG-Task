@@ -28,8 +28,8 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
 
     protected V mViewModel;
     private BaseActivity mActivity;
-    private View mLoadingView;
 
+    private View mLoadingView;
     private View mNoConnectionView;
 
     private Bundle mSavedInstanceState;
@@ -50,6 +50,9 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
     protected abstract void setUpObservers();
 
     protected void onRetry() {
+        loadStartUpData();}
+    protected void loadStartUpData() {
+
     }
 
     protected void initContentView(int layoutId, boolean hasChildrenFragments) {
@@ -109,6 +112,10 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
         }
     }
 
+    protected void markScreenAsCompleted(){
+        mViewModel.markAsCompleted(getClass().getName());
+    }
+
     private void checkValidResources() {
         if (layoutId == -1)
             throw new IllegalArgumentException("you should call initContentView() method inside onLaunch Callback");
@@ -133,9 +140,13 @@ public abstract class BaseFragment<V extends BaseViewModel> extends Fragment {
             observeDefaults();
 
         }
+
+        //used to spicify this fragment should observe screen status or its children will take this responsibility
         if (!hasChildrenFragments)
             observeScreenStatus();
+
         onViewCreated(view, mViewModel, savedInstanceState);
+        loadStartUpData();
     }
 
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.islam.basepropject.ui.ExFetchData.Fragment1;
+import com.islam.basepropject.ui.ExRecyclerView.Fragment3;
 import com.islam.basepropject.ui.ExViewPager.FragmentTab1;
 import com.islam.basepropject.ui.Fragment2;
 import com.islam.basepropject.ui.ExPaging.ExViewModel;
@@ -43,6 +44,10 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
         if (modelClass.isAssignableFrom(FragmentTab1.ViewModel.class)) {
             return (T) new FragmentTab1.ViewModel();
+        }
+
+        if (modelClass.isAssignableFrom(Fragment3.ViewModel.class)) {
+            return (T) new Fragment3.ViewModel();
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

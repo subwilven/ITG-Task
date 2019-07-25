@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
 
     //network
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'

@@ -45,6 +45,10 @@ public abstract class BaseViewModel<N> extends ViewModel {
         lastRegisteredFragment = fragmentClassName;
     }
 
+    public void markAsCompleted(String name){
+        registeredFragments.put(name, ScreenStatus.COMPLETED);
+    }
+
     public ScreenStatus getLastRegisterdFragmentStatus() {
         return registeredFragments.get(lastRegisteredFragment);
     }
@@ -129,4 +133,6 @@ public abstract class BaseViewModel<N> extends ViewModel {
     public void unRegister(String fragmentClassName) {
         registeredFragments.remove(fragmentClassName);
     }
+
+
 }

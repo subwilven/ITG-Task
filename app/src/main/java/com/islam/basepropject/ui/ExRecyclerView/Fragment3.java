@@ -1,87 +1,112 @@
 package com.islam.basepropject.ui.ExRecyclerView;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import com.google.gson.JsonElement;
 import com.islam.basepropject.R;
-import com.islam.basepropject.project_base.base.other.BaseViewModel;
-import com.islam.basepropject.project_base.base.adapters.BaseAdapter;
-import com.islam.basepropject.project_base.base.adapters.BaseViewHolder;
+import com.islam.basepropject.data.Repository;
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment;
-import com.islam.basepropject.ui.Fragment2;
+import com.islam.basepropject.project_base.base.other.BaseViewModel;
+import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
+import com.islam.basepropject.project_base.views.OnViewStatusChange;
+
+import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment3 extends BaseSuperFragment<Fragment2.ViewModel> {
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
+public class Fragment3 extends BaseSuperFragment<Fragment3.ViewModel> {
+
+    Adapter mAdapter;
 
     @Override
     protected void onLaunch() {
         initContentView(R.layout.fragment_fragment2);
         initToolbar(R.string.title2, true);
-        initViewModel(getActivity(), Fragment2.ViewModel.class);
+        initViewModel(getActivity(), Fragment3.ViewModel.class);
     }
 
     @Override
-    protected void onViewCreated(View view, Fragment2.ViewModel viewModel, Bundle instance) {
+    protected void onViewCreated(View view, Fragment3.ViewModel viewModel, Bundle instance) {
 
-        Adapter mAdapter = new Adapter();
+        mAdapter = new Adapter();
         createRecyclerView(mAdapter);
+        markScreenAsCompleted();
+    }
 
-        List<String> strings = new ArrayList<>();
-        mAdapter.setData(strings);
-
-       new Handler().postDelayed(new Runnable() {
-           @Override
-           public void run() {
-               strings.add("dsdsd");
-               strings.add("sdsdsdsdsd");
-               mAdapter.setData(strings);
-           }
-       },2000);
-
+    @Override
+    protected void loadStartUpData() {
+        mViewModel.loadProviders(getRecyclerView());
     }
 
     @Override
     protected void setUpObservers() {
-
-    }
-
-    public class Adapter extends BaseAdapter<String, Adapter.ViewHolder> {
-
-
-        public Adapter() {
-            super();
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(parent, R.layout.item_string);
-        }
-
-        public class ViewHolder extends BaseViewHolder<String> {
-            TextView textView;
-
-            public ViewHolder(ViewGroup viewGroup, int layoutId) {
-                super(viewGroup, layoutId);
-                textView = itemView.findViewById(R.id.textView2);
-            }
-
+        mViewModel.getData().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
-            public void onBind(String item) {
-                textView.setText(item);
+            public void onChanged(List<String> strings) {
+
+                mAdapter.setData(strings);
             }
+        });
+    }
+
+    public static class ViewModel extends BaseViewModel {
+
+        MutableLiveData<List<String>> data = new MutableLiveData<>();
+
+//        public Single<Boolean> whenAll(List<Single<?>> tasks) {
+//            return Single.merge(tasks)
+//                    .flatMap(new Function<Object, Publisher<?>>() {
+//                @Override
+//                public Publisher<?> apply(Object o) throws Exception {
+//                    return null;
+//                }
+//            }).map(new Function<Object, Object>() {
+//                @Override
+//                public Object apply(Object o) throws Exception {
+//                    return null;
+//                }
+//            });
+//
+//        }
+
+        public void loadProviders(OnViewStatusChange onViewStatusChange) {
+            Repository repository = new Repository();
+            addDisposable(repository.getProvidresList()
+                    .subscribeOn(getSchedulerProvider().io())
+                    .doOnSuccess(new Consumer<JsonElement>() {
+                        @Override
+                        public void accept(JsonElement jsonElement) throws Exception {
+
+                        }
+                    })
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new RetrofitObserver<JsonElement>(this, onViewStatusChange) {
+                        @Override
+                        public void onResultSuccess(JsonElement o) {
+                            List<String> strings = new ArrayList<>();
+                            strings.add("dsdsd");
+                            strings.add("sdsdsdsdsd");
+                            data.postValue(strings);
+                        }
+                    }));
+
+        }
+
+        public LiveData<List<String>> getData() {
+            return data;
         }
     }
 
 
-    public class ViewModel extends BaseViewModel {
-    }
 }

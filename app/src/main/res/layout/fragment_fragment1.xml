@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ExFetchData.Fragment1">
 
-    <Button
+    <com.islam.basepropject.project_base.views.MyButton
         android:id="@+id/btn_fetch"
         android:text="fetch"
         app:layout_constraintTop_toTopOf="parent"

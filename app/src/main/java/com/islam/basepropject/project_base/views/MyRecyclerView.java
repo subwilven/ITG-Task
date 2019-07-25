@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.islam.basepropject.R;
@@ -14,7 +15,7 @@ import com.islam.basepropject.project_base.utils.ActivityManager;
 import static androidx.recyclerview.widget.RecyclerView.Adapter;
 import static androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
-public class MyRecyclerView extends ConstraintLayout {
+public class MyRecyclerView extends ConstraintLayout implements OnViewStatusChange{
 
     private View mLoadingView;
     private View mEmptyView;
@@ -63,15 +64,12 @@ public class MyRecyclerView extends ConstraintLayout {
         emptyViewId = emptyViewLayout;
     }
 
-
     public void showEmptyView(boolean b) {
         if (b) {
             inflateEmptyView();
-            // ActivityManager.setVisibility(View.VISIBLE,mEmptyView);
-
+            ActivityManager.setVisibility(View.VISIBLE, mEmptyView);
         } else {
-            removeView(mEmptyView);
-            mEmptyView = null;
+            ActivityManager.setVisibility(View.GONE, mEmptyView);
         }
     }
 
@@ -85,6 +83,8 @@ public class MyRecyclerView extends ConstraintLayout {
     }
 
     private void inflateRecyclerView() {
+        recyclerView.setLayoutParams(
+                new ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
         addView(recyclerView);
     }
 
@@ -100,5 +100,10 @@ public class MyRecyclerView extends ConstraintLayout {
         mEmptyView = LayoutInflater.from(getContext()).inflate(emptyViewId,
                 this, false);
         addView(mEmptyView);
+    }
+
+    @Override
+    public void showLoading(boolean b) {
+        showLoadingView(b);
     }
 }

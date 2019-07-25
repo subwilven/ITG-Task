@@ -5,6 +5,7 @@ import com.islam.basepropject.project_base.base.POJO.ApiError;
 import com.islam.basepropject.project_base.base.POJO.ErrorModel;
 import com.islam.basepropject.project_base.base.POJO.ScreenStatus;
 import com.islam.basepropject.project_base.base.other.BaseViewModel;
+import com.islam.basepropject.project_base.views.OnViewStatusChange;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -15,11 +16,14 @@ import retrofit2.HttpException;
 public abstract class RetrofitObserver<T> extends DisposableSingleObserver<T> {
 
     private BaseViewModel baseViewModel;
+    private OnViewStatusChange view;
 
     protected RetrofitObserver(BaseViewModel viewModel) {
         baseViewModel = viewModel;
-
-
+    }
+    protected RetrofitObserver(BaseViewModel viewModel, OnViewStatusChange view) {
+        baseViewModel = viewModel;
+        this.view=view;
     }
 
     public abstract void onResultSuccess(T o);
@@ -34,6 +38,9 @@ public abstract class RetrofitObserver<T> extends DisposableSingleObserver<T> {
         if (isStartingFragment()) {
             baseViewModel.showNoConnectionFullScreen(ErrorModel.freeError());
             baseViewModel.showLoadingFullScreen(true);
+        }else{
+            if(view!=null)
+                view.showLoading(true);
         }
     }
 
@@ -41,7 +48,12 @@ public abstract class RetrofitObserver<T> extends DisposableSingleObserver<T> {
     @Override
     public final void onError(Throwable e) {
         e.printStackTrace();
-        baseViewModel.showLoadingFullScreen(false);
+        if (isStartingFragment())
+            baseViewModel.showLoadingFullScreen(false);
+        else
+        if(view!=null)
+            view.showLoading(false);
+
         if (e instanceof HttpException) {
             handelState500Error(e);
         } else if (e instanceof SocketTimeoutException) {
@@ -78,6 +90,10 @@ public abstract class RetrofitObserver<T> extends DisposableSingleObserver<T> {
     public final void onSuccess(T o) {
         if (isStartingFragment())
             baseViewModel.showLoadingFullScreen(false);
+        else
+        if(view!=null)
+            view.showLoading(false);
+
         onResultSuccess(o);
     }
 
