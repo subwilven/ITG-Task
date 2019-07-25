@@ -14,15 +14,11 @@ public class MainActivity extends BaseNavigationActivity {
 
     @Override
     public void onLaunch() {
+        initContentView(R.layout.activity_main);
         initNavigation(new Class[]{Fragment1.class, Fragment3.class, Fragment4.class, ExFragment.class, SettingsFragment.class},
                 new int[]{R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.nav_tools,R.id.nav_settings},
                 NavigationType.DrawerNavigation);
     }
 
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_main;
-    }
 
 }

@@ -18,11 +18,15 @@ import com.islam.basepropject.project_base.utils.NetworkManager;
 public abstract class BaseActivity extends AppCompatActivity
         implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    public abstract int getLayoutId();
+    private int layoutId=-1;
     public abstract void onLaunch();
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocalManager.updateResources(newBase, LocalManager.getLanguage(newBase)));
+    }
+
+    protected void initContentView(int layoutId) {
+        this.layoutId = layoutId;
     }
 
     @Override
@@ -32,12 +36,18 @@ public abstract class BaseActivity extends AppCompatActivity
         updateConnectionState();
     }
 
+    private void checkValidResources() {
+        if (layoutId == -1)
+            throw new IllegalArgumentException("you should call initContentView() method inside onLaunch Callback");
+    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         onLaunch();
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
+        checkValidResources();
+        setContentView(layoutId);
         initToolbar();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

@@ -14,7 +14,11 @@ import com.islam.basepropject.project_base.base.fragments.BaseFragment;
 import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil;
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
+import com.islam.basepropject.project_base.views.OnViewStatusChange;
 import com.islam.basepropject.ui.ExRecyclerView.Fragment3;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,11 +39,11 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
 
     @Override
     protected void onViewCreated(View view, ViewModel viewModel, Bundle instance) {
-
+        markScreenAsCompleted();
         view.findViewById(R.id.btn_fetch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadData();
+                getViewModel().loadProviders(view.findViewById(R.id.btn_fetch));
             }
         });
         // loadData();
@@ -52,34 +56,27 @@ public class Fragment1 extends BaseFragment<Fragment1.ViewModel> {
 
     }
 
-    public void loadData() {
-        getViewModel().loadProviders();
-    }
 
     @Override
     protected void setUpObservers() {
 
     }
 
-    @Override
-    protected void onRetry() {
-        loadData();
-    }
-
-
     public static class ViewModel extends BaseViewModel {
 
-        public void loadProviders() {
+        public void loadProviders(OnViewStatusChange onViewStatusChange) {
             Repository repository = new Repository();
-            addDisposable(repository.getProvidresList()
+            repository.getProvidresList()
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
-                    .subscribeWith(new RetrofitObserver<JsonElement>(this) {
+                    .subscribeWith(new RetrofitObserver<JsonElement>(this, onViewStatusChange) {
                         @Override
                         public void onResultSuccess(JsonElement o) {
                             Log.i("network", o.toString());
                         }
-                    }));
+                    });
+
+//            addDisposable();
 
         }
     }

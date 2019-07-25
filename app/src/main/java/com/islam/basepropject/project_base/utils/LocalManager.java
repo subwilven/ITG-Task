@@ -25,7 +25,6 @@ public class LocalManager {
     }
 
     public static String getLanguage(Context c) {
-       // return c.getSharedPreferences("main",Context.MODE_PRIVATE).getString("language","");
         return PreferenceManager.getDefaultSharedPreferences(c).getString("language","en");
     }
 

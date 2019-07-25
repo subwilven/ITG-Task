@@ -1,5 +1,6 @@
 package com.islam.basepropject.ui.ExRecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,8 +15,6 @@ import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment;
 import com.islam.basepropject.project_base.base.other.BaseViewModel;
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver;
 import com.islam.basepropject.project_base.views.OnViewStatusChange;
-
-import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,21 +63,43 @@ public class Fragment3 extends BaseSuperFragment<Fragment3.ViewModel> {
 
         MutableLiveData<List<String>> data = new MutableLiveData<>();
 
-//        public Single<Boolean> whenAll(List<Single<?>> tasks) {
-//            return Single.merge(tasks)
-//                    .flatMap(new Function<Object, Publisher<?>>() {
-//                @Override
-//                public Publisher<?> apply(Object o) throws Exception {
-//                    return null;
-//                }
-//            }).map(new Function<Object, Object>() {
-//                @Override
-//                public Object apply(Object o) throws Exception {
-//                    return null;
-//                }
-//            });
-//
-//        }
+        @SuppressLint("CheckResult")
+        public void whenAll(List<Single<?>> tasks) {
+            Single.zip(
+                    tasks,
+                    new Function<Object[], Object>() {
+                        @Override
+                        public Object apply(Object[] objects) throws Exception {
+                            // Objects[] is an array of combined results of completed requests
+
+                            // do something with those results and emit new event
+                            return new Object();
+                        }
+                    }).flatMap(new Function<Object, SingleSource<?>>() {
+                @Override
+                public SingleSource<?> apply(Object o) throws Exception {
+                    return null;
+                }
+            })
+
+                    .subscribe(
+
+                            new Consumer<Object>() {
+                                @Override
+                                public void accept(Object o) throws Exception {
+
+                                }
+                            },
+
+
+                            new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable e) throws Exception {
+                                    //Do something on error completion of requests
+                                }
+                            }
+                    );
+        }
 
         public void loadProviders(OnViewStatusChange onViewStatusChange) {
             Repository repository = new Repository();

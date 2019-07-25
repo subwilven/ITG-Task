@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.google.android.material.button.MaterialButton;
 import com.islam.basepropject.R;
 
+//TODO need to register to to fragment/Activity lifecycle
 public class MyButton extends MaterialButton implements OnViewStatusChange {
 
     CircularProgressDrawable mProgressDrawable;
