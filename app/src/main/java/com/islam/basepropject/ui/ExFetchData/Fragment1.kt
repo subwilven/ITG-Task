@@ -1,0 +1,66 @@
+package com.islam.basepropject.ui.ExFetchData
+
+
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+
+import androidx.fragment.app.Fragment
+
+import com.google.gson.JsonElement
+import com.islam.basepropject.R
+import com.islam.basepropject.data.Repository
+import com.islam.basepropject.project_base.base.fragments.BaseFragment
+import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.project_base.utils.FragmentManagerUtil
+import com.islam.basepropject.project_base.utils.network.RetrofitObserver
+import com.islam.basepropject.project_base.views.OnViewStatusChange
+import com.islam.basepropject.ui.ExRecyclerView.Fragment3
+
+import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableSingleObserver
+
+
+/**
+ * A simple [Fragment] subclass.
+ */
+class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
+
+    override fun onLaunch() {
+        initContentView(R.layout.fragment_fragment1)
+        initToolbar(R.string.title1, false)
+        initViewModel(activity!!, ViewModel::class.java)
+    }
+
+    override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
+        markScreenAsCompleted()
+        view.findViewById<View>(R.id.btn_fetch)
+                .setOnClickListener { viewModel!!.loadProviders(view.findViewById<View>(R.id.btn_fetch) as OnViewStatusChange) }
+        // loadData();
+        view.setOnClickListener { FragmentManagerUtil.replaceFragment(fragmentManager!!, Fragment3(), true) }
+
+    }
+
+
+    override fun setUpObservers() {
+
+    }
+
+    class ViewModel : BaseViewModel<Any>() {
+
+        fun loadProviders(onViewStatusChange: OnViewStatusChange) {
+            val repository = Repository()
+            addDisposable(repository.providresList
+                    .subscribeOn(schedulerProvider.io())
+                    .observeOn(schedulerProvider.ui())
+                    .subscribeWith(object : RetrofitObserver<JsonElement>(this, onViewStatusChange) {
+                        override fun onResultSuccess(o: JsonElement) {
+                            Log.i("network", o.toString())
+                        }
+                    }))
+
+            //            addDisposable();
+
+        }
+    }
+}// Required empty public constructor
