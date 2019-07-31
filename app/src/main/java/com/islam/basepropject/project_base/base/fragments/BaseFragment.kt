@@ -66,7 +66,7 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
     }
 
     @JvmOverloads
-    protected fun initToolbar(toolbarTitle: Int, enableBackButton: Boolean, menuId: Int = -1) {
+    protected fun initToolbar(toolbarTitle: Int, enableBackButton: Boolean = false, menuId: Int = -1) {
         this.enableBackButton = enableBackButton
         this.toolbarTitle = toolbarTitle
         optionMenuId = menuId
@@ -117,7 +117,6 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         view.isFocusableInTouchMode = true
         view.requestFocus()
 
@@ -141,18 +140,18 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
         if (viewModel == null) return
 
         //TODO need to be implemented
-        viewModel!!.observeSnackBarMessage(Consumer{})
-        viewModel!!.observeDialogMessage ( Consumer{})
+        viewModel!!.observeSnackBarMessage(Consumer {})
+        viewModel!!.observeDialogMessage(Consumer {})
 
 
-        viewModel!!.observeToastMessage (Consumer{ActivityManager.showToastLong(it)})
+        viewModel!!.observeToastMessage(Consumer { ActivityManager.showToastLong(it) })
 
     }
 
     protected fun observeScreenStatus() {
 
 
-        viewModel!!.observeDialogMessage(Consumer{})
+        viewModel!!.observeDialogMessage(Consumer {})
         viewModel!!.observeShowLoadingFullScreen(Consumer {
 
             if (it) {
@@ -172,33 +171,33 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
 
     }
 
-    private fun inflateLoadingFullScreenView()  {
-     //   baseActivity!!.runOnUiThread {
-            val viewGroup = fullScreenViewGroup
-            if (mLoadingView != null) return
-            mLoadingView = LayoutInflater.from(context).inflate(R.layout.layout_progress_bar,
-                    viewGroup, false)
-            viewGroup.addView(mLoadingView)
-       // }
+    private fun inflateLoadingFullScreenView() {
+        //   baseActivity!!.runOnUiThread {
+        val viewGroup = fullScreenViewGroup
+        if (mLoadingView != null) return
+        mLoadingView = LayoutInflater.from(context).inflate(R.layout.layout_progress_bar,
+                viewGroup, false)
+        viewGroup.addView(mLoadingView)
+        // }
     }
 
     private fun inflateNoConnectionFullScreenView(errorModel: ErrorModel) {
-            val viewGroup = fullScreenViewGroup
-            if (mNoConnectionView == null) {
-                mNoConnectionView = LayoutInflater.from(context).inflate(R.layout.layout_no_connection,
-                        viewGroup, false)
+        val viewGroup = fullScreenViewGroup
+        if (mNoConnectionView == null) {
+            mNoConnectionView = LayoutInflater.from(context).inflate(R.layout.layout_no_connection,
+                    viewGroup, false)
 
-                //to handel onRetry in each fragment individually
-                mNoConnectionView!!.findViewById<View>(R.id.btn_retry).setOnClickListener { v ->
-                    if (isNetworkConnected)
-                        onRetry()
-                }
-
-                viewGroup.addView(mNoConnectionView)
+            //to handel onRetry in each fragment individually
+            mNoConnectionView!!.findViewById<View>(R.id.btn_retry).setOnClickListener { v ->
+                if (isNetworkConnected)
+                    onRetry()
             }
 
-            (mNoConnectionView!!.findViewById<View>(R.id.tv_title) as TextView).setText(errorModel.title)
-            (mNoConnectionView!!.findViewById<View>(R.id.tv_message) as TextView).setText(errorModel.message)
+            viewGroup.addView(mNoConnectionView)
+        }
+
+        (mNoConnectionView!!.findViewById<View>(R.id.tv_title) as TextView).setText(errorModel.title)
+        (mNoConnectionView!!.findViewById<View>(R.id.tv_message) as TextView).setText(errorModel.message)
     }
 
     override fun onStart() {

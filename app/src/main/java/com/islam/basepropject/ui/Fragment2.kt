@@ -51,7 +51,7 @@ class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
                     .observeOn(schedulerProvider.ui())
                     .subscribeWith(object : RetrofitObserver<JsonElement>(this) {
                         override fun onResultSuccess(o: JsonElement) {
-                            Log.i("network", o.toString())
+
                         }
                     }))
 

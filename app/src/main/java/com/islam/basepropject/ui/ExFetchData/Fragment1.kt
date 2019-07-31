@@ -1,9 +1,11 @@
 package com.islam.basepropject.ui.ExFetchData
 
 
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 
 import androidx.fragment.app.Fragment
 
@@ -28,15 +30,20 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment1)
-        initToolbar(R.string.title1, false)
+        initToolbar(R.string.title1)
         initViewModel(activity!!, ViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
         markScreenAsCompleted()
         view.findViewById<View>(R.id.btn_fetch)
-                .setOnClickListener { viewModel!!.loadProviders(view.findViewById<View>(R.id.btn_fetch) as OnViewStatusChange) }
+                .setOnClickListener {
+                    viewModel!!.loadProviders(view.findViewById<View>(R.id.btn_fetch) as OnViewStatusChange)
+                                }
         // loadData();
+
+        activity?.findViewById<View>(R.id.fab)?.setOnClickListener {  viewModel!!.loadProviders(activity
+                ?.findViewById<View>(R.id.fab) as OnViewStatusChange)}
         view.setOnClickListener { FragmentManagerUtil.replaceFragment(fragmentManager!!, Fragment3(), true) }
 
     }
@@ -55,11 +62,9 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
                     .observeOn(schedulerProvider.ui())
                     .subscribeWith(object : RetrofitObserver<JsonElement>(this, onViewStatusChange) {
                         override fun onResultSuccess(o: JsonElement) {
-                            Log.i("network", o.toString())
+
                         }
                     }))
-
-            //            addDisposable();
 
         }
     }

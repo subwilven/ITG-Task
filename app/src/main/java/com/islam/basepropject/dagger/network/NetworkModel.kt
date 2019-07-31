@@ -2,6 +2,7 @@ package com.islam.basepropject.dagger.network
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.islam.basepropject.BuildConfig
 import com.islam.basepropject.data.ClientApi
 import com.islam.basepropject.project_base.utils.network.ConnectivityInterceptor
 
@@ -16,6 +17,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.logging.HttpLoggingInterceptor
+
+
 
 @Module
 class NetworkModel {
@@ -41,6 +45,14 @@ class NetworkModel {
         builder.readTimeout(7, TimeUnit.SECONDS)
         builder.connectTimeout(7, TimeUnit.SECONDS)
         builder.addInterceptor(interceptor)
+
+        //if debug mood show retrofit logging
+        if (BuildConfig.DEBUG) {
+            val debugInterceptor = HttpLoggingInterceptor()
+            debugInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            builder.addInterceptor(debugInterceptor)
+        }
+
         return builder.build()
     }
 

@@ -144,11 +144,12 @@ class MyButton : MaterialButton, OnViewStatusChange {
 
 
     private fun startLoading() {
+        super.setOnClickListener(null)
         initProgressBar()
         mButtonText = text.toString()
         text = spannableString
         mProgressDrawable!!.start()
-        super.setOnClickListener(null)
+
 
     }
 

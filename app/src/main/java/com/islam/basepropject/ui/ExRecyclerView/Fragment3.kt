@@ -22,6 +22,7 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
+import java.util.concurrent.TimeUnit
 
 class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
 
@@ -29,14 +30,13 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
-        initToolbar(R.string.title2, true)
+        initToolbar(R.string.title2)
         initViewModel(activity!!, Fragment3.ViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, viewModel: Fragment3.ViewModel?, instance: Bundle?) {
-
         mAdapter = Adapter()
-        createRecyclerView(mAdapter as Adapter)
+        createRecyclerView(mAdapter!!)
         markScreenAsCompleted()
     }
 

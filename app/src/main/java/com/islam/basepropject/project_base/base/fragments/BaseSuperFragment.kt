@@ -1,5 +1,6 @@
 package com.islam.basepropject.project_base.base.fragments
 
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -22,16 +23,16 @@ abstract class BaseSuperFragment<V : BaseViewModel<*>> : BaseFragment<V>() {
     var viewPager: ViewPager2? = null
         private set
 
-    fun createRecyclerView(baseAdapter: RecyclerView.Adapter<*>, hasFixedSize: Boolean) {
-        createRecyclerView(baseAdapter, LinearLayoutManager(context), hasFixedSize)
-    }
-
-
     @JvmOverloads
-    fun createRecyclerView(baseAdapter: RecyclerView.Adapter<*>, layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context), hasFixedSize: Boolean = false) {
-        recyclerView = view!!.findViewById(R.id.recyclerView)
+    fun createRecyclerView(baseAdapter: RecyclerView.Adapter<*>,
+                           layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context),
+                           hasFixedSize: Boolean = false,
+                           recyclerViewId: Int = R.id.recyclerView) {
+        recyclerView = view!!.findViewById(recyclerViewId)
+
         if (recyclerView == null)
             throw IllegalStateException("There is no RecyclerView included in xml with id \"recyclerView\" ")
+
         recyclerView!!.setLayoutManager(layoutManager)
         recyclerView!!.adapter = baseAdapter
         recyclerView!!.setHasFixedSize(hasFixedSize)
@@ -49,12 +50,15 @@ abstract class BaseSuperFragment<V : BaseViewModel<*>> : BaseFragment<V>() {
             baseAdapter.registerAdapterDataObservertion(recyclerView!!)
     }
 
-    fun createTabLayout(fragmentsClass: Array<Class<*>>, tabsNames: Array<String>) {
+    fun createTabLayout(fragmentsClass: Array<Class<*>>,
+                        tabsNames: Array<String>,
+                        tabLayoutId : Int = R.id.tabLayout,
+                        viewPagerId : Int = R.id.viewPager) {
 
-        val tabLayout = view!!.findViewById<TabLayout>(R.id.tabLayout)
+        val tabLayout = view!!.findViewById<TabLayout>(tabLayoutId)
         viewPager = null
         try {
-            viewPager = view!!.findViewById(R.id.viewPager)
+            viewPager = view!!.findViewById(viewPagerId)
         } catch (e: ClassCastException) {
             throw IllegalStateException("use ViewPager2 instead of ViewPager ")
         }

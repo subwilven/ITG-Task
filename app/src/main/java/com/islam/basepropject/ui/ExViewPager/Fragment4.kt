@@ -2,6 +2,7 @@ package com.islam.basepropject.ui.ExViewPager
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment

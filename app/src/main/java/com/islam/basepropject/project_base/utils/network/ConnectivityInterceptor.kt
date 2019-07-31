@@ -10,7 +10,7 @@ import okhttp3.Response
 
 class ConnectivityInterceptor : Interceptor {
 
-    @Throws(IOException::class)
+    @Throws(NoConnectivityException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         return if (!NetworkManager.isNetworkConnected(MyApplication.instance!!)) {
             throw NoConnectivityException()
