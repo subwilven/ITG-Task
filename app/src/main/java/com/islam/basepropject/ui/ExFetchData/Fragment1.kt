@@ -17,6 +17,7 @@ import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.network.RetrofitObserver
 import com.islam.basepropject.project_base.views.OnViewStatusChange
+import com.islam.basepropject.ui.ExDialogs.Fragment5
 import com.islam.basepropject.ui.ExRecyclerView.Fragment3
 
 import io.reactivex.disposables.Disposable
@@ -44,7 +45,7 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
 
         activity?.findViewById<View>(R.id.fab)?.setOnClickListener {  viewModel!!.loadProviders(activity
                 ?.findViewById<View>(R.id.fab) as OnViewStatusChange)}
-        view.setOnClickListener { FragmentManagerUtil.replaceFragment(fragmentManager!!, Fragment3(), true) }
+        view.setOnClickListener { FragmentManagerUtil.replaceFragment(fragmentManager!!, Fragment5(), true) }
 
     }
 

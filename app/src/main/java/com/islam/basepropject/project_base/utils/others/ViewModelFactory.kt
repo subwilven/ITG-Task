@@ -2,6 +2,7 @@ package com.islam.basepropject.project_base.utils.others
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.islam.basepropject.ui.ExDialogs.Fragment5
 
 import com.islam.basepropject.ui.ExFetchData.Fragment1
 import com.islam.basepropject.ui.ExRecyclerView.Fragment3
@@ -29,6 +30,11 @@ class ViewModelFactory private constructor() : ViewModelProvider.NewInstanceFact
 
         if (modelClass.isAssignableFrom(Fragment3.ViewModel::class.java)) {
             return Fragment3.ViewModel() as T
+        }
+
+
+        if (modelClass.isAssignableFrom(Fragment5.ViewModel::class.java)) {
+            return Fragment5.ViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

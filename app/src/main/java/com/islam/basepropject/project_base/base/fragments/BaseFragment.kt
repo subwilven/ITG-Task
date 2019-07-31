@@ -4,14 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import com.afollestad.materialdialogs.MaterialDialog
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.POJO.ErrorModel
 import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.ActivityManager
+import com.islam.basepropject.project_base.utils.DialogManager
 import com.islam.basepropject.project_base.utils.others.ViewModelFactory
 import io.reactivex.functions.Consumer
 
@@ -236,4 +239,42 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
         baseActivity!!.enableBackButton(enableBackButton)
     }
 
+    fun showDialog(@StringRes title: Int,
+                   @StringRes message: Int,
+                   @StringRes positiveButton: Int = -1,
+                   @StringRes negativeButton: Int = -1,
+                   cancelable: Boolean = true,
+                   cancelOnTouchOutside: Boolean = true,
+                   onPositiveClick: (() -> Unit)? = null,
+                   onNegativelick: (() -> Unit)? = null) {
+        DialogManager.showDialog(context!!, title, message, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onPositiveClick, onNegativelick)
+    }
+
+    fun showDialogList(@StringRes title: Int,
+                       @StringRes positiveButton: Int = -1,
+                       @StringRes negativeButton: Int = -1,
+                       cancelable: Boolean = true,
+                       cancelOnTouchOutside: Boolean = true,
+                       onPositiveClick: (() -> Unit)? = null,
+                       onNegativelick: (() -> Unit)? = null,
+                       initialSelection: Int = -1,
+                       initialSelectionArray: IntArray = IntArray(0),
+                       items: List<String>? = null,
+                       onSingleChoiceClicked: ((dialog: MaterialDialog, index: Int, text: String) -> Unit)? = null,
+                       onMultiChoiceClicked: ((dialog: MaterialDialog, indices: IntArray, items: List<String>) -> Unit)? = null) {
+
+        DialogManager.showDialogList(context!!, title, positiveButton,
+                negativeButton,
+                cancelable,
+                cancelOnTouchOutside,
+                onPositiveClick,
+                onNegativelick,
+                initialSelection = initialSelection,
+                items= items,
+                onSingleChoiceClicked= onSingleChoiceClicked,
+                onMultiChoiceClicked = onMultiChoiceClicked,
+                initialSelectionArray = initialSelectionArray)
+    }
 }
+
+

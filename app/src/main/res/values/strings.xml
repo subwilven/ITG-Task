@@ -39,4 +39,7 @@
                               C 14.8,1 19,4.8 19,10
                               C 19,14.8 14.8,19 10,19
                               C 4.8,19 1,14.8 1,10</string>
+    <string name="dialogs">Dialogs</string>
+    <string name="ok">Ok</string>
+    <string name="message1">Message Message Me Messagessage Message</string>
 </resources>

@@ -7,11 +7,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
-        <item name="tabStyle">@style/AppTheme.TabLayout</item>
+        <item name="tabStyle">@style/AppTabLayout</item>
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="md_corner_radius">16dp</item>
+     <item name="md_font_button"></item>
     </style>
 
-    <style name="AppTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+    <style name="AppTabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabSelectedTextColor">?attr/colorPrimary</item>
         <item name="tabTextColor">@color/mtrl_tabs_icon_color_selector</item>
         <item name="android:background">?attr/colorSurface</item>
