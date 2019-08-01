@@ -2,10 +2,10 @@ package com.islam.basepropject.project_base.utils
 
 import android.content.Context
 import androidx.annotation.StringRes
-import com.afollestad.materialdialogs.DialogBehavior
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.islam.basepropject.project_base.base.POJO.Message
 
 object DialogManager {
 
@@ -34,7 +34,7 @@ object DialogManager {
 
     fun showDialog(context: Context,
                    @StringRes title: Int,
-                   @StringRes message: Int,
+                   message: Message,
                    @StringRes positiveButton: Int = -1,
                    @StringRes negativeButton: Int = -1,
                    cancelable: Boolean = true,
@@ -43,7 +43,8 @@ object DialogManager {
                    onNegativelick: (() -> Unit)? = null) {
 
         val dialog = buildDialog(context, title, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onPositiveClick, onNegativelick)
-        dialog.message(message)
+        dialog.message(text = message.getValue(context))
+
         dialog.show()
     }
 

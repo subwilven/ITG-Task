@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 
 import com.islam.basepropject.MyApplication
+import com.islam.basepropject.project_base.base.POJO.Message
 
 object ActivityManager {
 
@@ -15,25 +16,15 @@ object ActivityManager {
         }
     }
 
-    fun showToastShort(stringId: Int) {
-        val context = MyApplication.instance!!.getApplicationContext()
-        showToast(context.getString(stringId), Toast.LENGTH_SHORT)
+    fun showToastShort(context :Context?,message: Message) {
+        showToast(context,message.getValue(context), Toast.LENGTH_SHORT)
     }
 
-    fun showToastLong(stringId: Int) {
-        val context = MyApplication.instance!!.getApplicationContext()
-        showToast(context.getString(stringId), Toast.LENGTH_LONG)
+    fun showToastLong(context :Context?,message: Message) {
+        showToast(context,message.getValue(context), Toast.LENGTH_LONG)
     }
 
-    fun showToastShort(string: String) {
-        showToast(string, Toast.LENGTH_SHORT)
-    }
-
-    fun showToastLong(string: String) {
-        showToast(string, Toast.LENGTH_LONG)
-    }
-
-    private fun showToast(string: String, duration: Int) {
-        Toast.makeText(MyApplication.instance!!.getApplicationContext(), string, duration).show()
+    private fun showToast(context :Context?,string: String, duration: Int) {
+        Toast.makeText(context, string, duration).show()
     }
 }

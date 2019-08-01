@@ -3,6 +3,7 @@ package com.islam.basepropject.project_base.base.other
 import androidx.lifecycle.ViewModel
 
 import com.islam.basepropject.project_base.base.POJO.ErrorModel
+import com.islam.basepropject.project_base.base.POJO.Message
 import com.islam.basepropject.project_base.base.POJO.ScreenStatus
 import com.islam.basepropject.project_base.utils.others.SchedulerProvider
 
@@ -19,9 +20,9 @@ abstract class BaseViewModel<N> : ViewModel() {
     val schedulerProvider: SchedulerProvider
 
     private val mCompositeDisposable: CompositeDisposable
-    private val mSnackBarMessage: PublishSubject<String>
-    private val mToastMessage: PublishSubject<String>
-    private val mDialogMessage: PublishSubject<String>
+    private val mSnackBarMessage: PublishSubject<Message>
+    private val mToastMessage: PublishSubject<Message>
+    private val mDialogMessage: PublishSubject<Message>
     private val mShowLoadingFullScreen: PublishSubject<Boolean>
     private val mShowErrorFullScreen: PublishSubject<ErrorModel>
     private val registeredFragments: HashMap<String, ScreenStatus>
@@ -75,15 +76,15 @@ abstract class BaseViewModel<N> : ViewModel() {
         mCompositeDisposable.add(disposable)
     }
 
-    fun showSnackBarMessage(s: String) {
+    fun showSnackBarMessage(s: Message) {
         mSnackBarMessage.onNext(s)
     }
 
-    fun showToastMessage(s: String) {
+    fun showToastMessage(s: Message) {
         mToastMessage.onNext(s)
     }
 
-    fun showDialogMessage(s: String) {
+    fun showDialogMessage(s: Message) {
         mDialogMessage.onNext(s)
     }
 
@@ -96,15 +97,15 @@ abstract class BaseViewModel<N> : ViewModel() {
     }
 
 
-    fun observeDialogMessage(consumer: Consumer<String>) {
+    fun observeDialogMessage(consumer: Consumer<Message>) {
         addDisposable(mDialogMessage.observeOn(schedulerProvider.ui()).subscribe(consumer))
     }
 
-    fun observeToastMessage(consumer: Consumer<String>) {
+    fun observeToastMessage(consumer: Consumer<Message>) {
         addDisposable(mToastMessage.observeOn(schedulerProvider.ui()).subscribe(consumer))
     }
 
-    fun observeSnackBarMessage(consumer: Consumer<String>) {
+    fun observeSnackBarMessage(consumer: Consumer<Message>) {
         addDisposable(mSnackBarMessage.observeOn(schedulerProvider.ui()).subscribe(consumer))
     }
 

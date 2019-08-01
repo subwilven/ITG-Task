@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 
 import androidx.fragment.app.FragmentActivity
+import com.islam.basepropject.project_base.base.POJO.Message
 
 import com.tbruyelle.rxpermissions2.RxPermissions
 
@@ -30,9 +31,9 @@ object PermissionsManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { permission ->
                     if (permission.granted) {
-                        ActivityManager.showToastShort("granted")
+                        ActivityManager.showToastShort(activity,Message("granted"))
                     } else if (permission.shouldShowRequestPermissionRationale) {
-                        ActivityManager.showToastShort("not granted")
+                        ActivityManager.showToastShort(activity,Message("not granted"))
                     } else {
                         IntentManager.openAppSettings()
                     }

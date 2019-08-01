@@ -37,7 +37,6 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
     override fun onViewCreated(view: View, viewModel: Fragment3.ViewModel?, instance: Bundle?) {
         mAdapter = Adapter()
         createRecyclerView(mAdapter!!)
-        markScreenAsCompleted()
     }
 
     override fun loadStartUpData() {

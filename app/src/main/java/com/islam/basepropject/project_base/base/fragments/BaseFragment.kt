@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.afollestad.materialdialogs.MaterialDialog
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.POJO.ErrorModel
+import com.islam.basepropject.project_base.base.POJO.Message
 import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.ActivityManager
@@ -145,10 +146,12 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
 
         //TODO need to be implemented
         viewModel!!.observeSnackBarMessage(Consumer {})
-        viewModel!!.observeDialogMessage(Consumer {})
 
+        viewModel!!.observeDialogMessage(Consumer {
+            showDialog(R.string.title1,it)
+        })
 
-        viewModel!!.observeToastMessage(Consumer { ActivityManager.showToastLong(it) })
+        viewModel!!.observeToastMessage(Consumer { ActivityManager.showToastLong(context,it) })
 
     }
 
@@ -253,8 +256,8 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
     }
 
     fun showDialog(@StringRes title: Int,
-                   @StringRes message: Int,
-                   @StringRes positiveButton: Int = -1,
+                   message : Message,
+                   @StringRes positiveButton: Int = R.string.ok,
                    @StringRes negativeButton: Int = -1,
                    cancelable: Boolean = true,
                    cancelOnTouchOutside: Boolean = true,

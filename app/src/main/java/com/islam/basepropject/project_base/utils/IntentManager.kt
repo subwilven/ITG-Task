@@ -11,6 +11,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
+import com.islam.basepropject.project_base.base.POJO.Message
 
 class IntentManager private constructor() {
 
@@ -23,7 +24,7 @@ class IntentManager private constructor() {
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)
         } else {
-            ActivityManager.showToastLong(R.string.google_map_app_not_found)
+            ActivityManager.showToastLong(context,Message(R.string.google_map_app_not_found))
         }
     }
 
