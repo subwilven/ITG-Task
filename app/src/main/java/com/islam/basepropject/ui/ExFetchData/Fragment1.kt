@@ -45,7 +45,7 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
 
         activity?.findViewById<View>(R.id.fab)?.setOnClickListener {  viewModel!!.loadProviders(activity
                 ?.findViewById<View>(R.id.fab) as OnViewStatusChange)}
-        view.setOnClickListener { FragmentManagerUtil.replaceFragment(fragmentManager!!, Fragment5(), true) }
+        view.setOnClickListener { navigate(Fragment5(),addToBackStack = true) }
 
     }
 

@@ -2,6 +2,7 @@ package com.islam.basepropject.project_base.utils
 
 import android.content.Context
 import androidx.annotation.StringRes
+import com.afollestad.materialdialogs.DialogBehavior
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
@@ -19,6 +20,7 @@ object DialogManager {
                             onNegativelick: (() -> Unit)?): MaterialDialog {
         var dialog = MaterialDialog(context)
                 .title(title)
+
                 .cancelOnTouchOutside(cancelOnTouchOutside)
                 .cancelable(cancelable)
         if (positiveButton != -1)

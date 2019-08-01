@@ -1,15 +1,20 @@
 package com.islam.basepropject.project_base.base.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
+import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NetworkManager
 
@@ -98,6 +103,25 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     open fun enableBackButton(enableBackButton: Boolean) {
         supportActionBar!!.setDisplayHomeAsUpEnabled(enableBackButton)
         supportActionBar!!.setDisplayShowHomeEnabled(enableBackButton)
+    }
+
+    fun navigate(cls: Class<Any>, bundle: Bundle? = null) {
+        val intent = Intent(this, cls)
+        bundle?.let { intent.putExtras(it) }
+        startActivity(intent)
+    }
+
+    fun navigate(fragmentManager: FragmentManager,
+                 fragment: Fragment,bundle: Bundle? = null,
+                 @IdRes container: Int = R.id.container,
+                 addToBackStack: Boolean = false) {
+
+        bundle?.let { fragment.arguments =(it) }
+
+        FragmentManagerUtil.replaceFragment(fragmentManager,
+                fragment,
+                setToBackStack = addToBackStack,
+                containerId = container)
     }
 
 }

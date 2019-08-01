@@ -135,7 +135,7 @@ abstract class BaseNavigationActivity : BaseActivity() {
         currentFragmentIndex = newFragmentIndex
         try {
             val fragment = fragmentClass.newInstance() as Fragment
-            FragmentManagerUtil.replaceFragment(supportFragmentManager, fragment)
+            navigate(supportFragmentManager,fragment)
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         } catch (e: InstantiationException) {

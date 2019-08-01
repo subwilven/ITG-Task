@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -236,7 +237,19 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
     fun setUpToolbar() {
         if (toolbarTitle != -1)
             baseActivity!!.setToolbarTitle(toolbarTitle)
-        baseActivity!!.enableBackButton(enableBackButton)
+        baseActivity?.enableBackButton(enableBackButton)
+    }
+
+    fun navigate(cls: Class<Any>, bundle: Bundle? = null) {
+        baseActivity?.navigate(cls, bundle)
+    }
+
+    fun navigate(fragment: Fragment, bundle: Bundle? = null,
+                 @IdRes container: Int = R.id.container,
+                 addToBackStack: Boolean = false,
+                 isChildToThisFragment: Boolean = false) {
+        val fragmentManager = if (isChildToThisFragment) childFragmentManager else activity?.supportFragmentManager
+        baseActivity?.navigate(fragmentManager!!,fragment,bundle,container,addToBackStack)
     }
 
     fun showDialog(@StringRes title: Int,
@@ -270,8 +283,8 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
                 onPositiveClick,
                 onNegativelick,
                 initialSelection = initialSelection,
-                items= items,
-                onSingleChoiceClicked= onSingleChoiceClicked,
+                items = items,
+                onSingleChoiceClicked = onSingleChoiceClicked,
                 onMultiChoiceClicked = onMultiChoiceClicked,
                 initialSelectionArray = initialSelectionArray)
     }
