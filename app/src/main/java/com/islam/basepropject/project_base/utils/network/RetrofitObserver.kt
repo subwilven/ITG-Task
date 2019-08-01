@@ -47,10 +47,6 @@ abstract class RetrofitObserver<T> : DisposableSingleObserver<T> {
 
     override fun onError(e: Throwable) {
         e.printStackTrace()
-        if (isStartingFragment)
-            baseViewModel!!.showLoadingFullScreen(false)
-        else view?.showLoading(false)
-
         if (e is HttpException) {
             handelState500Error(e)
         } else if (e is SocketTimeoutException) {
@@ -62,6 +58,10 @@ abstract class RetrofitObserver<T> : DisposableSingleObserver<T> {
         } else {
             baseViewModel!!.showToastMessage(Message("Something Went wrong"))
         }
+
+        if (isStartingFragment)
+            baseViewModel!!.showLoadingFullScreen(false)
+        else view?.showLoading(false)
     }
 
     //handel errors like validation error or authentication error
