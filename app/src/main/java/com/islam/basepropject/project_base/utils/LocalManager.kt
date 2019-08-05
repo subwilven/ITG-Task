@@ -2,7 +2,6 @@ package com.islam.basepropject.project_base.utils
 
 import android.content.Context
 import android.content.res.Configuration
-import androidx.preference.PreferenceManager
 import java.util.*
 
 object LocalManager {
@@ -16,16 +15,12 @@ object LocalManager {
         updateResources(c, language)
     }
 
-    fun isCurrentLanguage(c: Context, lang: String): Boolean {
-        return getLanguage(c)!!.equals(lang, ignoreCase = true)
-    }
-
     fun getLanguage(c: Context): String? {
-        return PreferenceManager.getDefaultSharedPreferences(c).getString("language", "en")
+        return PrefManager.getAppLanguage(c)
     }
 
     private fun persistLanguage(c: Context, language: String?) {
-        PreferenceManager.getDefaultSharedPreferences(c).edit().putString("language", language).apply()
+        language?.let { PrefManager.saveAppLanguage(c, language) }
     }
 
     fun updateResources(context: Context, language: String?): Context {

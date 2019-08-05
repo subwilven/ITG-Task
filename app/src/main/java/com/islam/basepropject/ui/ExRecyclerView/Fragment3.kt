@@ -47,7 +47,7 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
         viewModel!!.getData().observe(viewLifecycleOwner, Observer { strings -> mAdapter?.setData(strings) })
     }
 
-    class ViewModel : BaseViewModel<Any>() {
+    class ViewModel : BaseViewModel() {
 
         internal var data = MutableLiveData<MutableList<String>>()
 

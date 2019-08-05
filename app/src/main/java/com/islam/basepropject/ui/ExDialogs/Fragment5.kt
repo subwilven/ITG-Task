@@ -31,5 +31,5 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
 
     }
 
-    class ViewModel : BaseViewModel<Any>()
+    class ViewModel : BaseViewModel()
 }

@@ -15,7 +15,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.PublishSubject
 
-abstract class BaseViewModel<N> : ViewModel() {
+abstract class BaseViewModel: ViewModel() {
 
     val schedulerProvider: SchedulerProvider
 
@@ -26,18 +26,11 @@ abstract class BaseViewModel<N> : ViewModel() {
     private val mShowLoadingFullScreen: PublishSubject<Boolean>
     private val mShowErrorFullScreen: PublishSubject<ErrorModel>
     private val registeredFragments: HashMap<String, ScreenStatus>
-    private var mNavigator: WeakReference<N>? = null
     private var lastRegisteredFragment: String? = null
 
     val lastRegisterdFragmentStatus: ScreenStatus?
         get() = registeredFragments[lastRegisteredFragment]
 
-
-    var navigator: N?
-        get() = mNavigator!!.get()
-        set(navigator) {
-            this.mNavigator = WeakReference<N>(navigator)
-        }
 
     //to prevent dublicate observing because observeDefault called twice in OnViewCreated and in onStart
     val isDefaultObserved: Boolean

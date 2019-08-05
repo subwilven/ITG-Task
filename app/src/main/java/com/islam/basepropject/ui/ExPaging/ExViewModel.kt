@@ -12,7 +12,7 @@ import com.islam.basepropject.project_base.base.other.BaseViewModel
 
 import io.reactivex.Observable
 
-class ExViewModel : BaseViewModel<Any>() {
+class ExViewModel : BaseViewModel() {
 
     var networkState: LiveData<NetworkRequestState>? = null
         private set
@@ -22,7 +22,7 @@ class ExViewModel : BaseViewModel<Any>() {
         get() {
             if (dataFactory == null)
                 dataFactory = object : BaseDataFactory<String>(this) {
-                    override fun onCreateDataSource(baseViewModel: BaseViewModel<*>): BaseDataSource<String> {
+                    override fun onCreateDataSource(baseViewModel: BaseViewModel): BaseDataSource<String> {
                         return ExDataSource(this@ExViewModel)
                     }
                 }

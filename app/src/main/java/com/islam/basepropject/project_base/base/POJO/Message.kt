@@ -1,7 +1,6 @@
 package com.islam.basepropject.project_base.base.POJO
 
 import android.content.Context
-import com.islam.basepropject.MyApplication
 
 class Message {
     var text: String = ""

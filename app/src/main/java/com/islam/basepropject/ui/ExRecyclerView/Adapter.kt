@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.adapters.BaseAdapter
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder
+import com.islam.basepropject.project_base.utils.ActivityManager.bind
 
 
 class Adapter : BaseAdapter<String, Adapter.ViewHolder>() {
@@ -15,11 +16,7 @@ class Adapter : BaseAdapter<String, Adapter.ViewHolder>() {
     }
 
     inner class ViewHolder(viewGroup: ViewGroup, layoutId: Int) : BaseViewHolder<String>(viewGroup, layoutId) {
-        internal var textView: TextView
-
-        init {
-            textView = itemBaseView.findViewById(R.id.textView2)
-        }
+        private val textView: TextView  by  bind(R.id.textView2)
 
         override fun onBind(item: String) {
             textView.text = item

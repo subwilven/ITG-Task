@@ -13,9 +13,6 @@ abstract class BaseViewHolder<T>(viewGroup: ViewGroup, layoutId: Int) : Recycler
         super.itemView.isClickable =true
         super.itemView.addRippleEffect()
     }
-    
-    val itemBaseView: View
-        get() { return super.itemView}
 
     abstract fun onBind(item: T)
 

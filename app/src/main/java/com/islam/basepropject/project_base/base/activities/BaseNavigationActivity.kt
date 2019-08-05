@@ -8,14 +8,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.POJO.NavigationType
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
-
-import java.util.Arrays
+import java.util.*
 
 abstract class BaseNavigationActivity : BaseActivity() {
 
@@ -48,7 +46,9 @@ abstract class BaseNavigationActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //should init toolbar before set up navigation drawer
+        //so we wont wait until the fragment call it we call it now
+        initToolbar()
 
         if (menuItemIds!!.size != fragmentsClassesList!!.size) {
             throw RuntimeException("Numbers of Ids should be equal to number of fragment classes")
@@ -135,7 +135,7 @@ abstract class BaseNavigationActivity : BaseActivity() {
         currentFragmentIndex = newFragmentIndex
         try {
             val fragment = fragmentClass.newInstance() as Fragment
-            navigate(supportFragmentManager,fragment)
+            navigate(supportFragmentManager, fragment)
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         } catch (e: InstantiationException) {

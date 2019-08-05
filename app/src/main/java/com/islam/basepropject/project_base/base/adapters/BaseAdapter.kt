@@ -36,6 +36,13 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
         notifyDataSetChanged()
     }
 
+    fun getItem(index :Int) : T?{
+        list?.let {
+            return it[index]
+        }
+        return null
+    }
+
     fun addItem(item: T) {
         initList()
         list!!.add(item)

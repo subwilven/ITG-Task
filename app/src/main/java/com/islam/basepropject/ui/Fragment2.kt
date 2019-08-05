@@ -39,7 +39,7 @@ class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
     }
 
 
-    class ViewModel : BaseViewModel<Unit>() {
+    class ViewModel : BaseViewModel() {
         //        public ViewModel(SchedulerProvider schedulerProvider) {
         //            super(schedulerProvider);
         //        }

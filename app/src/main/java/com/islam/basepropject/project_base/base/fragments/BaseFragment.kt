@@ -20,10 +20,11 @@ import com.islam.basepropject.project_base.utils.DialogManager
 import com.islam.basepropject.project_base.utils.others.ViewModelFactory
 import io.reactivex.functions.Consumer
 
-abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
+abstract class BaseFragment<V : BaseViewModel> : Fragment() {
 
     var viewModel: V? = null
         protected set
+        get
     var baseActivity: BaseActivity? = null
         private set
 
@@ -148,10 +149,10 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
         viewModel!!.observeSnackBarMessage(Consumer {})
 
         viewModel!!.observeDialogMessage(Consumer {
-            showDialog(R.string.title1,it)
+            showDialog(R.string.title1, it)
         })
 
-        viewModel!!.observeToastMessage(Consumer { ActivityManager.showToastLong(context,it) })
+        viewModel!!.observeToastMessage(Consumer { ActivityManager.showToastLong(context, it) })
 
     }
 
@@ -237,13 +238,17 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
         super.onDetach()
     }
 
+    protected fun finish(){
+        activity?.finish()
+    }
+
     fun setUpToolbar() {
         if (toolbarTitle != -1)
             baseActivity!!.setToolbarTitle(toolbarTitle)
         baseActivity?.enableBackButton(enableBackButton)
     }
 
-    fun navigate(cls: Class<Any>, bundle: Bundle? = null) {
+    fun navigate(cls: Class<*>, bundle: Bundle? = null) {
         baseActivity?.navigate(cls, bundle)
     }
 
@@ -252,11 +257,11 @@ abstract class BaseFragment<V : BaseViewModel<*>> : Fragment() {
                  addToBackStack: Boolean = false,
                  isChildToThisFragment: Boolean = false) {
         val fragmentManager = if (isChildToThisFragment) childFragmentManager else activity?.supportFragmentManager
-        baseActivity?.navigate(fragmentManager!!,fragment,bundle,container,addToBackStack)
+        baseActivity?.navigate(fragmentManager!!, fragment, bundle, container, addToBackStack)
     }
 
     fun showDialog(@StringRes title: Int,
-                   message : Message,
+                   message: Message,
                    @StringRes positiveButton: Int = R.string.ok,
                    @StringRes negativeButton: Int = -1,
                    cancelable: Boolean = true,

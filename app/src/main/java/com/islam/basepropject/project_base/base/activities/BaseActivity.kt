@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
+import com.islam.basepropject.project_base.utils.ActivityManager.bind
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NetworkManager
@@ -52,7 +53,6 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
         super.onCreate(savedInstanceState)
         checkValidResources()
         setContentView(layoutId)
-        initToolbar()
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
@@ -79,7 +79,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
     fun initToolbar() {
         if (supportActionBar == null) {
-            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            val toolbar :Toolbar  by  bind(R.id.toolbar)
             setSupportActionBar(toolbar)
 
             if (toolbar == null)
@@ -89,7 +89,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
     //always called from basefragment but if you have activity without any fragment feel free to call
     fun setToolbarTitle(title: Int) {
-
+         initToolbar()
         //search for textview with this id (in case this app want the title in the middle of the tool bar
         val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)
         if (toolbarTitle != null) {
@@ -101,11 +101,11 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     }
 
     open fun enableBackButton(enableBackButton: Boolean) {
-        supportActionBar!!.setDisplayHomeAsUpEnabled(enableBackButton)
-        supportActionBar!!.setDisplayShowHomeEnabled(enableBackButton)
+        supportActionBar?.setDisplayHomeAsUpEnabled(enableBackButton)
+        supportActionBar?.setDisplayShowHomeEnabled(enableBackButton)
     }
 
-    fun navigate(cls: Class<Any>, bundle: Bundle? = null) {
+    fun navigate(cls: Class<*>, bundle: Bundle? = null) {
         val intent = Intent(this, cls)
         bundle?.let { intent.putExtras(it) }
         startActivity(intent)

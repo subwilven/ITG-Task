@@ -27,7 +27,7 @@ class FragmentTab1 : BaseSuperFragment<FragmentTab1.ViewModel>() {
 
     }
 
-    class ViewModel : BaseViewModel<String>() {
+    class ViewModel : BaseViewModel() {
         fun loadProviders() {
             val repository = Repository()
             addDisposable(repository.providresList

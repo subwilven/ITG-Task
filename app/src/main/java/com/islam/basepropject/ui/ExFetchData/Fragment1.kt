@@ -54,7 +54,7 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
 
     }
 
-    class ViewModel : BaseViewModel<Any>() {
+    class ViewModel : BaseViewModel() {
 
         fun loadProviders(onViewStatusChange: OnViewStatusChange) {
             val repository = Repository()

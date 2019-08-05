@@ -41,4 +41,5 @@
     <string name="message1">Message Message Me Messagessage Message</string>
     <string name="no_network_available">لا يوجد اتصال بالشبكة الرجاء التحقق</string>
     <string name="cannot_reach_the_server">لا نستيطع الوصول للخادم حاول مرة اخري</string>
+    <string name="skip">تخطي</string>
 </resources>

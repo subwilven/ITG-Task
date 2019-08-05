@@ -9,7 +9,7 @@ import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 
-abstract class BaseDataSource<T>(val baseViewModel: BaseViewModel<*>) : PageKeyedDataSource<Long, T>() {
+abstract class BaseDataSource<T>(val baseViewModel: BaseViewModel) : PageKeyedDataSource<Long, T>() {
 
 
     val networkState: MutableLiveData<NetworkRequestState>

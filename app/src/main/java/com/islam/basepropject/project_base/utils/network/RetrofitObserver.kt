@@ -17,17 +17,17 @@ import retrofit2.HttpException
 
 abstract class RetrofitObserver<T> : DisposableSingleObserver<T> {
 
-    private var baseViewModel: BaseViewModel<*>? = null
+    private var baseViewModel: BaseViewModel? = null
     private var view: OnViewStatusChange? = null
 
     private val isStartingFragment: Boolean
         get() = baseViewModel!!.lastRegisterdFragmentStatus == ScreenStatus.STARTING
 
-    protected constructor(viewModel: BaseViewModel<*>) {
+    protected constructor(viewModel: BaseViewModel) {
         baseViewModel = viewModel
     }
 
-    protected constructor(viewModel: BaseViewModel<*>, view: OnViewStatusChange) {
+    protected constructor(viewModel: BaseViewModel, view: OnViewStatusChange) {
         baseViewModel = viewModel
         this.view = view
     }

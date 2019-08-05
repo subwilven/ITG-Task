@@ -1,3 +1,42 @@
 package com.islam.basepropject.project_base.common.ui.splash
 
-class SplashActivity
+import android.os.Bundle
+import android.os.Handler
+import android.view.WindowManager
+import com.islam.basepropject.R
+import com.islam.basepropject.project_base.base.activities.BaseActivity
+import com.islam.basepropject.project_base.common.ui.language.LanguageActivity
+import com.islam.basepropject.project_base.utils.PrefManager
+import com.islam.basepropject.ui.MainActivity
+
+class SplashActivity : BaseActivity() {
+
+
+    override fun onLaunch() {
+        initContentView(R.layout.activity_splash)
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Handler().postDelayed({
+            naviagteToNextScreen()
+        }, 2500)
+    }
+
+    fun naviagteToNextScreen() {
+        if (PrefManager.isFristLaunch(this)) {
+            navigate(LanguageActivity::class.java)
+        } else {
+            navigate(MainActivity::class.java)
+        }
+        finish()
+
+    }
+
+}

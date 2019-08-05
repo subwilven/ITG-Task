@@ -1,10 +1,8 @@
 package com.islam.basepropject.project_base.base.fragments
 
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.islam.basepropject.R
@@ -15,13 +13,16 @@ import com.islam.basepropject.project_base.base.adapters.ViewPagerAdapter
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.views.MyRecyclerView
 
-abstract class BaseSuperFragment<V : BaseViewModel<*>> : BaseFragment<V>() {
+abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
 
 
     var recyclerView: MyRecyclerView? = null
         private set
-    var viewPager: ViewPager2? = null
+    protected var viewPager: ViewPager2? = null
         private set
+        get
+
+    var tabLayout: TabLayout? = null
 
     @JvmOverloads
     fun createRecyclerView(baseAdapter: RecyclerView.Adapter<*>,
@@ -50,12 +51,16 @@ abstract class BaseSuperFragment<V : BaseViewModel<*>> : BaseFragment<V>() {
             baseAdapter.registerAdapterDataObservertion(recyclerView!!)
     }
 
-    fun createTabLayout(fragmentsClass: Array<Class<*>>,
-                        tabsNames: Array<String>,
-                        tabLayoutId : Int = R.id.tabLayout,
-                        viewPagerId : Int = R.id.viewPager) {
 
-        val tabLayout = view!!.findViewById<TabLayout>(tabLayoutId)
+    private fun initTabLayout(tabLayoutId: Int) {
+        tabLayout = view!!.findViewById<TabLayout>(tabLayoutId)
+
+        if (tabLayout == null)
+            throw IllegalStateException("There is no tabLayout included in xml with id \"tabLayout\" ")
+    }
+
+
+    private fun initViewPager(viewPagerId: Int) {
         viewPager = null
         try {
             viewPager = view!!.findViewById(viewPagerId)
@@ -63,31 +68,62 @@ abstract class BaseSuperFragment<V : BaseViewModel<*>> : BaseFragment<V>() {
             throw IllegalStateException("use ViewPager2 instead of ViewPager ")
         }
 
-        if (tabLayout == null)
-            throw IllegalStateException("There is no tabLayout included in xml with id \"tabLayout\" ")
 
         if (viewPager == null)
             throw IllegalStateException("There is no viewPager included in xml with id \"viewPager\" ")
 
+        viewPager!!.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+    }
+
+    private fun setViewPagerAdapter(adapter: RecyclerView.Adapter<*>) {
+        viewPager!!.adapter = adapter
+    }
+
+    private fun attachViewPagerWithTabLayout() {
+        TabLayoutMediator(tabLayout!!, viewPager!!, true) { tab, position -> }.attach()
+    }
+
+
+    fun createViewPager(adapter: RecyclerView.Adapter<*>,
+                        viewPagerId: Int = R.id.viewPager) {
+        initViewPager(viewPagerId)
+        setViewPagerAdapter(adapter)
+    }
+
+    fun createViewPagerWithIndicator(adapter: RecyclerView.Adapter<*>,
+                                     tabLayoutId: Int = R.id.tabLayout,
+                                     viewPagerId: Int = R.id.viewPager) {
+        createViewPager(adapter, viewPagerId)
+        initTabLayout(tabLayoutId)
+        attachViewPagerWithTabLayout()
+    }
+
+
+    fun createViewPagerWithTabLayout(fragmentsClass: Array<Class<*>>,
+                                     tabsNames: Array<String>,
+                                     tabLayoutId: Int = R.id.tabLayout,
+                                     viewPagerId: Int = R.id.viewPager) {
+
+        initTabLayout(tabLayoutId)
+
+        initViewPager(viewPagerId)
 
         val adapter = ViewPagerAdapter(this, fragmentsClass)
-        viewPager!!.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
-        viewPager!!.adapter = adapter
+        setViewPagerAdapter(adapter)
 
-        TabLayoutMediator(tabLayout, viewPager!!, true) { tab, position -> }.attach()
+        attachViewPagerWithTabLayout()
 
         for (i in tabsNames.indices) {
-            tabLayout.getTabAt(i)!!.text = tabsNames[i]
+            tabLayout?.getTabAt(i)!!.text = tabsNames[i]
         }
-
-        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        tabLayout.tabMode = TabLayout.MODE_FIXED
 
     }
 
+
     override fun onDestroy() {
         recyclerView = null
+        tabLayout = null
         viewPager = null
         super.onDestroy()
     }

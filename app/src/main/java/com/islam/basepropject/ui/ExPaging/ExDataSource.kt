@@ -9,7 +9,7 @@ import java.util.ArrayList
 
 import io.reactivex.Single
 
-class ExDataSource(baseView: BaseViewModel<*>) : BaseDataSource<String>(baseView) {
+class ExDataSource(baseView: BaseViewModel) : BaseDataSource<String>(baseView) {
 
     internal var number = 1
     override fun fetchData(key: Int): Single<List<String>> {
