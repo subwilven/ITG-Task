@@ -15,9 +15,10 @@ import com.islam.basepropject.project_base.base.POJO.ErrorModel
 import com.islam.basepropject.project_base.base.POJO.Message
 import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.project_base.base.other.ViewModelFactory
 import com.islam.basepropject.project_base.utils.ActivityManager
 import com.islam.basepropject.project_base.utils.DialogManager
-import com.islam.basepropject.project_base.utils.others.ViewModelFactory
+import com.islam.basepropject.project_base.utils.PermissionsManager
 import io.reactivex.functions.Consumer
 
 abstract class BaseFragment<V : BaseViewModel> : Fragment() {
@@ -238,7 +239,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
         super.onDetach()
     }
 
-    protected fun finish(){
+    protected fun finish() {
         activity?.finish()
     }
 
@@ -258,6 +259,12 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
                  isChildToThisFragment: Boolean = false) {
         val fragmentManager = if (isChildToThisFragment) childFragmentManager else activity?.supportFragmentManager
         baseActivity?.navigate(fragmentManager!!, fragment, bundle, container, addToBackStack)
+    }
+
+    fun requestPermission(vararg permissions: String,
+                           onGranted: (() -> Unit)? = null,
+                           onDenied: (() -> Unit)? = null) {
+        PermissionsManager.requestPermission(this, *permissions, onGranted = onGranted, onDenied = onDenied)
     }
 
     fun showDialog(@StringRes title: Int,

@@ -1,4 +1,4 @@
-package com.islam.basepropject.project_base.utils.others
+package com.islam.basepropject.project_base.base.other
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

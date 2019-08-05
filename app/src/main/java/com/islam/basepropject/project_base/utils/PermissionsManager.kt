@@ -2,12 +2,10 @@ package com.islam.basepropject.project_base.utils
 
 import android.Manifest
 import android.annotation.SuppressLint
-
-import androidx.fragment.app.FragmentActivity
+import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.POJO.Message
-
+import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.tbruyelle.rxpermissions2.RxPermissions
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -24,16 +22,19 @@ object PermissionsManager {
     val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
     @SuppressLint("CheckResult")
-    fun requestPermission(activity: FragmentActivity, vararg permissions: String) {
-        RxPermissions(activity)
+    fun requestPermission(fragment: BaseFragment<*>,
+                          vararg permissions: String,
+                          onGranted: (() -> Unit)? =null,
+                          onDenied: (() -> Unit)? = null) {
+        RxPermissions(fragment)
                 .requestEachCombined(*permissions)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { permission ->
                     if (permission.granted) {
-                        ActivityManager.showToastShort(activity,Message("granted"))
+                        onGranted?.invoke()
                     } else if (permission.shouldShowRequestPermissionRationale) {
-                        ActivityManager.showToastShort(activity,Message("not granted"))
+                        onDenied?.invoke()
                     } else {
                         IntentManager.openAppSettings()
                     }

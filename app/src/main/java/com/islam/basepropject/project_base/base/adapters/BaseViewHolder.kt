@@ -5,11 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.extensions.LayoutContainer
 
+abstract class BaseViewHolder<T>(viewGroup: ViewGroup, layoutId: Int) :
+        RecyclerView.ViewHolder((LayoutInflater.from(viewGroup.context).inflate(layoutId, viewGroup, false))),LayoutContainer {
 
-abstract class BaseViewHolder<T>(viewGroup: ViewGroup, layoutId: Int) : RecyclerView.ViewHolder((LayoutInflater.from(viewGroup.context).inflate(layoutId, viewGroup, false))) {
+     override val containerView: View?
+         get() = itemView
 
-    init {
+     init {
         super.itemView.isClickable =true
         super.itemView.addRippleEffect()
     }

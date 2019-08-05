@@ -13,16 +13,14 @@ import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.utils.network.RetrofitObserver
+import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
 import com.islam.basepropject.project_base.views.OnViewStatusChange
 
 import java.util.ArrayList
 
 import io.reactivex.Single
 import io.reactivex.SingleSource
-import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
-import java.util.concurrent.TimeUnit
 
 class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
 

@@ -1,4 +1,4 @@
-package com.islam.basepropject.project_base.utils.network
+package com.islam.basepropject.project_base.base.other.network
 
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.utils.NetworkManager

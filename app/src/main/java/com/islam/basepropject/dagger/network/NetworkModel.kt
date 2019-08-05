@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.islam.basepropject.BuildConfig
 import com.islam.basepropject.data.ClientApi
-import com.islam.basepropject.project_base.utils.network.ConnectivityInterceptor
+import com.islam.basepropject.project_base.base.other.network.ConnectivityInterceptor
 
 import java.util.concurrent.TimeUnit
 

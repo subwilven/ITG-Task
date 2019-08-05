@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
-import com.islam.basepropject.project_base.utils.ActivityManager.bind
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NetworkManager
@@ -79,7 +78,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
     fun initToolbar() {
         if (supportActionBar == null) {
-            val toolbar :Toolbar  by  bind(R.id.toolbar)
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
             setSupportActionBar(toolbar)
 
             if (toolbar == null)

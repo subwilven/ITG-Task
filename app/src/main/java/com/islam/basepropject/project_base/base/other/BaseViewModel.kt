@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.islam.basepropject.project_base.base.POJO.ErrorModel
 import com.islam.basepropject.project_base.base.POJO.Message
 import com.islam.basepropject.project_base.base.POJO.ScreenStatus
-import com.islam.basepropject.project_base.utils.others.SchedulerProvider
 
-import java.lang.ref.WeakReference
 import java.util.HashMap
 
 import io.reactivex.disposables.CompositeDisposable

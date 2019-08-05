@@ -5,7 +5,6 @@ import android.os.Bundle
 
 import androidx.fragment.app.Fragment
 
-import android.util.Log
 import android.view.View
 
 import com.google.gson.JsonElement
@@ -13,7 +12,7 @@ import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
-import com.islam.basepropject.project_base.utils.network.RetrofitObserver
+import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
 
 
 /**

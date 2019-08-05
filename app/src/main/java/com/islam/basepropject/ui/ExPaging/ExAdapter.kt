@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.adapters.BasePagingAdapter
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder
+import kotlinx.android.synthetic.main.item_string.*
 
 class ExAdapter : BasePagingAdapter<String, ExAdapter.ViewHolder>() {
 
@@ -16,14 +17,8 @@ class ExAdapter : BasePagingAdapter<String, ExAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(viewGroup: ViewGroup, layoutId: Int) : BaseViewHolder<String>(viewGroup, layoutId) {
-        internal var textView: TextView
-
-        init {
-            textView = itemView.findViewById(R.id.textView2)
-        }
-
         override fun onBind(item: String) {
-            textView.text = item
+            textView2.text = item
         }
     }
 }

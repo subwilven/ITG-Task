@@ -1,4 +1,4 @@
-package com.islam.basepropject.project_base.utils.others
+package com.islam.basepropject.project_base.base.other
 
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers

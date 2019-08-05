@@ -6,6 +6,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.project_base.utils.PermissionsManager
 
 class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
 
@@ -16,11 +17,12 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
     }
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
-        showDialogList(R.string.title1,
-                positiveButton = R.string.ok,
-                items = listOf("asdfasd", "asfdsafd", "asfdasdf"),
-                initialSelectionArray = IntArray(1) { 1 },
-                onMultiChoiceClicked = this::onDialogClicked)
+//        showDialogList(R.string.title1,
+//                positiveButton = R.string.ok,
+//                items = listOf("asdfasd", "asfdsafd", "asfdasdf"),
+//                initialSelectionArray = IntArray(1) { 1 },
+//                onMultiChoiceClicked = this::onDialogClicked)
+       requestPermission(PermissionsManager.CAMERA,onGranted = { print("sfdsadfsf")})
     }
 
     fun onDialogClicked(dialog: MaterialDialog, indices: IntArray, items: List<String>): Unit {

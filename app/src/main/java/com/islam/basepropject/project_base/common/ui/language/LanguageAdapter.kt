@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.adapters.BaseAdapter
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder
-import com.islam.basepropject.project_base.utils.ActivityManager.bind
+import kotlinx.android.synthetic.main.item_language.*
 
 
 class LanguageAdapter(viewModel: LanguageViewModel, stringArray: Array<String>?) : BaseAdapter<String, LanguageAdapter.ViewHolder>(stringArray!!.toMutableList()) {
@@ -18,15 +18,12 @@ class LanguageAdapter(viewModel: LanguageViewModel, stringArray: Array<String>?)
     }
 
     inner class ViewHolder(viewGroup: ViewGroup, layoutId: Int) : BaseViewHolder<String>(viewGroup, layoutId),View.OnClickListener{
-
-        private val languageTextView: TextView by bind(R.id.tv_language)
-
         init {
             itemView.setOnClickListener(this)
         }
 
         override fun onBind(item: String) {
-            languageTextView.text =item
+            tv_language.text =item
         }
 
         override fun onClick(p0: View?) {

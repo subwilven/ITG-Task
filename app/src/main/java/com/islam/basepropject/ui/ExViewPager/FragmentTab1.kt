@@ -1,7 +1,6 @@
 package com.islam.basepropject.ui.ExViewPager
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 
 import com.google.gson.JsonElement
@@ -9,7 +8,8 @@ import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.utils.network.RetrofitObserver
+import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
+import kotlinx.android.synthetic.main.fragment_tab1.*
 
 class FragmentTab1 : BaseSuperFragment<FragmentTab1.ViewModel>() {
 
@@ -20,7 +20,7 @@ class FragmentTab1 : BaseSuperFragment<FragmentTab1.ViewModel>() {
     }
 
     override fun onViewCreated(view: View, viewModel: FragmentTab1.ViewModel?, instance: Bundle?) {
-        view.findViewById<View>(R.id.btn_fetch2).setOnClickListener { v -> viewModel!!.loadProviders() }
+        btn_fetch2.setOnClickListener { v -> viewModel!!.loadProviders() }
     }
 
     override fun setUpObservers() {
