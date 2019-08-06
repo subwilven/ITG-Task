@@ -262,8 +262,19 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
     }
 
     fun requestPermission(vararg permissions: String,
-                           onGranted: (() -> Unit)? = null,
-                           onDenied: (() -> Unit)? = null) {
+                          message: Message? = null,
+                          onGranted: (() -> Unit)? = null,
+                          onDenied: (() -> Unit)? = null) {
+        message?.let {
+            showDialog(R.string.permission_needed, message, onPositiveClick = { permissionToBeRequested(*permissions, onGranted = onGranted, onDenied = onDenied) })
+        }
+                ?: permissionToBeRequested(*permissions, onGranted = onGranted, onDenied = onDenied)
+    }
+
+    private fun permissionToBeRequested(vararg permissions: String,
+                                        onGranted: (() -> Unit)? = null,
+                                        onDenied: (() -> Unit)? = null) {
+
         PermissionsManager.requestPermission(this, *permissions, onGranted = onGranted, onDenied = onDenied)
     }
 

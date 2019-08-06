@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.islam.basepropject.R
+import com.islam.basepropject.project_base.base.POJO.Message
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.PermissionsManager
@@ -22,7 +23,7 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
 //                items = listOf("asdfasd", "asfdsafd", "asfdasdf"),
 //                initialSelectionArray = IntArray(1) { 1 },
 //                onMultiChoiceClicked = this::onDialogClicked)
-       requestPermission(PermissionsManager.CAMERA,onGranted = { print("sfdsadfsf")})
+       requestPermission(PermissionsManager.CAMERA, onGranted = { print("sfdsadfsf")})
     }
 
     fun onDialogClicked(dialog: MaterialDialog, indices: IntArray, items: List<String>): Unit {

@@ -30,6 +30,8 @@ abstract class BaseViewModel: ViewModel() {
         get() = registeredFragments[lastRegisteredFragment]
 
 
+    var isPermissionRequestedBefore :Boolean = false
+
     //to prevent dublicate observing because observeDefault called twice in OnViewCreated and in onStart
     val isDefaultObserved: Boolean
         get() = (mDialogMessage.hasObservers()
