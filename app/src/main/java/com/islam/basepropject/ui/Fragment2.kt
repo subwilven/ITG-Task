@@ -20,8 +20,6 @@ import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
  */
 class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
 
-    internal var mViewModel: ViewModel? = null
-
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
         initToolbar(R.string.title2, false)
@@ -30,7 +28,7 @@ class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
 
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
-        mViewModel = viewModel
+
     }
 
     override fun setUpObservers() {

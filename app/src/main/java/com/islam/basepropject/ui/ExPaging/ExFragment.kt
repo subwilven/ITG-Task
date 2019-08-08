@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 
-import androidx.recyclerview.widget.RecyclerView
-
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 
@@ -27,10 +25,13 @@ class ExFragment : BaseSuperFragment<ExViewModel>() {
     }
 
     override fun setUpObservers() {
-        viewModel!!.orders.subscribe { strings -> mAdapter!!.submitList(strings) }
+        mViewModel!!.orders.observe(viewLifecycleOwner, Observer {mAdapter!!.submitList(it)})
 
-        viewModel?.networkState?.observe(viewLifecycleOwner, Observer
+        mViewModel?.networkState?.observe(viewLifecycleOwner, Observer
                 { networkRequestState -> mAdapter!!.setNetworkState(networkRequestState) })
     }
 
+    override fun loadStartUpData() {
+       mViewModel?.loadOrders()
+    }
 }

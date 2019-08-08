@@ -18,19 +18,17 @@ abstract class BaseViewModel: ViewModel() {
     val schedulerProvider: SchedulerProvider
 
     private val mCompositeDisposable: CompositeDisposable
-    private val mSnackBarMessage: PublishSubject<Message>
-    private val mToastMessage: PublishSubject<Message>
-    private val mDialogMessage: PublishSubject<Message>
-    private val mShowLoadingFullScreen: PublishSubject<Boolean>
-    private val mShowErrorFullScreen: PublishSubject<ErrorModel>
+    val mSnackBarMessage: SingleLiveEvent<Message>
+    val mToastMessage: SingleLiveEvent<Message>
+    val mDialogMessage: SingleLiveEvent<Message>
+    val mShowLoadingFullScreen: SingleLiveEvent<Boolean>
+    val mShowErrorFullScreen: SingleLiveEvent<ErrorModel>
     private val registeredFragments: HashMap<String, ScreenStatus>
     private var lastRegisteredFragment: String? = null
 
     val lastRegisterdFragmentStatus: ScreenStatus?
         get() = registeredFragments[lastRegisteredFragment]
 
-
-    var isPermissionRequestedBefore :Boolean = false
 
     //to prevent dublicate observing because observeDefault called twice in OnViewCreated and in onStart
     val isDefaultObserved: Boolean
@@ -41,11 +39,11 @@ abstract class BaseViewModel: ViewModel() {
     init {
         this.schedulerProvider = SchedulerProvider()
         this.mCompositeDisposable = CompositeDisposable()
-        mSnackBarMessage = PublishSubject.create()
-        mToastMessage = PublishSubject.create()
-        mDialogMessage = PublishSubject.create()
-        mShowLoadingFullScreen = PublishSubject.create()
-        mShowErrorFullScreen = PublishSubject.create()
+        mSnackBarMessage = SingleLiveEvent()
+        mToastMessage = SingleLiveEvent()
+        mDialogMessage = SingleLiveEvent()
+        mShowLoadingFullScreen = SingleLiveEvent()
+        mShowErrorFullScreen = SingleLiveEvent()
         registeredFragments = HashMap()
     }
 
@@ -65,55 +63,30 @@ abstract class BaseViewModel: ViewModel() {
         super.onCleared()
     }
 
-    protected fun addDisposable(disposable: Disposable) {
+    fun addDisposable(disposable: Disposable) {
         mCompositeDisposable.add(disposable)
     }
 
     fun showSnackBarMessage(s: Message) {
-        mSnackBarMessage.onNext(s)
+        mSnackBarMessage.value = s
     }
 
     fun showToastMessage(s: Message) {
-        mToastMessage.onNext(s)
+        mToastMessage.value = s
     }
 
     fun showDialogMessage(s: Message) {
-        mDialogMessage.onNext(s)
+        mDialogMessage.value = s
     }
 
     fun showLoadingFullScreen(b: Boolean) {
-        mShowLoadingFullScreen.onNext(b)
+        mShowLoadingFullScreen.value = b
     }
 
     fun showNoConnectionFullScreen(errorModel: ErrorModel) {
-        mShowErrorFullScreen.onNext(errorModel)
+        mShowErrorFullScreen.value =errorModel
     }
 
-
-    fun observeDialogMessage(consumer: Consumer<Message>) {
-        addDisposable(mDialogMessage.observeOn(schedulerProvider.ui()).subscribe(consumer))
-    }
-
-    fun observeToastMessage(consumer: Consumer<Message>) {
-        addDisposable(mToastMessage.observeOn(schedulerProvider.ui()).subscribe(consumer))
-    }
-
-    fun observeSnackBarMessage(consumer: Consumer<Message>) {
-        addDisposable(mSnackBarMessage.observeOn(schedulerProvider.ui()).subscribe(consumer))
-    }
-
-    fun  observeShowLoadingFullScreen(consumer: Consumer<Boolean>){
-        addDisposable(mShowLoadingFullScreen.observeOn(schedulerProvider.ui()).subscribe(consumer))
-
-    }
-
-    fun observeShowNoConnectionFullScreen(consumer: Consumer<ErrorModel>) {
-        addDisposable(mShowErrorFullScreen.observeOn(schedulerProvider.ui()).subscribe(consumer))
-    }
-
-    fun unSubscribe() {
-        mCompositeDisposable.clear()
-    }
 
     fun unRegister(fragmentClassName: String) {
         registeredFragments.remove(fragmentClassName)

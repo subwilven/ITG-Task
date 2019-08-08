@@ -7,9 +7,8 @@ import com.islam.basepropject.project_base.base.activities.BaseActivityFragment
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.common.ui.intro.IntroFragment
+import com.islam.basepropject.project_base.common.ui.intro.IntroActivity
 import com.islam.basepropject.project_base.utils.PrefManager
-import com.islam.basepropject.ui.MainActivity
 import io.reactivex.subjects.PublishSubject
 
 class LanguageFragment : BaseSuperFragment<LanguageViewModel>() {
@@ -23,15 +22,15 @@ class LanguageFragment : BaseSuperFragment<LanguageViewModel>() {
 
     override fun onViewCreated(view: View, viewModel: LanguageViewModel?, instance: Bundle?) {
         mAdapter = LanguageAdapter(viewModel!!, resources.getStringArray(R.array.languages))
-        createRecyclerView(mAdapter!!)
+        createRecyclerView(mAdapter!!,recyclerViewId = R.id.recyclerView554)
     }
 
     override fun setUpObservers() {
-        viewModel?.let {
-            it.mOnLanguageClicked.subscribe {
+        mViewModel?.let {
+            it.addDisposable(it.mOnLanguageClicked.subscribe {
                 PrefManager.saveAppLanguage(context!!, resources.getStringArray(R.array.languages_values)[it])
-                navigate(IntroFragment(),addToBackStack = true)
-            }
+                navigate(IntroActivity::class.java)
+            })
         }
     }
 }
@@ -40,6 +39,7 @@ class LanguageViewModel : BaseViewModel() {
     val mOnLanguageClicked: PublishSubject<Int> = PublishSubject.create()
     fun onLanguageClicked(lang: Int) = mOnLanguageClicked.onNext(lang)
 }
+
 class LanguageActivity : BaseActivityFragment() {
-    override fun getStartFragment(): BaseFragment<*> =  LanguageFragment()
+    override fun getStartFragment(): BaseFragment<*> = LanguageFragment()
 }

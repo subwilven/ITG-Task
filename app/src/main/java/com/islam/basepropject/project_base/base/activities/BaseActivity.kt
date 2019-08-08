@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -17,6 +16,7 @@ import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NetworkManager
+
 
 abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -88,7 +88,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
     //always called from basefragment but if you have activity without any fragment feel free to call
     fun setToolbarTitle(title: Int) {
-         initToolbar()
+        initToolbar()
         //search for textview with this id (in case this app want the title in the middle of the tool bar
         val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)
         if (toolbarTitle != null) {
@@ -104,18 +104,20 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
         supportActionBar?.setDisplayShowHomeEnabled(enableBackButton)
     }
 
-    fun navigate(cls: Class<*>, bundle: Bundle? = null) {
+    fun navigate(cls: Class<*>, bundle: Bundle? = null, clearBackStack: Boolean = false) {
         val intent = Intent(this, cls)
+        if (clearBackStack)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_CLEAR_TASK and Intent.FLAG_ACTIVITY_NEW_TASK)
         bundle?.let { intent.putExtras(it) }
         startActivity(intent)
     }
 
     fun navigate(fragmentManager: FragmentManager,
-                 fragment: Fragment,bundle: Bundle? = null,
+                 fragment: Fragment, bundle: Bundle? = null,
                  @IdRes container: Int = R.id.container,
                  addToBackStack: Boolean = false) {
 
-        bundle?.let { fragment.arguments =(it) }
+        bundle?.let { fragment.arguments = (it) }
 
         FragmentManagerUtil.replaceFragment(fragmentManager,
                 fragment,

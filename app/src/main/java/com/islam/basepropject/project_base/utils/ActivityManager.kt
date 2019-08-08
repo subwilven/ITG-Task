@@ -3,6 +3,8 @@ package com.islam.basepropject.project_base.utils
 import android.content.Context
 import android.view.View
 import android.widget.Toast
+import androidx.viewpager2.widget.ViewPager2
+import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.base.POJO.Message
 
 object ActivityManager {
@@ -14,16 +16,27 @@ object ActivityManager {
         }
     }
 
-    fun showToastShort(context :Context?,message: Message) {
-        showToast(context,message.getValue(context), Toast.LENGTH_SHORT)
+    fun showToastShort(context: Context?, message: Message) {
+        showToast(message.getValue(context), Toast.LENGTH_SHORT)
     }
 
-    fun showToastLong(context :Context?,message: Message) {
-        showToast(context,message.getValue(context), Toast.LENGTH_LONG)
+    fun showToastLong(context: Context?, message: Message) {
+        showToast(message.getValue(context), Toast.LENGTH_LONG)
     }
 
-    private fun showToast(context :Context?,string: String, duration: Int) {
-        Toast.makeText(context, string, duration).show()
+    private fun showToast(string: String, duration: Int) {
+        Toast.makeText(MyApplication.instance?.applicationContext, string, duration).show()
     }
+
+    fun ViewPager2?.nextPage() :Boolean {
+        this?.let { viewPager ->
+            if (viewPager.currentItem + 1 != viewPager.adapter?.itemCount!!){
+                viewPager.currentItem = viewPager.currentItem.plus(1)
+                return true
+            }
+        }
+        return false
+    }
+
 
 }

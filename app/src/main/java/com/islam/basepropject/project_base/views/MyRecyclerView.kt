@@ -73,7 +73,8 @@ class MyRecyclerView : ConstraintLayout, OnViewStatusChange {
     }
 
     private fun inflateRecyclerView() {
-        recyclerView!!.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        recyclerView?.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        recyclerView?.id = View.generateViewId()
         addView(recyclerView)
     }
 

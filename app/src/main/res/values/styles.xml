@@ -10,7 +10,7 @@
         <item name="tabStyle">@style/AppTabLayout</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:fontFamily">@font/font_family</item>
-
+        <item name="navigationViewStyle">@style/AppNavigationDrawer</item> //to set custom font for the drawer navigation
         <item name="md_corner_radius">16dp</item>
         <item name="md_font_title">@font/font_family</item>
         <item name="md_font_body">@font/font_family</item>
@@ -28,7 +28,13 @@
         <item name="tabMaxWidth">0dp</item>
     </style>
 
+    <style name="AppNavigationDrawer" parent="Widget.Design.NavigationView">
+        <item name="android:textAppearance">@style/TextNavigationDrawer</item>
+    </style>
 
+    <style name="TextNavigationDrawer">
+        <item name="android:fontFamily">@font/font_family</item>
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

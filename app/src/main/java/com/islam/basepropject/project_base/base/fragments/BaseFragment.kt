@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.afollestad.materialdialogs.MaterialDialog
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.POJO.ErrorModel
 import com.islam.basepropject.project_base.base.POJO.Message
@@ -19,21 +19,21 @@ import com.islam.basepropject.project_base.base.other.ViewModelFactory
 import com.islam.basepropject.project_base.utils.ActivityManager
 import com.islam.basepropject.project_base.utils.DialogManager
 import com.islam.basepropject.project_base.utils.PermissionsManager
-import io.reactivex.functions.Consumer
 
-abstract class BaseFragment<V : BaseViewModel> : Fragment() {
 
-    var viewModel: V? = null
+abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
+
+
+    protected var mViewModel: V? = null
         protected set
-        get
-    var baseActivity: BaseActivity? = null
-        private set
 
+    private var mView: View? = null
+
+    private var baseActivity: BaseActivity? = null
     private var mLoadingView: View? = null
     private var mNoConnectionView: View? = null
+    private var savedInstanceState: Bundle? = null
 
-    var savedInstanceState: Bundle? = null
-        private set
 
     //used to spicify this fragment should observe screen status or its children will take this responsibility
     private var hasChildrenFragments = false
@@ -43,14 +43,19 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
     private var optionMenuId = -1
     private var layoutId = -1
 
+
     //override this method if you need to indetif another view group if the
     // loading full screen overlap on another view
     protected val fullScreenViewGroup: ViewGroup
-        get() = view as ViewGroup
+        get() = mView as ViewGroup
 
     val isNetworkConnected: Boolean
         get() = baseActivity != null && baseActivity!!.isNetworkConnected
 
+    override val _fragmentManager: FragmentManager?
+        get() = childFragmentManager
+    override val _context: Context
+        get() = context!!
 
     protected abstract fun onLaunch()
 
@@ -80,11 +85,11 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
     }
 
     protected fun initViewModel(fragment: Fragment, viewModel: Class<V>) {
-        this.viewModel = ViewModelProviders.of(fragment, ViewModelFactory.instance).get(viewModel)
+        this.mViewModel = ViewModelProviders.of(fragment, ViewModelFactory.instance).get(viewModel)
     }
 
     protected fun initViewModel(activity: FragmentActivity, viewModel: Class<V>) {
-        this.viewModel = ViewModelProviders.of(activity, ViewModelFactory.instance).get(viewModel)
+        this.mViewModel = ViewModelProviders.of(activity, ViewModelFactory.instance).get(viewModel)
     }
 
     override fun onAttach(context: Context) {
@@ -103,13 +108,13 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
             setHasOptionsMenu(true)
 
         //register fragment so we can determine should we show full screen loading by consume screen status
-        if (savedInstanceState == null && viewModel != null) {
-            viewModel!!.registerFragment(javaClass.name)
-        }
+        mViewModel!!.registerFragment(javaClass.name)
+
+
     }
 
     protected fun markScreenAsCompleted() {
-        viewModel!!.markAsCompleted(javaClass.name)
+        mViewModel!!.markAsCompleted(javaClass.name)
     }
 
     private fun checkValidResources() {
@@ -119,7 +124,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.savedInstanceState = savedInstanceState
-        return inflater.inflate(layoutId, container, false)
+        mView = inflater.inflate(layoutId, container, false)
+        return mView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,30 +144,31 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
         if (!hasChildrenFragments)
             observeScreenStatus()
 
-        onViewCreated(view, viewModel, savedInstanceState)
+        onViewCreated(view, mViewModel, savedInstanceState)
         loadStartUpData()
+        setUpObservers()
     }
 
 
     private fun observeDefaults() {
-        if (viewModel == null) return
+        if (mViewModel == null) return
 
         //TODO need to be implemented
-        viewModel!!.observeSnackBarMessage(Consumer {})
+        mViewModel!!.mSnackBarMessage.observes(viewLifecycleOwner, Observer {})
 
-        viewModel!!.observeDialogMessage(Consumer {
+        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {
             showDialog(R.string.title1, it)
         })
 
-        viewModel!!.observeToastMessage(Consumer { ActivityManager.showToastLong(context, it) })
+        mViewModel!!.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
 
     }
 
     protected fun observeScreenStatus() {
 
 
-        viewModel!!.observeDialogMessage(Consumer {})
-        viewModel!!.observeShowLoadingFullScreen(Consumer {
+        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {})
+        mViewModel!!.mShowLoadingFullScreen.observes(viewLifecycleOwner, Observer {
 
             if (it) {
                 inflateLoadingFullScreenView()
@@ -170,7 +177,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
                 ActivityManager.setVisibility(View.GONE, mLoadingView)
 
         })
-        viewModel!!.observeShowNoConnectionFullScreen(Consumer {
+        mViewModel!!.mShowErrorFullScreen.observes(viewLifecycleOwner, Observer {
             if (!it.isFreeError) {
                 inflateNoConnectionFullScreenView(it)
                 ActivityManager.setVisibility(View.VISIBLE, mNoConnectionView)
@@ -209,23 +216,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
         (mNoConnectionView!!.findViewById<View>(R.id.tv_message) as TextView).setText(errorModel.message)
     }
 
-    override fun onStart() {
-        super.onStart()
-        //to prevent dublicate observing because observeDefault called twice in OnViewCreated and in onStart
-        if (!viewModel!!.isDefaultObserved)
-            observeDefaults()
-        setUpObservers()
-    }
-
-    override fun onStop() {
-        if (viewModel != null)
-            viewModel!!.unSubscribe()
-        super.onStop()
-    }
 
     override fun onDestroy() {
-        if (viewModel != null)
-            viewModel!!.unRegister(javaClass.name)
+        if (mViewModel != null)
+            mViewModel!!.unRegister(javaClass.name)
         super.onDestroy()
     }
 
@@ -236,6 +230,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
 
     override fun onDetach() {
         baseActivity = null
+        mView = null
         super.onDetach()
     }
 
@@ -249,8 +244,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
         baseActivity?.enableBackButton(enableBackButton)
     }
 
-    fun navigate(cls: Class<*>, bundle: Bundle? = null) {
-        baseActivity?.navigate(cls, bundle)
+    fun navigate(cls: Class<*>, bundle: Bundle? = null, clearBackStack: Boolean = false) {
+        baseActivity?.navigate(cls, bundle, clearBackStack)
     }
 
     fun navigate(fragment: Fragment, bundle: Bundle? = null,
@@ -263,8 +258,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
 
     fun requestPermission(vararg permissions: String,
                           message: Message? = null,
-                          onGranted: (() -> Unit)? = null,
-                          onDenied: (() -> Unit)? = null) {
+                          onDenied: (() -> Unit)? = null,
+                          onGranted: (() -> Unit)? = null) {
         message?.let {
             showDialog(R.string.permission_needed, message, onPositiveClick = { permissionToBeRequested(*permissions, onGranted = onGranted, onDenied = onDenied) })
         }
@@ -278,42 +273,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment() {
         PermissionsManager.requestPermission(this, *permissions, onGranted = onGranted, onDenied = onDenied)
     }
 
-    fun showDialog(@StringRes title: Int,
-                   message: Message,
-                   @StringRes positiveButton: Int = R.string.ok,
-                   @StringRes negativeButton: Int = -1,
-                   cancelable: Boolean = true,
-                   cancelOnTouchOutside: Boolean = true,
-                   onPositiveClick: (() -> Unit)? = null,
-                   onNegativelick: (() -> Unit)? = null) {
-        DialogManager.showDialog(context!!, title, message, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onPositiveClick, onNegativelick)
-    }
-
-    fun showDialogList(@StringRes title: Int,
-                       @StringRes positiveButton: Int = -1,
-                       @StringRes negativeButton: Int = -1,
-                       cancelable: Boolean = true,
-                       cancelOnTouchOutside: Boolean = true,
-                       onPositiveClick: (() -> Unit)? = null,
-                       onNegativelick: (() -> Unit)? = null,
-                       initialSelection: Int = -1,
-                       initialSelectionArray: IntArray = IntArray(0),
-                       items: List<String>? = null,
-                       onSingleChoiceClicked: ((dialog: MaterialDialog, index: Int, text: String) -> Unit)? = null,
-                       onMultiChoiceClicked: ((dialog: MaterialDialog, indices: IntArray, items: List<String>) -> Unit)? = null) {
-
-        DialogManager.showDialogList(context!!, title, positiveButton,
-                negativeButton,
-                cancelable,
-                cancelOnTouchOutside,
-                onPositiveClick,
-                onNegativelick,
-                initialSelection = initialSelection,
-                items = items,
-                onSingleChoiceClicked = onSingleChoiceClicked,
-                onMultiChoiceClicked = onMultiChoiceClicked,
-                initialSelectionArray = initialSelectionArray)
-    }
 }
 
 

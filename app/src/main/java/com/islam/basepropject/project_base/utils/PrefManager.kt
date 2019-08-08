@@ -17,7 +17,7 @@ object PrefManager {
     }
 
     fun saveAppLanguage(context: Context, lang: String) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREF_LANGUAGE, lang).commit()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREF_LANGUAGE, lang).apply()
     }
 
     fun getAppLanguage(context: Context): String? {
