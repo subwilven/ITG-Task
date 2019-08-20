@@ -3,9 +3,7 @@ package com.islam.basepropject.project_base.utils
 import android.Manifest
 import android.annotation.SuppressLint
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
-import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 object PermissionsManager {
@@ -28,7 +26,7 @@ object PermissionsManager {
         RxPermissions(fragment)
                 .requestEachCombined(*permissions)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+               // .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { permission ->
 
                     if (permission.granted) {

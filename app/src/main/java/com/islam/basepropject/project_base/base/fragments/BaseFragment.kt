@@ -5,17 +5,19 @@ import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.MenuRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.ErrorModel
-import com.islam.basepropject.project_base.base.POJO.Message
+import com.islam.basepropject.project_base.POJO.ErrorModel
+import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.base.other.ViewModelFactory
 import com.islam.basepropject.project_base.utils.ActivityManager
 import com.islam.basepropject.project_base.utils.DialogManager
 import com.islam.basepropject.project_base.utils.PermissionsManager
@@ -72,24 +74,24 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     }
 
     @JvmOverloads
-    protected fun initContentView(layoutId: Int, hasChildrenFragments: Boolean = false) {
+    protected fun initContentView(@LayoutRes layoutId: Int, hasChildrenFragments: Boolean = false) {
         this.layoutId = layoutId
         this.hasChildrenFragments = hasChildrenFragments
     }
 
     @JvmOverloads
-    protected fun initToolbar(toolbarTitle: Int, enableBackButton: Boolean = false, menuId: Int = -1) {
+    protected fun initToolbar(@StringRes toolbarTitle: Int, enableBackButton: Boolean = false,@MenuRes menuId: Int = -1) {
         this.enableBackButton = enableBackButton
         this.toolbarTitle = toolbarTitle
         optionMenuId = menuId
     }
 
     protected fun initViewModel(fragment: Fragment, viewModel: Class<V>) {
-        this.mViewModel = ViewModelProviders.of(fragment, ViewModelFactory.instance).get(viewModel)
+        this.mViewModel = ViewModelProviders.of(fragment).get(viewModel)
     }
 
     protected fun initViewModel(activity: FragmentActivity, viewModel: Class<V>) {
-        this.mViewModel = ViewModelProviders.of(activity, ViewModelFactory.instance).get(viewModel)
+        this.mViewModel = ViewModelProviders.of(activity).get(viewModel)
     }
 
     override fun onAttach(context: Context) {
@@ -137,7 +139,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         if (parentFragment == null) {
             setUpToolbar()
             observeDefaults()
-
         }
 
         //used to spicify this fragment should observe screen status or its children will take this responsibility
@@ -178,7 +179,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         })
         mViewModel!!.mShowErrorFullScreen.observes(viewLifecycleOwner, Observer {
-            if (!it.isFreeError) {
+            if (it!=null) {
                 inflateNoConnectionFullScreenView(it)
                 ActivityManager.setVisibility(View.VISIBLE, mNoConnectionView)
             } else
@@ -204,7 +205,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
                     viewGroup, false)
 
             //to handel onRetry in each fragment individually
-            mNoConnectionView!!.findViewById<View>(R.id.btn_retry).setOnClickListener { v ->
+            mNoConnectionView!!.findViewById<View>(R.id.btn_retry).setOnClickListener {
                 if (isNetworkConnected)
                     onRetry()
             }
@@ -212,8 +213,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
             viewGroup.addView(mNoConnectionView)
         }
 
-        (mNoConnectionView!!.findViewById<View>(R.id.tv_title) as TextView).setText(errorModel.title)
-        (mNoConnectionView!!.findViewById<View>(R.id.tv_message) as TextView).setText(errorModel.message)
+        (mNoConnectionView!!.findViewById<View>(R.id.tv_title) as TextView).text = errorModel.title.getValue(context)
+        (mNoConnectionView!!.findViewById<View>(R.id.tv_message) as TextView).text = errorModel.message.getValue(context)
     }
 
 

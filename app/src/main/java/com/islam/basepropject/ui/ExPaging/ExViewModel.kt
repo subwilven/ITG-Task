@@ -5,12 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import androidx.paging.RxPagedListBuilder
-import com.islam.basepropject.project_base.base.POJO.NetworkRequestState
+import com.islam.basepropject.project_base.POJO.NetworkRequestState
 import com.islam.basepropject.project_base.base.other.BaseDataFactory
 import com.islam.basepropject.project_base.base.other.BaseDataSource
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import io.reactivex.subjects.PublishSubject
-import java.util.function.Consumer
 
 class ExViewModel : BaseViewModel() {
     private var dataFactory: BaseDataFactory<String>? = null
@@ -38,10 +36,10 @@ class ExViewModel : BaseViewModel() {
                 .setInitialLoadSizeHint(2)
                 .setPageSize(20).build()
 
-        addDisposable(RxPagedListBuilder(dataFactory!!, pagedListConfig)
-                .buildObservable()
-                .observeOn(schedulerProvider.ui())
-                .subscribeOn(schedulerProvider.io())
-                .subscribe { orders?.value = it})
+//        addDisposable(RxPagedListBuilder(dataFactory!!, pagedListConfig)
+//                .buildObservable()
+//                .observeOn(schedulerProvider.ui())
+//                .subscribeOn(schedulerProvider.io())
+//                .subscribe { orders?.value = it})
     }
 }

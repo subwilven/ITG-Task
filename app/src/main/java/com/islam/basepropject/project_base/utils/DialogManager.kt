@@ -2,7 +2,6 @@ package com.islam.basepropject.project_base.utils
 
 import android.app.Dialog
 import android.content.Context
-import android.widget.AdapterView
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -10,7 +9,7 @@ import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.Message
+import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.base.dialogs.BaseDefaultDialog
 
 interface DialogManager {
@@ -58,9 +57,9 @@ interface DialogManager {
     }
 
     fun showDialogList(@StringRes title: Int,
+                       items: List<String>,
                        cancelable: Boolean = true,
                        cancelOnTouchOutside: Boolean = true,
-                       items: List<String>? = null,
                        onItemSelectedListener:  ((dialog: MaterialDialog, index: Int, text: String) -> Unit)?=null) {
         var dialog = buildDialog(title, cancelable = cancelable,cancelOnTouchOutside =  cancelOnTouchOutside)
         dialog = dialog.listItems(
@@ -72,11 +71,11 @@ interface DialogManager {
     }
 
     fun showDialogListSingleChoice(@StringRes title: Int,
+                                   items: List<String>,
                                    @StringRes positiveButton: Int = R.string.ok,
                                    @StringRes negativeButton: Int = -1,
                                    cancelable: Boolean = true,
                                    cancelOnTouchOutside: Boolean = true,
-                                   items: List<String>? = null,
                                    initialSelection: Int = -1,
                                    onNegativeClick: (() -> Unit)? = null,
                                    onPositiveClick: ((dialog: MaterialDialog, index: Int, text: String) -> Unit)? = null) {
@@ -91,11 +90,11 @@ interface DialogManager {
     }
 
     fun showDialogListMultiChoice(@StringRes title: Int,
+                                  items: List<String>,
                                   @StringRes positiveButton: Int = R.string.ok,
                                   @StringRes negativeButton: Int = -1,
                                   cancelable: Boolean = true,
                                   cancelOnTouchOutside: Boolean = true,
-                                  items: List<String>? = null,
                                   initialSelection: IntArray = IntArray(0),
                                   onNegativeClick: (() -> Unit)? = null,
                                   onPositiveClick: ((dialog: MaterialDialog, indices: IntArray, items: List<String>) -> Unit)? = null) {

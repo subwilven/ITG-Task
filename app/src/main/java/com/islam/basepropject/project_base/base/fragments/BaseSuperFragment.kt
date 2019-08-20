@@ -80,7 +80,7 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
     }
 
     private fun attachViewPagerWithTabLayout() {
-        TabLayoutMediator(tabLayout!!, viewPager!!, true) { tab, position -> }.attach()
+        TabLayoutMediator(tabLayout!!, viewPager!!, true) {_,_ -> }.attach()
     }
 
 

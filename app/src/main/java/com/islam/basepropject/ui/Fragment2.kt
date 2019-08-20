@@ -7,12 +7,11 @@ import androidx.fragment.app.Fragment
 
 import android.view.View
 
-import com.google.gson.JsonElement
 import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
-import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
+
 
 
 /**
@@ -43,14 +42,14 @@ class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
 
         fun loadProviders() {
             val repository = Repository()
-            addDisposable(repository.providresList
-                    .subscribeOn(schedulerProvider.io())
-                    .observeOn(schedulerProvider.ui())
-                    .subscribeWith(object : RetrofitObserver<JsonElement>(this) {
-                        override fun onResultSuccess(o: JsonElement) {
-
-                        }
-                    }))
+//            addDisposable(repository.providresList
+//                    .subscribeOn(schedulerProvider.io())
+//                    .observeOn(schedulerProvider.ui())
+//                    .subscribeWith(object : RetrofitObserver<JsonElement>(this) {
+//                        override fun onResultSuccess(o: JsonElement) {
+//
+//                        }
+//                    }))
 
         }
     }

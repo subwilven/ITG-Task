@@ -35,7 +35,6 @@ class ExDataSource(baseView: BaseViewModel) : BaseDataSource<String>(baseView) {
         strings.add("string " + number++)
         strings.add("string " + number++)
         strings.add("string " + number++)
-        return Single.just<List<String>>(strings).subscribeOn(baseViewModel.schedulerProvider.io())
-                .observeOn(baseViewModel.schedulerProvider.ui())
+        return Single.just<List<String>>(strings)
     }
 }

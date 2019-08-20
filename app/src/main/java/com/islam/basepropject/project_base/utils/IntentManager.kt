@@ -11,7 +11,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.Message
+import com.islam.basepropject.project_base.POJO.Message
 
 object IntentManager {
 

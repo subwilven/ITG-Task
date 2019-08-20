@@ -1,23 +1,15 @@
 package com.islam.basepropject.project_base.base.other
 
 import androidx.lifecycle.ViewModel
+import com.islam.basepropject.project_base.POJO.ErrorModel
+import com.islam.basepropject.project_base.POJO.Message
+import com.islam.basepropject.project_base.POJO.ScreenStatus
+import com.islam.basepropject.project_base.base.other.network.Failure
+import com.islam.basepropject.project_base.base.other.network.Result
+import java.util.*
 
-import com.islam.basepropject.project_base.base.POJO.ErrorModel
-import com.islam.basepropject.project_base.base.POJO.Message
-import com.islam.basepropject.project_base.base.POJO.ScreenStatus
+abstract class BaseViewModel : ViewModel() {
 
-import java.util.HashMap
-
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.subjects.PublishSubject
-
-abstract class BaseViewModel: ViewModel() {
-
-    val schedulerProvider: SchedulerProvider
-
-    private val mCompositeDisposable: CompositeDisposable
     val mSnackBarMessage: SingleLiveEvent<Message>
     val mToastMessage: SingleLiveEvent<Message>
     val mDialogMessage: SingleLiveEvent<Message>
@@ -37,8 +29,6 @@ abstract class BaseViewModel: ViewModel() {
                 && mSnackBarMessage.hasObservers())
 
     init {
-        this.schedulerProvider = SchedulerProvider()
-        this.mCompositeDisposable = CompositeDisposable()
         mSnackBarMessage = SingleLiveEvent()
         mToastMessage = SingleLiveEvent()
         mDialogMessage = SingleLiveEvent()
@@ -53,19 +43,21 @@ abstract class BaseViewModel: ViewModel() {
         lastRegisteredFragment = fragmentClassName
     }
 
+    //get the last screen
+
+    fun markAsCompleted( results: List<Result<Any>>) {
+        for (result in results) {
+            if(result is Failure)
+                return
+        }
+        registeredFragments[lastRegisteredFragment!!] = ScreenStatus.COMPLETED
+    }
+
+
     fun markAsCompleted(name: String) {
         registeredFragments[name] = ScreenStatus.COMPLETED
     }
 
-
-    override fun onCleared() {
-        mCompositeDisposable.dispose()
-        super.onCleared()
-    }
-
-    fun addDisposable(disposable: Disposable) {
-        mCompositeDisposable.add(disposable)
-    }
 
     fun showSnackBarMessage(s: Message) {
         mSnackBarMessage.value = s
@@ -83,8 +75,8 @@ abstract class BaseViewModel: ViewModel() {
         mShowLoadingFullScreen.value = b
     }
 
-    fun showNoConnectionFullScreen(errorModel: ErrorModel) {
-        mShowErrorFullScreen.value =errorModel
+    fun showNoConnectionFullScreen(errorModel: ErrorModel?) {
+        mShowErrorFullScreen.value = errorModel
     }
 
 

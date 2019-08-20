@@ -1,18 +1,16 @@
 package com.islam.basepropject.data
 
-import com.google.gson.JsonElement
 import com.islam.basepropject.BuildConfig
-import com.islam.basepropject.MyApplication
-import com.islam.basepropject.dagger.network.NetworkComponent
+import com.islam.basepropject.pojo.Article
+import com.islam.basepropject.project_base.POJO.ApiResponse
 
-import io.reactivex.Single
+import com.islam.basepropject.project_base.base.other.network.NetworkModel
+
 
 class Repository {
 
-    val providresList: Single<JsonElement>
-        get() {
-            val component = MyApplication.instance!!.networkArticleComponent
-            val clientApi = component.clientApi
-            return clientApi.getProviders("sources", BuildConfig.NEWS_API_KEY)
-        }
+     suspend fun getProvidersList() : ApiResponse<List<Article>> {
+        return NetworkModel.clientApi!!.getProviders("sources", BuildConfig.NEWS_API_KEY)
+       // return NetworkModel.clientApi!!.getProviders()
+    }
 }

@@ -1,4 +1,4 @@
-package com.islam.basepropject.project_base.base.POJO
+package com.islam.basepropject.project_base.POJO
 
 enum class ScreenStatus {
     STARTING,

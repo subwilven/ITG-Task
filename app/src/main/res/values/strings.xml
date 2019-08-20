@@ -38,7 +38,10 @@
     <string name="ok">Ok</string>
     <string name="message1">Message Message Me Messagessage Message</string>
     <string name="no_network_available">No network available, please check your WiFi or Data connection</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="unexpected_error_happened">Unexpected Error Happened</string>
     <string name="cannot_reach_the_server">Cannot reach the server try again later</string>
     <string name="skip">SKIP</string>
     <string name="permission_needed">Permission Needed</string>
+    <string name="server_error">Server Error</string>
 </resources>

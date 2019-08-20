@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -31,7 +33,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
         super.attachBaseContext(LocalManager.updateResources(newBase, LocalManager.getLanguage(newBase)))
     }
 
-    protected fun initContentView(layoutId: Int) {
+    protected fun initContentView(@LayoutRes layoutId: Int) {
         this.layoutId = layoutId
     }
 
@@ -87,7 +89,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     }
 
     //always called from basefragment but if you have activity without any fragment feel free to call
-    fun setToolbarTitle(title: Int) {
+    fun setToolbarTitle(@StringRes title: Int) {
         initToolbar()
         //search for textview with this id (in case this app want the title in the middle of the tool bar
         val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)

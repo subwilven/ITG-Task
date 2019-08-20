@@ -7,24 +7,12 @@ import android.content.IntentFilter
 import android.content.res.Configuration
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatDelegate
-import com.islam.basepropject.dagger.network.DaggerNetworkComponent
-import com.islam.basepropject.dagger.network.NetworkComponent
-import com.islam.basepropject.dagger.network.NetworkModel
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NotificationManager
 
 class MyApplication : Application() {
     internal var broadcastReceiver: BroadcastReceiver? = null
-    internal var networkComponent: NetworkComponent? = null
-
-    val networkArticleComponent: NetworkComponent
-        get() {
-            if (networkComponent == null)
-
-                networkComponent =  DaggerNetworkComponent.builder().networkModel(NetworkModel()).build()
-            return networkComponent as NetworkComponent
-        }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(LocalManager.updateResources(base, LocalManager.getLanguage(base)))

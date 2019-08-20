@@ -19,33 +19,6 @@ class ViewModelFactory private constructor() : ViewModelProvider.NewInstanceFact
         if (modelClass.isAssignableFrom(Fragment1.ViewModel::class.java)) {
             return Fragment1.ViewModel() as T
         }
-        if (modelClass.isAssignableFrom(Fragment2.ViewModel::class.java)) {
-            return Fragment2.ViewModel() as T
-        }
-        if (modelClass.isAssignableFrom(ExViewModel::class.java)) {
-            return ExViewModel() as T
-        }
-
-        if (modelClass.isAssignableFrom(FragmentTab1.ViewModel::class.java)) {
-            return FragmentTab1.ViewModel() as T
-        }
-
-        if (modelClass.isAssignableFrom(Fragment3.ViewModel::class.java)) {
-            return Fragment3.ViewModel() as T
-        }
-
-
-        if (modelClass.isAssignableFrom(Fragment5.ViewModel::class.java)) {
-            return Fragment5.ViewModel() as T
-        }
-
-        if (modelClass.isAssignableFrom(LanguageViewModel::class.java)) {
-            return LanguageViewModel() as  T
-        }
-
-        if (modelClass.isAssignableFrom(IntroViewModel::class.java)) {
-            return IntroViewModel() as  T
-        }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 

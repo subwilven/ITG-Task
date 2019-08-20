@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.islam.basepropject.MyApplication
-import com.islam.basepropject.project_base.base.POJO.Message
+import com.islam.basepropject.project_base.POJO.Message
 
 object ActivityManager {
 

@@ -1,4 +1,4 @@
-package com.islam.basepropject.project_base.base.POJO
+package com.islam.basepropject.project_base.POJO
 
 import android.content.Context
 
@@ -14,11 +14,11 @@ class Message {
         this.resource = resource
     }
 
-    fun getValue(context :Context?) :String{
-        if (text.isNotEmpty())
+    fun getValue(context: Context?): String {
+        if (resource == -1)
             return text
         else
-            return context?.getString(resource) ?:""
+            return context?.getString(resource) ?: ""
     }
 
 

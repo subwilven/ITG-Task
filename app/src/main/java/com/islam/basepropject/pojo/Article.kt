@@ -1,3 +1,3 @@
 package com.islam.basepropject.pojo
 
-class Article
+data class Article (val id:String)

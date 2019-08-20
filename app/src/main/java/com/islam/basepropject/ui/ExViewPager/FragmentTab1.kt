@@ -3,12 +3,10 @@ package com.islam.basepropject.ui.ExViewPager
 import android.os.Bundle
 import android.view.View
 
-import com.google.gson.JsonElement
 import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
 import kotlinx.android.synthetic.main.fragment_tab1.*
 
 class FragmentTab1 : BaseSuperFragment<FragmentTab1.ViewModel>() {
@@ -30,14 +28,14 @@ class FragmentTab1 : BaseSuperFragment<FragmentTab1.ViewModel>() {
     class ViewModel : BaseViewModel() {
         fun loadProviders() {
             val repository = Repository()
-            addDisposable(repository.providresList
-                    .subscribeOn(schedulerProvider.io())
-                    .observeOn(schedulerProvider.ui())
-                    .subscribeWith(object : RetrofitObserver<JsonElement>(this) {
-                        override fun onResultSuccess(o: JsonElement) {
-
-                        }
-                    }))
+//            addDisposable(repository.providresList
+//                    .subscribeOn(schedulerProvider.io())
+//                    .observeOn(schedulerProvider.ui())
+//                    .subscribeWith(object : RetrofitObserver<JsonElement>(this) {
+//                        override fun onResultSuccess(o: JsonElement) {
+//
+//                        }
+//                    }))
 
         }
     }

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.NavigationType
+import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import java.util.*
 
@@ -168,9 +168,9 @@ abstract class BaseNavigationActivity : BaseActivity() {
         }
     }
 
-    fun setElevation(f: Float) {
-        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        //            appBarLayout.setElevation(f);
-        //        }
-    }
+//    fun setElevation(f: Float) {
+//        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//        //            appBarLayout.setElevation(f);
+//        //        }
+//    }
 }

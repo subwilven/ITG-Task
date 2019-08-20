@@ -3,7 +3,7 @@ package com.islam.basepropject.project_base.base.other
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 
-import com.islam.basepropject.project_base.base.POJO.NetworkRequestState
+import com.islam.basepropject.project_base.POJO.NetworkRequestState
 
 import io.reactivex.Single
 import io.reactivex.SingleObserver

@@ -1,9 +1,7 @@
 package com.islam.basepropject.ui
 
-import android.os.Bundle
-
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.NavigationType
+import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity
 import com.islam.basepropject.ui.ExFetchData.Fragment1
 import com.islam.basepropject.ui.ExViewPager.Fragment4

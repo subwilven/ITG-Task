@@ -38,9 +38,12 @@
     <string name="loading">تحميل</string>
     <string name="dialogs">Dialogs</string>
     <string name="ok">Ok</string>
+    <string name="something_went_wrong">حدث خطا الرجاء المحاولة مرة اخري</string>
+    <string name="unexpected_error_happened">خطا غير متوقع</string>
     <string name="message1">Message Message Me Messagessage Message</string>
     <string name="no_network_available">لا يوجد اتصال بالشبكة الرجاء التحقق</string>
     <string name="cannot_reach_the_server">لا نستيطع الوصول للخادم حاول مرة اخري</string>
     <string name="skip">تخطي</string>
     <string name="permission_needed">Permission Needed</string>
+    <string name="server_error">خطأ ف الخادم</string>
 </resources>

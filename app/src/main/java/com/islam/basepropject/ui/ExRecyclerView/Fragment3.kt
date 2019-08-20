@@ -8,20 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-import com.google.gson.JsonElement
 import com.islam.basepropject.R
-import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.base.other.network.RetrofitObserver
 import com.islam.basepropject.project_base.views.OnViewStatusChange
-
-import java.util.ArrayList
-
-import io.reactivex.Single
-import io.reactivex.SingleSource
-import io.reactivex.functions.Function
-import java.util.concurrent.TimeUnit
 
 class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
 
@@ -36,6 +26,7 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
     override fun onViewCreated(view: View, viewModel: Fragment3.ViewModel?, instance: Bundle?) {
         mAdapter = Adapter()
         createRecyclerView(mAdapter!!)
+
     }
 
     override fun loadStartUpData() {
@@ -53,18 +44,18 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
         fun loadProviders(onViewStatusChange: OnViewStatusChange) {
             if(data.value!=null)
                 return
-            val repository = Repository()
-            addDisposable(repository.providresList
-                    .subscribeOn(schedulerProvider.io())
-                    .observeOn(schedulerProvider.ui())
-                    .subscribeWith(object : RetrofitObserver<JsonElement>(this, onViewStatusChange) {
-                        override fun onResultSuccess(o: JsonElement) {
-                            val strings = ArrayList<String>()
-                            strings.add("dsdsd")
-                            strings.add("sdsdsdsdsd")
-                            data.postValue(strings)
-                        }
-                    }))
+//            val repository = Repository()
+//            addDisposable(repository.providresList
+//                    .subscribeOn(schedulerProvider.io())
+//                    .observeOn(schedulerProvider.ui())
+//                    .subscribeWith(object : RetrofitObserver<JsonElement>(this, onViewStatusChange) {
+//                        override fun onResultSuccess(o: JsonElement) {
+//                            val strings = ArrayList<String>()
+//                            strings.add("dsdsd")
+//                            strings.add("sdsdsdsdsd")
+//                            data.postValue(strings)
+//                        }
+//                    }))
 
         }
 

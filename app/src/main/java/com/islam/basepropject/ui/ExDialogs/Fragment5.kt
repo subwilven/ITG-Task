@@ -17,7 +17,7 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
         if (instance == null)
-            showDialogListMultiChoice(R.string.title1,items =listOf("asdfasd", "asfdsafd", "asfdasdf")){dialog,index,text ->
+            showDialogListMultiChoice(R.string.title1,listOf("asdfasd", "asfdsafd", "asfdasdf")){dialog,index,text ->
 
             }
            //requestPermission(PermissionsManager.CAMERA, onGranted = { print("sfdsadfsf")})

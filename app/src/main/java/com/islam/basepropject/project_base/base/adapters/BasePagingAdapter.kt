@@ -5,7 +5,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.NetworkRequestState
+import com.islam.basepropject.project_base.POJO.NetworkRequestState
 import com.islam.basepropject.project_base.views.MyRecyclerView
 
 

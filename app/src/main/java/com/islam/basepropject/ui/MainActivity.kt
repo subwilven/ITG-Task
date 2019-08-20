@@ -1,7 +1,7 @@
 package com.islam.basepropject.ui
 
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.POJO.NavigationType
+import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity
 import com.islam.basepropject.project_base.common.ui.settings.SettingsFragment
 import com.islam.basepropject.ui.ExFetchData.Fragment1
