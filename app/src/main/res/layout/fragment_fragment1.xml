@@ -6,6 +6,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ExFetchData.Fragment1">
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintBottom_toTopOf="@+id/btnFetch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+        app:layout_constraintVertical_bias="0.73" />
+
     <com.islam.basepropject.project_base.views.MyImageView
         android:id="@+id/btnFetch"
         app:srcCompat="@drawable/ic_home_black_24dp"

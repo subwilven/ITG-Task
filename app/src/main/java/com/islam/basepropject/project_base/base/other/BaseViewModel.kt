@@ -18,6 +18,7 @@ abstract class BaseViewModel : ViewModel() {
     */
 
     val mSnackBarMessage: SingleLiveEvent<Message> = SingleLiveEvent()
+    val mEnableSensitiveInputs: SingleLiveEvent<Boolean> = SingleLiveEvent()
     val mToastMessage: SingleLiveEvent<Message> = SingleLiveEvent()
     val mDialogMessage: SingleLiveEvent<Message> = SingleLiveEvent()
     val mShowLoadingFullScreen: SingleLiveEvent<Boolean> = SingleLiveEvent()
@@ -68,6 +69,10 @@ abstract class BaseViewModel : ViewModel() {
 
     fun showDialogMessage(s: Message) {
         mDialogMessage.value = s
+    }
+
+    fun enableSensitiveInputs(b :Boolean){
+        mEnableSensitiveInputs.value =b
     }
 
     fun showLoadingFullScreen(b: Boolean) {

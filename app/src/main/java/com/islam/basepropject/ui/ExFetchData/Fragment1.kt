@@ -1,13 +1,11 @@
 package com.islam.basepropject.ui.ExFetchData
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
@@ -34,14 +32,13 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
         btnFetch.setOnClickListener {
             viewModel!!.loadProviders(btnFetch as OnViewStatusChange)
         }
-
+        addSensitiveInputs(editText)
         activity?.findViewById<View>(R.id.fab)?.setOnClickListener {
 
         }
         view.setOnClickListener { navigate(Fragment5(), addToBackStack = true) }
 
     }
-
 
 
     override fun loadStartUpData() {
@@ -57,7 +54,7 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
 
         fun loadProviders(view: OnViewStatusChange?) {
             ProcessLifecycleOwner.get().lifecycleScope.launch {
-                val providersList = networkCall(view){repository.getProvidersList()}
+                val providersList = networkCall(view) { repository.getProvidersList() }
                 markAsCompleted(listOf(providersList))
             }
 

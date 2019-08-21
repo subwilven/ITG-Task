@@ -29,6 +29,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     }
 
     private fun showLoading() {
+        baseViewModel.enableSensitiveInputs(false)
         if (isStartingFragment) {
             baseViewModel.showNoConnectionFullScreen(null)
             baseViewModel.showLoadingFullScreen(true)
@@ -38,6 +39,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     }
 
     private fun hideLoading() {
+        baseViewModel.enableSensitiveInputs(true)
         if (isStartingFragment)
             baseViewModel.showLoadingFullScreen(false)
         else view?.showLoading(false)
@@ -80,6 +82,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
 
 
     private fun showError(msg: Message, errorModel: ErrorModel = ErrorModel.serverError(msg)) {
+
         if (isStartingFragment)
             baseViewModel.showNoConnectionFullScreen(errorModel)
         else

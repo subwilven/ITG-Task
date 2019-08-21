@@ -35,6 +35,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     private var mLoadingView: View? = null
     private var mErrorView: View? = null
     private var savedInstanceState: Bundle? = null
+    private val sensitiveInputViews = mutableListOf<View>()
 
 
     //used to spicify this fragment should observe screen status or its children will take this responsibility
@@ -73,14 +74,26 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     }
 
+    protected fun addSensitiveInputs(vararg views: View) {
+        for (view in views) {
+            sensitiveInputViews.add(view)
+        }
+    }
+
+    protected fun enableSensitiveInputs(shouldEnable: Boolean) {
+        for (view in sensitiveInputViews)
+            view.isEnabled = shouldEnable
+    }
+
     @JvmOverloads
     protected fun initContentView(@LayoutRes layoutId: Int, hasChildrenFragments: Boolean = false) {
         this.layoutId = layoutId
         this.hasChildrenFragments = hasChildrenFragments
+
     }
 
     @JvmOverloads
-    protected fun initToolbar(@StringRes toolbarTitle: Int, enableBackButton: Boolean = false,@MenuRes menuId: Int = -1) {
+    protected fun initToolbar(@StringRes toolbarTitle: Int, enableBackButton: Boolean = false, @MenuRes menuId: Int = -1) {
         this.enableBackButton = enableBackButton
         this.toolbarTitle = toolbarTitle
         optionMenuId = menuId
@@ -154,6 +167,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     private fun observeDefaults() {
         if (mViewModel == null) return
 
+        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {})
+
         //TODO need to be implemented
         mViewModel!!.mSnackBarMessage.observes(viewLifecycleOwner, Observer {})
 
@@ -163,12 +178,14 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         mViewModel!!.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
 
+        mViewModel!!.mEnableSensitiveInputs.observes(viewLifecycleOwner, Observer {enableSensitiveInputs(it)})
+
     }
 
     protected fun observeScreenStatus() {
 
 
-        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {})
+
         mViewModel!!.mShowLoadingFullScreen.observes(viewLifecycleOwner, Observer {
 
             if (it) {
@@ -179,7 +196,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         })
         mViewModel!!.mShowErrorFullScreen.observes(viewLifecycleOwner, Observer {
-            if (it!=null) {
+            if (it != null) {
                 inflateErrorFullScreenView(it)
                 ActivityManager.setVisibility(View.VISIBLE, mErrorView)
             } else
@@ -221,6 +238,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     override fun onDestroy() {
         if (mViewModel != null)
             mViewModel!!.unRegister(javaClass.name)
+        sensitiveInputViews.clear()
+        mView=null
+        mLoadingView=null
+        mErrorView=null
         super.onDestroy()
     }
 
