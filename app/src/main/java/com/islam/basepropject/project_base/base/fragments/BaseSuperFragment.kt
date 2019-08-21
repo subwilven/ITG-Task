@@ -16,8 +16,6 @@ import com.islam.basepropject.project_base.views.MyRecyclerView
 abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
 
 
-    var recyclerView: MyRecyclerView? = null
-        private set
     protected var viewPager: ViewPager2? = null
         private set
         get
@@ -28,27 +26,26 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
     fun createRecyclerView(baseAdapter: RecyclerView.Adapter<*>,
                            layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context),
                            hasFixedSize: Boolean = false,
-                           recyclerViewId: Int = R.id.recyclerView) {
-        recyclerView = view!!.findViewById(recyclerViewId)
+                           recyclerViewId: Int = R.id.recyclerView) :MyRecyclerView{
 
-        if (recyclerView == null)
-            throw IllegalStateException("There is no RecyclerView included in xml with id \"recyclerView\" ")
+        val recyclerView = view!!.findViewById<MyRecyclerView>(recyclerViewId)
+                ?: throw IllegalStateException("There is no RecyclerView included in xml with id \"recyclerView\" ")
 
-        recyclerView!!.setLayoutManager(layoutManager)
-        recyclerView!!.adapter = baseAdapter
-        recyclerView!!.setHasFixedSize(hasFixedSize)
+        recyclerView.setLayoutManager(layoutManager)
+        recyclerView.adapter = baseAdapter
+        recyclerView.setHasFixedSize(hasFixedSize)
 
-        registerDataObservation(baseAdapter)
+        registerDataObservation(baseAdapter,recyclerView)
 
+        return recyclerView
     }
 
-    fun registerDataObservation(baseAdapter: RecyclerView.Adapter<*>) {
-        if (baseAdapter is BaseAdapter<*, *>)
-            baseAdapter.registerAdapterDataObservertion(recyclerView!!)
-        else if (baseAdapter is BasePagingAdapter<*, *>)
-            baseAdapter.registerAdapterDataObservertion(recyclerView!!)
-        else if (baseAdapter is BaseListAdapter<*, *>)
-            baseAdapter.registerAdapterDataObservertion(recyclerView!!)
+    private fun registerDataObservation(baseAdapter: RecyclerView.Adapter<*>,recyclerView :MyRecyclerView) {
+        when (baseAdapter) {
+            is BaseAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(recyclerView)
+            is BasePagingAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(recyclerView)
+            is BaseListAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(recyclerView)
+        }
     }
 
 
@@ -122,7 +119,6 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
 
 
     override fun onDestroy() {
-        recyclerView = null
         tabLayout = null
         viewPager = null
         super.onDestroy()

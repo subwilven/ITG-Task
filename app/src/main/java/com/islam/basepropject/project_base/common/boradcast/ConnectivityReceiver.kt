@@ -9,6 +9,10 @@ import com.islam.basepropject.project_base.utils.NetworkManager
 
 class ConnectivityReceiver : BroadcastReceiver() {
 
+    companion object {
+        var listener: ConnectivityReceiverListener? = null
+    }
+
     override fun onReceive(context: Context, arg1: Intent) {
         val isConnected = NetworkManager.isNetworkConnected(context)
         if (listener != null) {
@@ -20,8 +24,5 @@ class ConnectivityReceiver : BroadcastReceiver() {
           fun onNetworkConnectionChanged(isConnected: Boolean?)
     }
 
-    companion object {
 
-        var listener: ConnectivityReceiverListener? = null
-    }
 }

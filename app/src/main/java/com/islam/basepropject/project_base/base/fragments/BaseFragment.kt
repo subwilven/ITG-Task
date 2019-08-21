@@ -33,7 +33,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     private var baseActivity: BaseActivity? = null
     private var mLoadingView: View? = null
-    private var mNoConnectionView: View? = null
+    private var mErrorView: View? = null
     private var savedInstanceState: Bundle? = null
 
 
@@ -180,10 +180,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         })
         mViewModel!!.mShowErrorFullScreen.observes(viewLifecycleOwner, Observer {
             if (it!=null) {
-                inflateNoConnectionFullScreenView(it)
-                ActivityManager.setVisibility(View.VISIBLE, mNoConnectionView)
+                inflateErrorFullScreenView(it)
+                ActivityManager.setVisibility(View.VISIBLE, mErrorView)
             } else
-                ActivityManager.setVisibility(View.GONE, mNoConnectionView)
+                ActivityManager.setVisibility(View.GONE, mErrorView)
         })
 
     }
@@ -198,23 +198,23 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         // }
     }
 
-    private fun inflateNoConnectionFullScreenView(errorModel: ErrorModel) {
+    private fun inflateErrorFullScreenView(errorModel: ErrorModel) {
         val viewGroup = fullScreenViewGroup
-        if (mNoConnectionView == null) {
-            mNoConnectionView = LayoutInflater.from(context).inflate(R.layout.layout_no_connection,
+        if (mErrorView == null) {
+            mErrorView = LayoutInflater.from(context).inflate(R.layout.layout_no_connection,
                     viewGroup, false)
 
             //to handel onRetry in each fragment individually
-            mNoConnectionView!!.findViewById<View>(R.id.btn_retry).setOnClickListener {
+            mErrorView!!.findViewById<View>(R.id.btn_retry).setOnClickListener {
                 if (isNetworkConnected)
                     onRetry()
             }
 
-            viewGroup.addView(mNoConnectionView)
+            viewGroup.addView(mErrorView)
         }
 
-        (mNoConnectionView!!.findViewById<View>(R.id.tv_title) as TextView).text = errorModel.title.getValue(context)
-        (mNoConnectionView!!.findViewById<View>(R.id.tv_message) as TextView).text = errorModel.message.getValue(context)
+        (mErrorView!!.findViewById<View>(R.id.tv_title) as TextView).text = errorModel.title.getValue(context)
+        (mErrorView!!.findViewById<View>(R.id.tv_message) as TextView).text = errorModel.message.getValue(context)
     }
 
 

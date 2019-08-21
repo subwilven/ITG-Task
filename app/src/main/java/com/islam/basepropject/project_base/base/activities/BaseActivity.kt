@@ -14,13 +14,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
+import com.islam.basepropject.project_base.common.boradcast.AlerterReceiver
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NetworkManager
+import com.tapadoo.alerter.Alerter
 
 
-abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
+abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener ,AlerterReceiver.AlerterReceiverListener{
 
     private var layoutId = -1
 
@@ -40,6 +42,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     override fun onResume() {
         super.onResume()
         MyApplication.instance!!.setConnectivityListener(this)
+        MyApplication.instance!!.setAlerterListener(this)
         updateConnectionState()
     }
 
@@ -59,10 +62,10 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
     }
 
-
-    override fun onStop() {
+    override fun onPause() {
         MyApplication.instance!!.setConnectivityListener(null)
-        super.onStop()
+        MyApplication.instance!!.setAlerterListener(null)
+        super.onPause()
     }
 
     //called after user get back to activity after unActive state
@@ -71,6 +74,17 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean?) {
+    }
+
+    override fun onAlertReceived(msg: String) {
+        Alerter.create(this)
+                .setTitle("Attention")
+                .setText(msg)
+                .enableSwipeToDismiss()
+                .setDuration(4500)
+                .setEnterAnimation(R.anim.alerter_slide_in_from_top)
+                .setExitAnimation(R.anim.alerter_slide_out_to_top)
+                .show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

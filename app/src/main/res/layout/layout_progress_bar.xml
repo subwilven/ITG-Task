@@ -2,8 +2,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:clickable="true"
     android:elevation="10dp"
-    android:background="?android:windowBackground">
+    android:focusable="true">
 
     <ProgressBar
         android:id="@+id/progressBar"

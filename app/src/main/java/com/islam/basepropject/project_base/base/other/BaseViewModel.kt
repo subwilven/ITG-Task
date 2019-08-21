@@ -1,41 +1,33 @@
 package com.islam.basepropject.project_base.base.other
 
 import androidx.lifecycle.ViewModel
+import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.POJO.ScreenStatus
 import com.islam.basepropject.project_base.base.other.network.Failure
 import com.islam.basepropject.project_base.base.other.network.Result
+import com.islam.basepropject.project_base.base.other.network.RetrofitCorounites
+import com.islam.basepropject.project_base.views.OnViewStatusChange
 import java.util.*
 
 abstract class BaseViewModel : ViewModel() {
 
-    val mSnackBarMessage: SingleLiveEvent<Message>
-    val mToastMessage: SingleLiveEvent<Message>
-    val mDialogMessage: SingleLiveEvent<Message>
-    val mShowLoadingFullScreen: SingleLiveEvent<Boolean>
-    val mShowErrorFullScreen: SingleLiveEvent<ErrorModel>
-    private val registeredFragments: HashMap<String, ScreenStatus>
+    /*
+     Do not forget to check if liveData value is null before requesting the data
+    */
+
+    val mSnackBarMessage: SingleLiveEvent<Message> = SingleLiveEvent()
+    val mToastMessage: SingleLiveEvent<Message> = SingleLiveEvent()
+    val mDialogMessage: SingleLiveEvent<Message> = SingleLiveEvent()
+    val mShowLoadingFullScreen: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val mShowErrorFullScreen: SingleLiveEvent<ErrorModel> = SingleLiveEvent()
+    private val registeredFragments: HashMap<String, ScreenStatus> = HashMap()
     private var lastRegisteredFragment: String? = null
 
     val lastRegisterdFragmentStatus: ScreenStatus?
         get() = registeredFragments[lastRegisteredFragment]
 
-
-    //to prevent dublicate observing because observeDefault called twice in OnViewCreated and in onStart
-    val isDefaultObserved: Boolean
-        get() = (mDialogMessage.hasObservers()
-                && mToastMessage.hasObservers()
-                && mSnackBarMessage.hasObservers())
-
-    init {
-        mSnackBarMessage = SingleLiveEvent()
-        mToastMessage = SingleLiveEvent()
-        mDialogMessage = SingleLiveEvent()
-        mShowLoadingFullScreen = SingleLiveEvent()
-        mShowErrorFullScreen = SingleLiveEvent()
-        registeredFragments = HashMap()
-    }
 
     fun registerFragment(fragmentClassName: String) {
         if (!registeredFragments.containsKey(fragmentClassName))
@@ -43,14 +35,18 @@ abstract class BaseViewModel : ViewModel() {
         lastRegisteredFragment = fragmentClassName
     }
 
-    //get the last screen
-
-    fun markAsCompleted( results: List<Result<Any>>) {
+    //if all network jobs finished successfully mark the screen as completed
+    fun markAsCompleted(results: List<Result<Any>>) {
         for (result in results) {
-            if(result is Failure)
+            if (result is Failure)
                 return
         }
         registeredFragments[lastRegisteredFragment!!] = ScreenStatus.COMPLETED
+    }
+
+
+    suspend fun <T> networkCall(onViewStatusChange: OnViewStatusChange? = null, block: suspend () -> T): Result<T> {
+        return RetrofitCorounites(this, onViewStatusChange).networkCall(block)
     }
 
 
@@ -64,7 +60,10 @@ abstract class BaseViewModel : ViewModel() {
     }
 
     fun showToastMessage(s: Message) {
-        mToastMessage.value = s
+        if (mToastMessage.hasActiveObservers())
+            mToastMessage.value = s
+        else
+            showAlertBar(s)
     }
 
     fun showDialogMessage(s: Message) {
@@ -77,6 +76,10 @@ abstract class BaseViewModel : ViewModel() {
 
     fun showNoConnectionFullScreen(errorModel: ErrorModel?) {
         mShowErrorFullScreen.value = errorModel
+    }
+
+    fun showAlertBar(message: Message) {
+        MyApplication.instance?.showAlertBar(message)
     }
 
 

@@ -9,6 +9,7 @@ import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.POJO.ScreenStatus
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.views.OnViewStatusChange
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -57,6 +58,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     private fun handelNetworkError(e: Throwable) {
         e.printStackTrace()
         when (e) {
+            is CancellationException ->{}
             is HttpException ->
                 onErrorReceived(getHttpErrorMessage(e))
             is SocketTimeoutException ->
@@ -64,14 +66,11 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
             is ConnectivityInterceptor.NoConnectivityException ->
                 showError(Message(R.string.no_network_available), ErrorModel.noConnection())
             is JsonSyntaxException ->
-                showError(Message(R.string.server_error),
-                    ErrorModel.serverError(Message(R.string.server_error)))
+                showError(Message(R.string.server_error))
             is IOException ->
-                showError(Message(R.string.something_went_wrong),
-                        ErrorModel.serverError(Message(R.string.something_went_wrong)))
+                showError(Message(R.string.something_went_wrong))
             else ->
-                showError(Message(R.string.unexpected_error_happened),
-                        ErrorModel.serverError(Message(R.string.unexpected_error_happened)))
+                showError(Message(R.string.unexpected_error_happened))
         }
     }
 
@@ -80,7 +79,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     }
 
 
-    private fun showError(msg: Message, errorModel: ErrorModel) {
+    private fun showError(msg: Message, errorModel: ErrorModel = ErrorModel.serverError(msg)) {
         if (isStartingFragment)
             baseViewModel.showNoConnectionFullScreen(errorModel)
         else

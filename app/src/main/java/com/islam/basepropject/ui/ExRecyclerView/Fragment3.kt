@@ -11,11 +11,13 @@ import androidx.lifecycle.Observer
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.project_base.views.MyRecyclerView
 import com.islam.basepropject.project_base.views.OnViewStatusChange
 
 class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
 
-    internal var mAdapter: Adapter? =null
+    private var mAdapter: Adapter? =null
+    private var myRecyclerView: MyRecyclerView? =null
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
@@ -25,12 +27,12 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
 
     override fun onViewCreated(view: View, viewModel: Fragment3.ViewModel?, instance: Bundle?) {
         mAdapter = Adapter()
-        createRecyclerView(mAdapter!!)
+        myRecyclerView = createRecyclerView(mAdapter!!)
 
     }
 
     override fun loadStartUpData() {
-        mViewModel!!.loadProviders(recyclerView as OnViewStatusChange)
+        mViewModel!!.loadProviders(myRecyclerView as OnViewStatusChange)
     }
 
     override fun setUpObservers() {
