@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
  * A simple [Fragment] subclass.
  */
 class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
+    override var fragmentTag = "Fragment1"
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment1)
@@ -53,7 +54,7 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
         val repository = Repository()
 
         fun loadProviders(view: OnViewStatusChange?) {
-            ProcessLifecycleOwner.get().lifecycleScope.launch {
+            appScope.launch {
                 val providersList = networkCall(view) { repository.getProvidersList() }
                 markAsCompleted(listOf(providersList))
             }

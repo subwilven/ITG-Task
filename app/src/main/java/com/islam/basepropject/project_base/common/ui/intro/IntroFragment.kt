@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_intro.*
 
 
 class IntroFragment : BaseSuperFragment<IntroViewModel>() {
-
+    override var fragmentTag = "IntroFragment"
     var mAdapter: IntroAdapter? = null
 
     override fun onLaunch() {

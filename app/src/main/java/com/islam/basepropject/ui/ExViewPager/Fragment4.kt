@@ -7,9 +7,9 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 
 class Fragment4 : BaseSuperFragment<FragmentTab1.ViewModel>() {
-
+    override var fragmentTag = "Fragment4"
     override fun onLaunch() {
-        initContentView(R.layout.fragment4, true)
+        initContentView(R.layout.fragment4,true)
         initToolbar(R.string.title2, true)
         initViewModel(activity!!, FragmentTab1.ViewModel::class.java)
     }

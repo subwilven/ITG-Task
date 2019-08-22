@@ -43,7 +43,7 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
     private fun registerDataObservation(baseAdapter: RecyclerView.Adapter<*>,recyclerView :MyRecyclerView) {
         when (baseAdapter) {
             is BaseAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(recyclerView)
-            is BasePagingAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(recyclerView)
+            is BasePagingAdapter<*,*> -> baseAdapter.registerAdapterDataObservation(recyclerView)
             is BaseListAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(recyclerView)
         }
     }

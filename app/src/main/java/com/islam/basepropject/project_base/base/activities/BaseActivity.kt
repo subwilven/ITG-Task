@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
+import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.common.boradcast.AlerterReceiver
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
@@ -129,7 +130,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     }
 
     fun navigate(fragmentManager: FragmentManager,
-                 fragment: Fragment, bundle: Bundle? = null,
+                 fragment: BaseFragment<*>, bundle: Bundle? = null,
                  @IdRes container: Int = R.id.container,
                  addToBackStack: Boolean = false) {
 

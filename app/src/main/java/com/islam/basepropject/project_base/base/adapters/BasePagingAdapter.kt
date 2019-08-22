@@ -7,13 +7,17 @@ import androidx.recyclerview.widget.DiffUtil
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.NetworkRequestState
 import com.islam.basepropject.project_base.views.MyRecyclerView
+import com.islam.basepropject.project_base.views.OnViewStatusChange
 
 
-abstract class BasePagingAdapter<T, VH : BaseViewHolder<T>> protected constructor() : PagedListAdapter<T, BaseViewHolder<T>>(callback as DiffUtil.ItemCallback<T>) {
+abstract class BasePagingAdapter<T, VH : BaseViewHolder<T>> protected constructor()
+    : PagedListAdapter<T, BaseViewHolder<T>>(callback as DiffUtil.ItemCallback<T>)
+        , OnViewStatusChange {
 
-    private var networkState: NetworkRequestState? = null
+    // private var networkState: NetworkRequestState? = null
+    private var hasExtraItems: Boolean = false
 
-    fun registerAdapterDataObservertion(recyclerView: MyRecyclerView) {
+    fun registerAdapterDataObservation(recyclerView: MyRecyclerView) {
         registerAdapterDataObserver(AdapterDataObservation(recyclerView))
     }
 
@@ -21,9 +25,9 @@ abstract class BasePagingAdapter<T, VH : BaseViewHolder<T>> protected constructo
     abstract fun getViewHolder(viewGroup: ViewGroup): VH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
-        when (viewType) {
-            TYPE_PROGRESS -> return LoadingViewHolder(parent)
-            else -> return getViewHolder(parent)
+        return when (viewType) {
+            TYPE_PROGRESS -> LoadingViewHolder(parent)
+            else -> getViewHolder(parent)
         }
 
     }
@@ -33,48 +37,26 @@ abstract class BasePagingAdapter<T, VH : BaseViewHolder<T>> protected constructo
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (hasExtraRow() && position == itemCount - 1) {
+        return if (hasExtraItems && position == itemCount-1) {
             TYPE_PROGRESS
         } else {
             TYPE_ITEM
         }
     }
 
-    private fun hasExtraRow(): Boolean {
-        return if (networkState != null && networkState != NetworkRequestState.COMPLETE) {
-            true
-        } else {
-            false
-        }
-    }
-
-    fun setNetworkState(newNetworkState: NetworkRequestState) {
-        val previousState = this.networkState
-        val previousExtraRow = hasExtraRow()
-        this.networkState = newNetworkState
-        val newExtraRow = hasExtraRow()
-        if (previousExtraRow != newExtraRow) {
-            if (previousExtraRow) {
-                notifyItemRemoved(itemCount)
-            } else {
-                notifyItemInserted(itemCount)
-            }
-        } else if (newExtraRow && previousState != newNetworkState) {
-            notifyItemChanged(itemCount - 1)
-        }
+    override fun showLoading(b: Boolean) {
+        hasExtraItems = b
+        if (b)
+            notifyItemInserted(itemCount)
+        else
+            notifyItemChanged(itemCount)
     }
 
     inner class LoadingViewHolder(itemView: ViewGroup) : BaseViewHolder<T>(itemView, R.layout.item_loading) {
-
-
-        override fun onBind(item: T) {
-
-        }
+        override fun onBind(item: T) {}
     }
 
     companion object {
-
-
         private val TYPE_PROGRESS = 0
         private val TYPE_ITEM = 1
 

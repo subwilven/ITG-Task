@@ -1,6 +1,8 @@
 package com.islam.basepropject.project_base.base.other
 
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
@@ -15,7 +17,11 @@ abstract class BaseViewModel : ViewModel() {
 
     /*
      Do not forget to check if liveData value is null before requesting the data
+     Use appScope when you need the response of network request even that user has left the screen
+     Use viewModelScope when the network response don't represent any importance if the user left the screen
     */
+
+    val appScope = ProcessLifecycleOwner.get().lifecycleScope
 
     val mSnackBarMessage: SingleLiveEvent<Message> = SingleLiveEvent()
     val mEnableSensitiveInputs: SingleLiveEvent<Boolean> = SingleLiveEvent()
@@ -71,8 +77,8 @@ abstract class BaseViewModel : ViewModel() {
         mDialogMessage.value = s
     }
 
-    fun enableSensitiveInputs(b :Boolean){
-        mEnableSensitiveInputs.value =b
+    fun enableSensitiveInputs(b: Boolean) {
+        mEnableSensitiveInputs.value = b
     }
 
     fun showLoadingFullScreen(b: Boolean) {

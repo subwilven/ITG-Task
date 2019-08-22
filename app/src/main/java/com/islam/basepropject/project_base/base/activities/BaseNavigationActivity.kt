@@ -7,11 +7,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.NavigationType
+import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import java.util.*
 
@@ -26,6 +26,7 @@ abstract class BaseNavigationActivity : BaseActivity() {
     private var fragmentsClassesList: List<Class<*>>? = null
     private var menuItemIds: IntArray? = null
     private var currentFragmentIndex = -1
+    private var firstFragmentTag: String? = null
 
 
     internal var closeDrawerHandler = Handler()
@@ -36,7 +37,8 @@ abstract class BaseNavigationActivity : BaseActivity() {
     internal var onBottomNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { this.onItemSelected(it) }
 
     private val isDrawerFragment: Boolean
-        get() = FragmentManagerUtil.getBackStackCount(supportFragmentManager) == 0 && !FragmentManagerUtil.isFragmentActive(supportFragmentManager, fragmentsClassesList!![0])
+        get() = FragmentManagerUtil.getBackStackCount(supportFragmentManager) == 0 &&
+                !FragmentManagerUtil.isFragmentActive(supportFragmentManager, firstFragmentTag!!)
 
     fun initNavigation(fragmentsClasses: Array<Class<*>>, menuItemIds: IntArray, navigationType: NavigationType) {
         this.fragmentsClassesList = Arrays.asList(*fragmentsClasses)
@@ -102,7 +104,7 @@ abstract class BaseNavigationActivity : BaseActivity() {
                 toggle!!.isDrawerIndicatorEnabled = false
                 supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                 supportActionBar!!.setDisplayShowHomeEnabled(true)
-                toggle!!.setToolbarNavigationClickListener { _ -> onBackPressed() }
+                toggle!!.setToolbarNavigationClickListener { onBackPressed() }
             } else {
                 supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                 toggle!!.isDrawerIndicatorEnabled = true
@@ -134,8 +136,10 @@ abstract class BaseNavigationActivity : BaseActivity() {
 
         currentFragmentIndex = newFragmentIndex
         try {
-            val fragment = fragmentClass.newInstance() as Fragment
+            val fragment = fragmentClass.newInstance() as BaseFragment<*>
             navigate(supportFragmentManager, fragment)
+            if (newFragmentIndex == 0)
+                firstFragmentTag = fragment.fragmentTag
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         } catch (e: InstantiationException) {

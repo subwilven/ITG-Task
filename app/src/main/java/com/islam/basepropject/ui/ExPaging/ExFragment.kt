@@ -8,8 +8,8 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 
 class ExFragment : BaseSuperFragment<ExViewModel>() {
-
-    private var mAdapter: ExAdapter? = null
+    override var fragmentTag = "ExFragment"
+    private var mAdapter = ExAdapter()
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
@@ -19,19 +19,14 @@ class ExFragment : BaseSuperFragment<ExViewModel>() {
 
 
     override fun onViewCreated(view: View, viewModel: ExViewModel?, instance: Bundle?) {
-        mAdapter = ExAdapter()
-
-        createRecyclerView(mAdapter as ExAdapter )
+        createRecyclerView(mAdapter)
     }
 
     override fun setUpObservers() {
-        mViewModel!!.orders.observe(viewLifecycleOwner, Observer {mAdapter!!.submitList(it)})
-
-        mViewModel?.networkState?.observe(viewLifecycleOwner, Observer
-                { networkRequestState -> mAdapter!!.setNetworkState(networkRequestState) })
+        mViewModel!!.orders?.observe(viewLifecycleOwner, Observer {mAdapter.submitList(it)})
     }
 
     override fun loadStartUpData() {
-       mViewModel?.loadOrders()
+       mViewModel?.loadOrders(mAdapter)
     }
 }

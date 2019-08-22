@@ -30,7 +30,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         protected set
 
     private var mView: View? = null
-
+    abstract var fragmentTag :String
     private var baseActivity: BaseActivity? = null
     private var mLoadingView: View? = null
     private var mErrorView: View? = null
@@ -89,7 +89,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     protected fun initContentView(@LayoutRes layoutId: Int, hasChildrenFragments: Boolean = false) {
         this.layoutId = layoutId
         this.hasChildrenFragments = hasChildrenFragments
-
     }
 
     @JvmOverloads
@@ -115,21 +114,22 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         onLaunch()
+        super.onCreate(savedInstanceState)
         checkValidResources()
 
         if (optionMenuId != -1)
             setHasOptionsMenu(true)
 
         //register fragment so we can determine should we show full screen loading by consume screen status
-        mViewModel!!.registerFragment(javaClass.name)
+        mViewModel!!.registerFragment(fragmentTag)
 
 
     }
 
     protected fun markScreenAsCompleted() {
-        mViewModel!!.markAsCompleted(javaClass.name)
+        mViewModel!!.markAsCompleted(fragmentTag)
+        tag
     }
 
     private fun checkValidResources() {
@@ -237,7 +237,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     override fun onDestroy() {
         if (mViewModel != null)
-            mViewModel!!.unRegister(javaClass.name)
+            mViewModel!!.unRegister(fragmentTag)
         sensitiveInputViews.clear()
         mView=null
         mLoadingView=null
@@ -270,7 +270,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         baseActivity?.navigate(cls, bundle, clearBackStack)
     }
 
-    fun navigate(fragment: Fragment, bundle: Bundle? = null,
+    fun navigate(fragment: BaseFragment<*>, bundle: Bundle? = null,
                  @IdRes container: Int = R.id.container,
                  addToBackStack: Boolean = false,
                  isChildToThisFragment: Boolean = false) {

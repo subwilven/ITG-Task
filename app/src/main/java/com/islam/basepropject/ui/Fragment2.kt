@@ -18,7 +18,7 @@ import com.islam.basepropject.project_base.base.fragments.BaseFragment
  * A simple [Fragment] subclass.
  */
 class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
-
+    override var fragmentTag = "Fragment2"
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
         initToolbar(R.string.title2, false)

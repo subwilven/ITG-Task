@@ -8,7 +8,7 @@ import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 
 class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
-
+    override var fragmentTag = "Fragment5"
     override fun onLaunch() {
         initContentView(R.layout.fragment_empty)
         initToolbar(R.string.dialogs)

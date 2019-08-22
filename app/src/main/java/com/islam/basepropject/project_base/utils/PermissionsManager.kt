@@ -3,8 +3,6 @@ package com.islam.basepropject.project_base.utils
 import android.Manifest
 import android.annotation.SuppressLint
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.schedulers.Schedulers
 
 object PermissionsManager {
 
@@ -23,20 +21,20 @@ object PermissionsManager {
                           vararg permissions: String,
                           onGranted: (() -> Unit)? =null,
                           onDenied: (() -> Unit)? = null) {
-        RxPermissions(fragment)
-                .requestEachCombined(*permissions)
-                .subscribeOn(Schedulers.io())
-               // .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { permission ->
-
-                    if (permission.granted) {
-                        onGranted?.invoke()
-                    } else if (permission.shouldShowRequestPermissionRationale) {
-                        onDenied?.invoke()
-                    } else {
-                        IntentManager.openAppSettings()
-                    }
-                }
-
+//        RxPermissions(fragment)
+//                .requestEachCombined(*permissions)
+//                .subscribeOn(Schedulers.io())
+//               // .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe { permission ->
+//
+//                    if (permission.granted) {
+//                        onGranted?.invoke()
+//                    } else if (permission.shouldShowRequestPermissionRationale) {
+//                        onDenied?.invoke()
+//                    } else {
+//                        IntentManager.openAppSettings()
+//                    }
+//                }
+//
                 }
     }

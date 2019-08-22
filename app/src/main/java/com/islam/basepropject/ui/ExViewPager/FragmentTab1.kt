@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_tab1.*
 
 class FragmentTab1 : BaseSuperFragment<FragmentTab1.ViewModel>() {
 
-
+    override var fragmentTag = "FragmentTab1"
     override fun onLaunch() {
         initContentView(R.layout.fragment_tab1)
         initViewModel(parentFragment!!, FragmentTab1.ViewModel::class.java)

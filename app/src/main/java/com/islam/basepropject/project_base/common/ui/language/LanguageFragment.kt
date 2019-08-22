@@ -13,7 +13,7 @@ import com.islam.basepropject.project_base.common.ui.intro.IntroActivity
 import com.islam.basepropject.project_base.utils.PrefManager
 
 class LanguageFragment : BaseSuperFragment<LanguageViewModel>() {
-
+    override var fragmentTag = "LanguageFragment"
     var mAdapter: LanguageAdapter? = null
 
     override fun onLaunch() {

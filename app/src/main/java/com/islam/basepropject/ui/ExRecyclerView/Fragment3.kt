@@ -15,7 +15,7 @@ import com.islam.basepropject.project_base.views.MyRecyclerView
 import com.islam.basepropject.project_base.views.OnViewStatusChange
 
 class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
-
+    override var fragmentTag = "Fragment3"
     private var mAdapter: Adapter? =null
     private var myRecyclerView: MyRecyclerView? =null
 
