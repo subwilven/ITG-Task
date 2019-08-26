@@ -1,6 +1,7 @@
 package com.islam.basepropject.project_base.utils
 
 import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 
@@ -11,15 +12,17 @@ object FragmentManagerUtil {
 
 
     fun replaceFragment(fragmentManager: FragmentManager,
-                        fragment: BaseFragment<*>,
+                        fragment: Fragment,
+                        tag: String,
                         @IdRes containerId: Int = R.id.container,
                         setToBackStack: Boolean = false) {
 
+
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(containerId, fragment, fragment.fragmentTag)
+        transaction.replace(containerId, fragment, tag)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         if (setToBackStack)
-            transaction.addToBackStack(fragment.fragmentTag)
+            transaction.addToBackStack(tag)
 
         transaction.commit()
     }

@@ -12,9 +12,12 @@ import com.islam.basepropject.project_base.views.OnViewStatusChange
 
 class ExViewModel : BaseViewModel() {
 
+
     private var dataFactory: BaseDataFactory<String>? = null
 
     var orders: LiveData<PagedList<String>>? = null
+
+    override fun loadInitialData() {}
 
 
     fun loadOrders(view:OnViewStatusChange) {

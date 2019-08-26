@@ -17,6 +17,7 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.common.boradcast.AlerterReceiver
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
+import com.islam.basepropject.project_base.common.ui.settings.TagedFragment
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.NetworkManager
@@ -138,8 +139,24 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
         FragmentManagerUtil.replaceFragment(fragmentManager,
                 fragment,
+                fragment.fragmentTag,
                 setToBackStack = addToBackStack,
                 containerId = container)
     }
 
+    fun navigate(fragmentManager: FragmentManager,
+                 fragment: Fragment,
+                 tag :String,
+                 bundle: Bundle? = null,
+                 @IdRes container: Int = R.id.container,
+                 addToBackStack: Boolean = false) {
+
+        bundle?.let { fragment.arguments = (it) }
+
+        FragmentManagerUtil.replaceFragment(fragmentManager,
+                fragment,
+                tag,
+                setToBackStack = addToBackStack,
+                containerId = container)
+    }
 }

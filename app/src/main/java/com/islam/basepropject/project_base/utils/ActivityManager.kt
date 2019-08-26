@@ -16,6 +16,7 @@ object ActivityManager {
         }
     }
 
+
     fun showToastShort(context: Context?, message: Message) {
         showToast(message.getValue(context), Toast.LENGTH_SHORT)
     }
@@ -24,7 +25,7 @@ object ActivityManager {
         showToast(message.getValue(context), Toast.LENGTH_LONG)
     }
 
-    private fun showToast(string: String, duration: Int) {
+    fun showToast(string: String, duration: Int) {
         Toast.makeText(MyApplication.instance?.applicationContext, string, duration).show()
     }
 

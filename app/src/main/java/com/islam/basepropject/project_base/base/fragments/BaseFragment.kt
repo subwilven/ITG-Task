@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
@@ -12,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
@@ -67,11 +68,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     protected abstract fun setUpObservers()
 
     protected fun onRetry() {
-        loadStartUpData()
-    }
-
-    protected open fun loadStartUpData() {
-
+        mViewModel?.loadInitialData()
     }
 
     protected fun addSensitiveInputs(vararg views: View) {
@@ -99,11 +96,11 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     }
 
     protected fun initViewModel(fragment: Fragment, viewModel: Class<V>) {
-        this.mViewModel = ViewModelProviders.of(fragment).get(viewModel)
+        this.mViewModel = ViewModelProvider(fragment).get(viewModel)
     }
 
     protected fun initViewModel(activity: FragmentActivity, viewModel: Class<V>) {
-        this.mViewModel = ViewModelProviders.of(activity).get(viewModel)
+        this.mViewModel = ViewModelProvider(activity).get(viewModel)
     }
 
     override fun onAttach(context: Context) {
@@ -120,11 +117,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         if (optionMenuId != -1)
             setHasOptionsMenu(true)
-
-        //register fragment so we can determine should we show full screen loading by consume screen status
-        mViewModel!!.registerFragment(fragmentTag)
-
-
     }
 
     protected fun markScreenAsCompleted() {
@@ -140,6 +132,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.savedInstanceState = savedInstanceState
         mView = inflater.inflate(layoutId, container, false)
+
+        //register fragment so we can determine should we show full screen loading by consume screen status
+        mViewModel!!.registerFragment(fragmentTag)
+
         return mView
     }
 
@@ -159,7 +155,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
             observeScreenStatus()
 
         onViewCreated(view, mViewModel, savedInstanceState)
-        loadStartUpData()
         setUpObservers()
     }
 
@@ -178,7 +173,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         mViewModel!!.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
 
-        mViewModel!!.mEnableSensitiveInputs.observes(viewLifecycleOwner, Observer {enableSensitiveInputs(it)})
+        mViewModel!!.mEnableSensitiveInputs.observe(viewLifecycleOwner, Observer {enableSensitiveInputs(it)})
 
     }
 
@@ -186,7 +181,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
 
 
-        mViewModel!!.mShowLoadingFullScreen.observes(viewLifecycleOwner, Observer {
+        mViewModel!!.mShowLoadingFullScreen.observe(viewLifecycleOwner, Observer {
 
             if (it) {
                 inflateLoadingFullScreenView()
@@ -195,7 +190,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
                 ActivityManager.setVisibility(View.GONE, mLoadingView)
 
         })
-        mViewModel!!.mShowErrorFullScreen.observes(viewLifecycleOwner, Observer {
+        mViewModel!!.mShowErrorFullScreen.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 inflateErrorFullScreenView(it)
                 ActivityManager.setVisibility(View.VISIBLE, mErrorView)
@@ -235,14 +230,14 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     }
 
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         if (mViewModel != null)
             mViewModel!!.unRegister(fragmentTag)
         sensitiveInputViews.clear()
         mView=null
         mLoadingView=null
         mErrorView=null
-        super.onDestroy()
+        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -266,6 +261,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         baseActivity?.enableBackButton(enableBackButton)
     }
 
+    fun toast(msg :String,lenght :Int = Toast.LENGTH_LONG){
+        ActivityManager.showToast(msg,lenght)
+    }
+
     fun navigate(cls: Class<*>, bundle: Bundle? = null, clearBackStack: Boolean = false) {
         baseActivity?.navigate(cls, bundle, clearBackStack)
     }
@@ -279,19 +278,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     }
 
     fun requestPermission(vararg permissions: String,
-                          message: Message? = null,
                           onDenied: (() -> Unit)? = null,
                           onGranted: (() -> Unit)? = null) {
-        message?.let {
-            showDialog(R.string.permission_needed, message, onPositiveClick = { permissionToBeRequested(*permissions, onGranted = onGranted, onDenied = onDenied) })
-        }
-                ?: permissionToBeRequested(*permissions, onGranted = onGranted, onDenied = onDenied)
-    }
-
-    private fun permissionToBeRequested(vararg permissions: String,
-                                        onGranted: (() -> Unit)? = null,
-                                        onDenied: (() -> Unit)? = null) {
-
         PermissionsManager.requestPermission(this, *permissions, onGranted = onGranted, onDenied = onDenied)
     }
 

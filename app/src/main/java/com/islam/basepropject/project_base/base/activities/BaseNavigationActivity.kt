@@ -7,11 +7,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
+import com.islam.basepropject.project_base.common.ui.settings.TagedFragment
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import java.util.*
 
@@ -54,6 +56,11 @@ abstract class BaseNavigationActivity : BaseActivity() {
 
         if (menuItemIds!!.size != fragmentsClassesList!!.size) {
             throw RuntimeException("Numbers of Ids should be equal to number of fragment classes")
+        }
+
+        if (savedInstanceState != null) {
+            currentFragmentIndex = savedInstanceState.getInt("currentFragmentIndex")
+            firstFragmentTag = savedInstanceState.getString("firstFragmentTag")
         }
 
         if (navigationType == NavigationType.BottomNavigation)
@@ -140,6 +147,13 @@ abstract class BaseNavigationActivity : BaseActivity() {
             navigate(supportFragmentManager, fragment)
             if (newFragmentIndex == 0)
                 firstFragmentTag = fragment.fragmentTag
+        } catch (e: ClassCastException) {
+            // if we cannot inhert our fragment from base fragment we must use TagedFragment interface
+            val fragment = fragmentClass.newInstance() as Fragment
+            navigate(supportFragmentManager, fragment,(fragment as TagedFragment).fragmentTag)
+            if (newFragmentIndex == 0)
+                firstFragmentTag = fragment.fragmentTag
+
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         } catch (e: InstantiationException) {
@@ -151,6 +165,12 @@ abstract class BaseNavigationActivity : BaseActivity() {
 
         return true
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("firstFragmentTag", firstFragmentTag)
+        outState.putInt("currentFragmentIndex", currentFragmentIndex)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onBackPressed() {

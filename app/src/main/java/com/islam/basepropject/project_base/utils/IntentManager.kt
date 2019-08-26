@@ -60,9 +60,7 @@ object IntentManager {
         customTabsIntent.launchUrl(context, Uri.parse(url))
     }
 
-    fun openAppSettings() {
-        val context = MyApplication.instance!!.getApplicationContext()
-
+    fun openAppSettings(context: Context) {
         val intent = Intent()
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
         val uri = Uri.fromParts("package", context.getPackageName(), null)

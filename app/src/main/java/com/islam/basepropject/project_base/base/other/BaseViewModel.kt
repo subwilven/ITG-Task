@@ -1,8 +1,7 @@
 package com.islam.basepropject.project_base.base.other
 
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
+//import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.*
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
@@ -21,20 +20,25 @@ abstract class BaseViewModel : ViewModel() {
      Use viewModelScope when the network response don't represent any importance if the user left the screen
     */
 
-    val appScope = ProcessLifecycleOwner.get().lifecycleScope
+     val appScope = ProcessLifecycleOwner.get().lifecycleScope
 
     val mSnackBarMessage: SingleLiveEvent<Message> = SingleLiveEvent()
-    val mEnableSensitiveInputs: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val mEnableSensitiveInputs: MutableLiveData<Boolean> = MutableLiveData()
     val mToastMessage: SingleLiveEvent<Message> = SingleLiveEvent()
     val mDialogMessage: SingleLiveEvent<Message> = SingleLiveEvent()
-    val mShowLoadingFullScreen: SingleLiveEvent<Boolean> = SingleLiveEvent()
-    val mShowErrorFullScreen: SingleLiveEvent<ErrorModel> = SingleLiveEvent()
+    val mShowLoadingFullScreen: MutableLiveData<Boolean> = MutableLiveData()
+    val mShowErrorFullScreen: MutableLiveData<ErrorModel> = MutableLiveData()
     private val registeredFragments: HashMap<String, ScreenStatus> = HashMap()
     private var lastRegisteredFragment: String? = null
 
     val lastRegisterdFragmentStatus: ScreenStatus?
         get() = registeredFragments[lastRegisteredFragment]
 
+    init {
+        this.loadInitialData()
+
+    }
+    open fun loadInitialData(){}
 
     fun registerFragment(fragmentClassName: String) {
         if (!registeredFragments.containsKey(fragmentClassName))
@@ -48,7 +52,8 @@ abstract class BaseViewModel : ViewModel() {
             if (result is Failure)
                 return
         }
-        registeredFragments[lastRegisteredFragment!!] = ScreenStatus.COMPLETED
+        lastRegisteredFragment?.let {   registeredFragments[it] = ScreenStatus.COMPLETED }
+
     }
 
 
@@ -96,7 +101,11 @@ abstract class BaseViewModel : ViewModel() {
 
     fun unRegister(fragmentClassName: String) {
         registeredFragments.remove(fragmentClassName)
+        if (fragmentClassName == lastRegisteredFragment)
+            lastRegisteredFragment = null // MAY CAUSE PROBLEM
     }
 
+    override fun onCleared() {
 
+    }
 }

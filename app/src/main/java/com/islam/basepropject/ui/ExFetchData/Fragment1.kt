@@ -4,12 +4,14 @@ package com.islam.basepropject.ui.ExFetchData
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
+import com.islam.basepropject.pojo.Article
+import com.islam.basepropject.project_base.POJO.ApiResponse
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.project_base.base.other.network.Result
 import com.islam.basepropject.project_base.views.OnViewStatusChange
 import com.islam.basepropject.ui.ExDialogs.Fragment5
 import kotlinx.android.synthetic.main.fragment_fragment1.*
@@ -42,10 +44,6 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
     }
 
 
-    override fun loadStartUpData() {
-        mViewModel!!.loadProviders(null)
-    }
-
     override fun setUpObservers() {
 
     }
@@ -53,15 +51,17 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
     class ViewModel : BaseViewModel() {
         val repository = Repository()
 
+        override fun loadInitialData() {
+            loadProviders(null)
+        }
+
+        var providersList: Result<ApiResponse<List<Article>>>? = null
         fun loadProviders(view: OnViewStatusChange?) {
-            appScope.launch {
-                val providersList = networkCall(view) { repository.getProvidersList() }
-                markAsCompleted(listOf(providersList))
-            }
+                viewModelScope.launch {
+                    providersList = networkCall(view) { repository.getProvidersList() }
+                    markAsCompleted(listOf(providersList!!))
+                }
 
-            ProcessLifecycleOwner.get().lifecycleScope.launch {
-
-            }
             //
 //            addDisposable(repository.providresList
 //                    .subscribeOn(schedulerProvider.io())
