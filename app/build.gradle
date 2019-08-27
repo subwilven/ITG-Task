@@ -91,9 +91,8 @@ dependencies {
     //--------------------------------------Secondary dependencies----------------------------------------------
 
 
-    //Glide
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //pick image from gallery or camera
     implementation 'com.github.jkwiecien:EasyImage:1.3.1'

@@ -21,7 +21,9 @@ import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.ActivityManager
 import com.islam.basepropject.project_base.utils.DialogManager
+import com.islam.basepropject.project_base.utils.ImagePicker
 import com.islam.basepropject.project_base.utils.PermissionsManager
+import java.io.File
 
 
 abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
@@ -259,6 +261,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         if (toolbarTitle != -1)
             baseActivity!!.setToolbarTitle(toolbarTitle)
         baseActivity?.enableBackButton(enableBackButton)
+    }
+
+    fun pickImage(onImagePicked: (imageFile: File?) -> Unit){
+        ImagePicker.pickImage(this,onImagePicked)
     }
 
     fun toast(msg :String,lenght :Int = Toast.LENGTH_LONG){

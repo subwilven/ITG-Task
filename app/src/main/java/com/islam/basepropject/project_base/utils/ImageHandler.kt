@@ -1,50 +1,54 @@
 package com.islam.basepropject.project_base.utils
 
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
-
 import androidx.annotation.DrawableRes
-
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-
+import com.islam.basepropject.R
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.RequestCreator
 import java.io.File
 
 //TODO Setup Monthly Schedule for Cleaning or Setup Cache Limit
 object ImageHandler {
 
-    private fun initGlideinstance(context: Context, url: String): RequestBuilder<Drawable> {
-        return Glide.with(context).load(url)
+
+    fun ImageView.loadImage(url: String) {
+        val creator = initPicasso(url = url)
+        creator.into(this)
     }
 
-    private fun initGlideinstance(context: Context, file: File): RequestBuilder<Drawable> {
-        return Glide.with(context).load(file)
+    fun ImageView.loadImage(file: File?) {
+        val creator = initPicasso(file = file)
+        creator.into(this)
     }
 
-    @JvmOverloads
-    fun loadImageFromFile(imageView: ImageView, file: File, size: Int = -1) {
-        val requestBuilder = initGlideinstance(imageView.context, file)
-
-        if (size != -1)
-            requestBuilder.override(size)
-
-        requestBuilder.into(imageView)
+    fun ImageView.loadImage(@DrawableRes res: Int) {
+        val creator = initPicasso(res = res)
+        creator.into(this)
     }
 
-    @JvmOverloads
-    fun loadImageFromNetwork(imageView: ImageView, url: String, @DrawableRes placeHolder: Int = -1, @DrawableRes error: Int = -1, size: Int = -1) {
+    fun loadImageFromNetwork(imageView: ImageView, url: String) {
+        val creator = initPicasso(url)
+        creator.into(imageView)
+    }
 
-        val requestBuilder = initGlideinstance(imageView.context, url)
+    fun loadImageFromFile(imageView: ImageView, file: File) {
+        val creator = initPicasso(file = file)
+        creator.into(imageView)
+    }
 
-        if (size != -1)
-            requestBuilder.override(size)
-        if (placeHolder != -1)
-            requestBuilder.placeholder(placeHolder)
-        if (error != -1)
-            requestBuilder.error(error)
+    private fun initPicasso(url: String = "", file: File? = null, @DrawableRes res: Int = -1): RequestCreator {
 
-        requestBuilder.into(imageView)
+        val creator = when {
+            url.isNotEmpty() -> Picasso.get().load(url)
+            file != null -> Picasso.get().load(file)
+            res != -1 -> Picasso.get().load(res)
+            else -> Picasso.get().load(R.drawable.placeholder)
+        }
+
+        creator.placeholder(R.drawable.placeholder)
+        creator.error(R.drawable.placeholder)
+        creator.fit()
+        return creator
     }
 
 }
