@@ -15,18 +15,18 @@ import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.common.ui.settings.TagedFragment
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
+import com.islam.basepropject.ui.ExDialogs.Fragment5
 import java.util.*
 
 abstract class BaseNavigationActivity : BaseActivity() {
 
 
-    private var navigationType: NavigationType? = null
+    abstract val navigationType: NavigationType
     private var drawer: DrawerLayout? = null
     private var toggle: ActionBarDrawerToggle? = null
     private var drawerNavigationView: NavigationView? = null
     private var bottomNavigationView: BottomNavigationView? = null
-    private var fragmentsClassesList: List<Class<*>>? = null
-    private var menuItemIds: IntArray? = null
+    abstract val menuIdsListWithFragment :List<Pair<Int,Class<*>>>
     private var currentFragmentIndex = -1
     private var firstFragmentTag: String? = null
 
@@ -42,21 +42,11 @@ abstract class BaseNavigationActivity : BaseActivity() {
         get() = FragmentManagerUtil.getBackStackCount(supportFragmentManager) == 0 &&
                 !FragmentManagerUtil.isFragmentActive(supportFragmentManager, firstFragmentTag!!)
 
-    fun initNavigation(fragmentsClasses: Array<Class<*>>, menuItemIds: IntArray, navigationType: NavigationType) {
-        this.fragmentsClassesList = Arrays.asList(*fragmentsClasses)
-        this.menuItemIds = menuItemIds
-        this.navigationType = navigationType
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //should init toolbar before set up navigation drawer
         //so we wont wait until the fragment call it we call it now
         initToolbar()
-
-        if (menuItemIds!!.size != fragmentsClassesList!!.size) {
-            throw RuntimeException("Numbers of Ids should be equal to number of fragment classes")
-        }
 
         if (savedInstanceState != null) {
             currentFragmentIndex = savedInstanceState.getInt("currentFragmentIndex")
@@ -76,7 +66,7 @@ abstract class BaseNavigationActivity : BaseActivity() {
 
         //launch the frist fragment for the frist time
         if (savedInstanceState == null) {
-            bottomNavigationView!!.selectedItemId = menuItemIds!![0]
+            bottomNavigationView!!.selectedItemId = menuIdsListWithFragment[0].first
             onBottomNavigationItemSelectedListener
                     .onNavigationItemSelected(bottomNavigationView!!.menu.getItem(0))
         }
@@ -98,7 +88,7 @@ abstract class BaseNavigationActivity : BaseActivity() {
 
         //launch the frist fragment for the frist time
         if (savedInstanceState == null) {
-            drawerNavigationView!!.setCheckedItem(menuItemIds!![0])
+            drawerNavigationView!!.setCheckedItem(menuIdsListWithFragment[0].first)
             onDrawerNavigationItemSelectedListener
                     .onNavigationItemSelected(drawerNavigationView!!.menu.getItem(0))
         }
@@ -127,9 +117,9 @@ abstract class BaseNavigationActivity : BaseActivity() {
         var newFragmentIndex = -1
 
         //get the fragment class of clicked item to create new instance of it
-        for (i in menuItemIds!!.indices) {
-            if (item.itemId == menuItemIds!![i]) {
-                fragmentClass = fragmentsClassesList!![i]
+        for (i in menuIdsListWithFragment.indices) {
+            if (item.itemId == menuIdsListWithFragment[i].first) {
+                fragmentClass = menuIdsListWithFragment[i].second
                 newFragmentIndex = i
             }
         }
@@ -179,11 +169,11 @@ abstract class BaseNavigationActivity : BaseActivity() {
             drawer!!.closeDrawer(GravityCompat.START)
         } else if (isDrawerFragment) {// if any fragment of the drawer fragment active make the frist one active
             if (navigationType == NavigationType.DrawerNavigation) {
-                drawerNavigationView!!.setCheckedItem(menuItemIds!![0])
+                drawerNavigationView!!.setCheckedItem(menuIdsListWithFragment[0].first)
                 onDrawerNavigationItemSelectedListener
                         .onNavigationItemSelected(drawerNavigationView!!.menu.getItem(0))
             } else if (navigationType == NavigationType.BottomNavigation) {
-                bottomNavigationView!!.selectedItemId = menuItemIds!![0]
+                bottomNavigationView!!.selectedItemId = menuIdsListWithFragment[0].first
                 onBottomNavigationItemSelectedListener
                         .onNavigationItemSelected(bottomNavigationView!!.menu.getItem(0))
             }

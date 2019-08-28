@@ -1,13 +1,14 @@
 package com.islam.basepropject.project_base.base.adapters
 
 import android.view.ViewGroup
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
 
 import com.islam.basepropject.project_base.views.MyRecyclerView
 
 import java.util.ArrayList
 
-abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH> {
+abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH> , LifecycleObserver {
 
     protected var list: MutableList<T>? = null
 
@@ -16,9 +17,22 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
     constructor(list: MutableList<T>) {
         this.list = list
     }
+    var adapterDataObservation: AdapterDataObservation?=null
 
-    fun registerAdapterDataObservertion(recyclerView: MyRecyclerView) {
-        registerAdapterDataObserver(AdapterDataObservation(recyclerView))
+    fun registerAdapterDataObservertion(lifecycleOwner: LifecycleOwner,recyclerView: MyRecyclerView) {
+        lifecycleOwner.lifecycle.addObserver(this)
+        adapterDataObservation = AdapterDataObservation(recyclerView)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun connectListener() {
+        registerAdapterDataObserver(adapterDataObservation!!)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun disconnectListener() {
+        adapterDataObservation?.clear()
+        unregisterAdapterDataObserver(adapterDataObservation!!)
     }
 
     abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH

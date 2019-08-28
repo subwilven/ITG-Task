@@ -2,22 +2,24 @@ package com.islam.basepropject.project_base.utils
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import pl.aprilapps.easyphotopicker.EasyImage.handleActivityResult
 import java.io.File
 
 
-object ImagePicker {
+object ImagePicker : LifecycleObserver {
 
 
-    var onPicked: (imageFile: File?) -> Unit = {}
-     fun pickImage(fragment: Fragment, onImagePicked: (imageFile: File?) -> Unit) {
+    var onPicked: ((imageFile: File?) -> Unit)? = {}
+    fun pickImage(fragment: Fragment, onImagePicked: (imageFile: File?) -> Unit) {
+        fragment.viewLifecycleOwner.lifecycle.addObserver(this)
         onPicked = onImagePicked
         fragment.childFragmentManager.beginTransaction()
                 .add(ImagePickerFragment(), "ImagePickerFragment")
@@ -25,31 +27,35 @@ object ImagePicker {
 
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun disconnectListener() {
+        onPicked = null
+    }
+
     private class ImagePickerFragment : Fragment() {
 
-
-        override fun onAttach(activity: Activity) {
-            super.onAttach(activity)
-            EasyImage.openChooserWithGallery(this, "asdfasdf", EasyImage.REQ_PICK_PICTURE_FROM_GALLERY)
-        }
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             retainInstance = true
+            if (savedInstanceState == null)
+                EasyImage.openChooserWithGallery(this, "asdfasdf", EasyImage.REQ_PICK_PICTURE_FROM_GALLERY)
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             super.onActivityResult(requestCode, resultCode, data)
-            handleActivityResult(requestCode, resultCode, data, activity, object : DefaultCallback() {
+            handleActivityResult(requestCode, resultCode, data, activity!!, object : DefaultCallback() {
                 override fun onImagePicked(imageFile: File?, source: EasyImage.ImageSource?, type: Int) {
 //                    val myBitmap = BitmapFactory.decodeFile(imageFile?.getAbsolutePath())
 //                    Bitmap.createScaledBitmap(myBitmap, 200, 200, false)
-                    onPicked.invoke(imageFile)
+                    onPicked?.invoke(imageFile)
+                    fragmentManager?.beginTransaction()?.remove(this@ImagePickerFragment)?.commitNow()
                 }
 
                 override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
                     super.onImagePickerError(e, source, type)
                     ActivityManager.showToast("Cannot Load the Image", Toast.LENGTH_SHORT)
+                    fragmentManager?.beginTransaction()?.remove(this@ImagePickerFragment)?.commitNow()
                 }
 
                 override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {
@@ -57,6 +63,7 @@ object ImagePicker {
                         val photoFile = EasyImage.lastlyTakenButCanceledPhoto(context)
                         photoFile?.delete()
                     }
+                    fragmentManager?.beginTransaction()?.remove(this@ImagePickerFragment)?.commitNow()
                 }
             })
         }

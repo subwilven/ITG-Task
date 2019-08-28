@@ -107,7 +107,7 @@ dependencies {
     //Chrome Tab view
     implementation 'androidx.browser:browser:1.0.0'
 
-
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
     //--------------------------------------Testing----------------------------------------------
 
     testImplementation 'junit:junit:4.12'

@@ -72,8 +72,8 @@ class MyFabButton : FloatingActionButton, OnViewStatusChange {
 
     private fun stopLoading() {
         mProgressDrawable?.stop()
-        setImageDrawable(mImageDrawable)
-        super.setOnClickListener(mOnClickListener)
+        mImageDrawable?.let {setImageDrawable(mImageDrawable)}
+        mOnClickListener?.let{ super.setOnClickListener(mOnClickListener)}
     }
 
 }

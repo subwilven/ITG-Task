@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 class Repository {
 
      suspend fun getProvidersList() : ApiResponse<List<Article>> {
+         delay(5000)
         return NetworkModel.clientApi!!.getProviders("sources", BuildConfig.NEWS_API_KEY)
        // return NetworkModel.clientApi!!.getProviders()
     }

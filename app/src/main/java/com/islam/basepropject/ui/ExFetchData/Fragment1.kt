@@ -33,7 +33,7 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
         //markScreenAsCompleted()
         btnFetch.setOnClickListener {
-            viewModel!!.loadProviders(btnFetch as OnViewStatusChange)
+            viewModel!!.loadProviders(btnFetch.id)
         }
         addSensitiveInputs(editText)
         activity?.findViewById<View>(R.id.fab)?.setOnClickListener {
@@ -56,9 +56,9 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
         }
 
         var providersList: Result<ApiResponse<List<Article>>>? = null
-        fun loadProviders(view: OnViewStatusChange?) {
+        fun loadProviders(viewId: Int?) {
                 viewModelScope.launch {
-                    providersList = networkCall(view) { repository.getProvidersList() }
+                    providersList = networkCall(viewId) { repository.getProvidersList() }
                     markAsCompleted(listOf(providersList!!))
                 }
 

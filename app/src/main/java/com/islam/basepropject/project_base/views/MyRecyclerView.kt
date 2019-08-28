@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.islam.basepropject.R
+import com.islam.basepropject.project_base.base.adapters.BasePagingAdapter
 import com.islam.basepropject.project_base.utils.ActivityManager
 
 class MyRecyclerView : ConstraintLayout, OnViewStatusChange {
@@ -18,7 +19,7 @@ class MyRecyclerView : ConstraintLayout, OnViewStatusChange {
     var adapter: Adapter<*>? = null
         set(adapter) {
             field = adapter
-            recyclerView!!.adapter = adapter
+            recyclerView?.adapter = adapter
         }
     private var recyclerView: RecyclerView? = null
     private var emptyViewId = R.layout.layout_empty
@@ -63,13 +64,22 @@ class MyRecyclerView : ConstraintLayout, OnViewStatusChange {
     }
 
     fun showLoadingView(b: Boolean) {
-
-        if (b) {
-            ActivityManager.setVisibility(View.VISIBLE, mLoadingView)
+        if (adapter is BasePagingAdapter<*, *>) { // if this is paging adapter to give the adapter the responsability of showing loading view
+            (adapter as BasePagingAdapter<*, *>).showLoading(b)
         } else {
-            inflateLoadingView()
-            ActivityManager.setVisibility(View.GONE, mLoadingView)
+            if (b) {
+                ActivityManager.setVisibility(View.VISIBLE, mLoadingView)
+            } else {
+                inflateLoadingView()
+                ActivityManager.setVisibility(View.GONE, mLoadingView)
+            }
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        recyclerView?.adapter = null
+        recyclerView = null
     }
 
     private fun inflateRecyclerView() {

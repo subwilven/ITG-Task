@@ -4,13 +4,17 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.islam.basepropject.project_base.views.MyRecyclerView
 
-class AdapterDataObservation(internal var recyclerView: MyRecyclerView) : RecyclerView.AdapterDataObserver() {
+class AdapterDataObservation(internal var recyclerView: MyRecyclerView?) : RecyclerView.AdapterDataObserver() {
 
     private fun checkAdapterHasData() {
-        if (recyclerView.adapter!!.itemCount == 0)
-            recyclerView.showEmptyView(true)
+        if (recyclerView?.adapter!!.itemCount == 0)
+            recyclerView?.showEmptyView(true)
         else
-            recyclerView.showEmptyView(false)
+            recyclerView?.showEmptyView(false)
+    }
+
+    fun clear(){
+        recyclerView = null
     }
 
     override fun onChanged() {

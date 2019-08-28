@@ -19,30 +19,13 @@ import java.net.SocketTimeoutException
 
 open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
 
-    private var view: OnViewStatusChange? = null
+    private var viewId: Int? = null
 
     private val isStartingFragment: Boolean
         get() = baseViewModel.lastRegisterdFragmentStatus == ScreenStatus.STARTING
 
-    constructor(baseViewModel: BaseViewModel, view: OnViewStatusChange?) : this(baseViewModel) {
-        this.view = view;
-    }
-
-    private fun showLoading() {
-        baseViewModel.enableSensitiveInputs(false)
-        if (isStartingFragment) {
-            baseViewModel.showNoConnectionFullScreen(null)
-            baseViewModel.showLoadingFullScreen(true)
-        } else {
-            view?.showLoading(true)
-        }
-    }
-
-    private fun hideLoading() {
-        baseViewModel.enableSensitiveInputs(true)
-        if (isStartingFragment)
-            baseViewModel.showLoadingFullScreen(false)
-        else view?.showLoading(false)
+    constructor(baseViewModel: BaseViewModel, viewId: Int?) : this(baseViewModel) {
+        this.viewId = viewId
     }
 
     //handel errors like validation error or authentication error
@@ -93,13 +76,13 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     suspend fun <T> networkCall(block: suspend () -> T): Result<T> {
         return withContext(Dispatchers.Main) {
             try {
-                showLoading()
+                baseViewModel.showLoading(viewId)
                 withContext(Dispatchers.IO) { Success(block.invoke()) }
             } catch (e: Throwable) {
                 handelNetworkError(e)
                 Failure()
             } finally {
-                hideLoading()
+               baseViewModel.hideLoading(viewId)
             }
         }
     }

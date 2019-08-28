@@ -8,11 +8,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class ExDataSource(baseView: BaseViewModel,val view: OnViewStatusChange) : BaseDataSource<String>(baseView) {
+class ExDataSource(baseView: BaseViewModel,val viewId: Int?) : BaseDataSource<String>(baseView) {
 
     internal var number = 1
     override suspend fun fetchData(key: Int): List<String> {
-     val result =  baseViewModel.networkCall(view) {getData()}
+     val result =  baseViewModel.networkCall(viewId) {getData()}
         baseViewModel.markAsCompleted(listOf(result))
         return result.value!!
     }

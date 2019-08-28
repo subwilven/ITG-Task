@@ -20,13 +20,13 @@ class ExViewModel : BaseViewModel() {
     override fun loadInitialData() {}
 
 
-    fun loadOrders(view:OnViewStatusChange) {
+    fun loadOrders(viewId:Int?) {
         if (orders?.value != null) return
 
         if (dataFactory == null)
             dataFactory = object : BaseDataFactory<String>(this) {
                 override fun onCreateDataSource(baseViewModel: BaseViewModel): BaseDataSource<String> {
-                    return ExDataSource(this@ExViewModel,view)
+                    return ExDataSource(this@ExViewModel,viewId)
                 }
             }
 

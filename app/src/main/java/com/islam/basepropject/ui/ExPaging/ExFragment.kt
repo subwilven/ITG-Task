@@ -19,8 +19,7 @@ class ExFragment : BaseSuperFragment<ExViewModel>() {
 
 
     override fun onViewCreated(view: View, viewModel: ExViewModel?, instance: Bundle?) {
-        createRecyclerView(mAdapter)
-        mViewModel?.loadOrders(mAdapter)
+        mViewModel?.loadOrders(createRecyclerView(mAdapter).id)
     }
 
     override fun setUpObservers() {

@@ -1,6 +1,10 @@
 package com.islam.basepropject.project_base.base.adapters
 
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 
@@ -12,13 +16,27 @@ import com.islam.basepropject.project_base.views.OnViewStatusChange
 
 abstract class BasePagingAdapter<T, VH : BaseViewHolder<T>> protected constructor()
     : PagedListAdapter<T, BaseViewHolder<T>>(callback as DiffUtil.ItemCallback<T>)
-        , OnViewStatusChange {
+        , OnViewStatusChange ,LifecycleObserver{
 
     // private var networkState: NetworkRequestState? = null
     private var hasExtraItems: Boolean = false
 
-    fun registerAdapterDataObservation(recyclerView: MyRecyclerView) {
-        registerAdapterDataObserver(AdapterDataObservation(recyclerView))
+    var adapterDataObservation: AdapterDataObservation?=null
+
+    fun registerAdapterDataObservertion(lifecycleOwner: LifecycleOwner, recyclerView: MyRecyclerView) {
+        lifecycleOwner.lifecycle.addObserver(this)
+        adapterDataObservation = AdapterDataObservation(recyclerView)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun connectListener() {
+        registerAdapterDataObserver(adapterDataObservation!!)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun disconnectListener() {
+        adapterDataObservation?.clear()
+        unregisterAdapterDataObserver(adapterDataObservation!!)
     }
 
 

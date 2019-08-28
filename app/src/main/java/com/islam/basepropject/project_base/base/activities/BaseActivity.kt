@@ -26,20 +26,15 @@ import com.tapadoo.alerter.Alerter
 
 abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener ,AlerterReceiver.AlerterReceiverListener{
 
-    private var layoutId = -1
-
+    abstract val layoutId :Int
 
     val isNetworkConnected: Boolean
         get() = NetworkManager.isNetworkConnected(this)
 
-    abstract fun onLaunch()
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocalManager.updateResources(newBase, LocalManager.getLanguage(newBase)))
     }
 
-    protected fun initContentView(@LayoutRes layoutId: Int) {
-        this.layoutId = layoutId
-    }
 
     override fun onResume() {
         super.onResume()
@@ -55,13 +50,10 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        onLaunch()
         super.onCreate(savedInstanceState)
         checkValidResources()
         setContentView(layoutId)
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-
     }
 
     override fun onPause() {

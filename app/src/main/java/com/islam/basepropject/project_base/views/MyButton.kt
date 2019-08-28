@@ -155,8 +155,8 @@ class MyButton : MaterialButton, OnViewStatusChange {
 
     private fun stopLoading() {
         mProgressDrawable!!.stop()
-        text = mButtonText
-        super.setOnClickListener(mOnClickListener)
+        mButtonText?.let { text = mButtonText}
+        mOnClickListener?.let{ super.setOnClickListener(mOnClickListener)}
     }
 
     override fun showLoading(b: Boolean) {

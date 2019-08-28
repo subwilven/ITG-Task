@@ -20,15 +20,16 @@ abstract class BaseViewModel : ViewModel() {
      Use viewModelScope when the network response don't represent any importance if the user left the screen
     */
 
-     val appScope = ProcessLifecycleOwner.get().lifecycleScope
+    val appScope = ProcessLifecycleOwner.get().lifecycleScope
 
-    val mSnackBarMessage: SingleLiveEvent<Message> = SingleLiveEvent()
-    val mEnableSensitiveInputs: MutableLiveData<Boolean> = MutableLiveData()
-    val mToastMessage: SingleLiveEvent<Message> = SingleLiveEvent()
-    val mDialogMessage: SingleLiveEvent<Message> = SingleLiveEvent()
-    val mShowLoadingFullScreen: MutableLiveData<Boolean> = MutableLiveData()
-    val mShowErrorFullScreen: MutableLiveData<ErrorModel> = MutableLiveData()
-    private val registeredFragments: HashMap<String, ScreenStatus> = HashMap()
+    val mLoadingViews  = MutableLiveData<MutableMap<Int,Boolean>>()//list of view that may show loading instead show full screen loading
+    val mSnackBarMessage = SingleLiveEvent<Message>()
+    val mEnableSensitiveInputs= MutableLiveData<Boolean>()
+    val mToastMessage = SingleLiveEvent<Message>()
+    val mDialogMessage = SingleLiveEvent<Message>()
+    val mShowLoadingFullScreen = MutableLiveData<Boolean>()
+    val mShowErrorFullScreen= MutableLiveData<ErrorModel>()
+    private val registeredFragments =  HashMap<String, ScreenStatus>()
     private var lastRegisteredFragment: String? = null
 
     val lastRegisterdFragmentStatus: ScreenStatus?
@@ -36,11 +37,12 @@ abstract class BaseViewModel : ViewModel() {
 
     init {
         this.loadInitialData()
-
+        mLoadingViews.value = mutableMapOf()
     }
     open fun loadInitialData(){}
 
     fun registerFragment(fragmentClassName: String) {
+
         if (!registeredFragments.containsKey(fragmentClassName))
             registeredFragments[fragmentClassName] = ScreenStatus.STARTING
         lastRegisteredFragment = fragmentClassName
@@ -57,8 +59,8 @@ abstract class BaseViewModel : ViewModel() {
     }
 
 
-    suspend fun <T> networkCall(onViewStatusChange: OnViewStatusChange? = null, block: suspend () -> T): Result<T> {
-        return RetrofitCorounites(this, onViewStatusChange).networkCall(block)
+    suspend fun <T> networkCall(viewId: Int? = null, block: suspend () -> T): Result<T> {
+        return RetrofitCorounites(this, viewId).networkCall(block)
     }
 
 
@@ -98,14 +100,35 @@ abstract class BaseViewModel : ViewModel() {
         MyApplication.instance?.showAlertBar(message)
     }
 
+    private val isStartingFragment: Boolean
+        get() = lastRegisterdFragmentStatus == ScreenStatus.STARTING
+
+    fun showLoading(viewId : Int?) {
+        enableSensitiveInputs(false)
+        if (isStartingFragment) {
+            showNoConnectionFullScreen(null)
+            showLoadingFullScreen(true)
+        } else if (viewId!=null){
+            mLoadingViews.value?.put(viewId,true)
+            mLoadingViews.value = mLoadingViews.value?.toMutableMap()
+        }
+    }
+
+    fun hideLoading(viewId : Int?) {
+        enableSensitiveInputs(true)
+        if (isStartingFragment)
+            showLoadingFullScreen(false)
+        else if (viewId!=null){
+            mLoadingViews.value?.put(viewId,false)
+            mLoadingViews.value = mLoadingViews.value
+        }
+    }
+
 
     fun unRegister(fragmentClassName: String) {
-        registeredFragments.remove(fragmentClassName)
+        //registeredFragments.remove(fragmentClassName)
         if (fragmentClassName == lastRegisteredFragment)
             lastRegisteredFragment = null // MAY CAUSE PROBLEM
     }
 
-    override fun onCleared() {
-
-    }
 }

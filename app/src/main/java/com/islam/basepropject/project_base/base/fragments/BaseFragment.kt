@@ -16,13 +16,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.ErrorModel
-import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.ActivityManager
 import com.islam.basepropject.project_base.utils.DialogManager
 import com.islam.basepropject.project_base.utils.ImagePicker
 import com.islam.basepropject.project_base.utils.PermissionsManager
+import com.islam.basepropject.project_base.views.OnViewStatusChange
 import java.io.File
 
 
@@ -33,7 +33,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         protected set
 
     private var mView: View? = null
-    abstract var fragmentTag :String
+    abstract var fragmentTag: String
     private var baseActivity: BaseActivity? = null
     private var mLoadingView: View? = null
     private var mErrorView: View? = null
@@ -52,7 +52,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     //override this method if you need to indetif another view group if the
     // loading full screen overlap on another view
-    protected val fullScreenViewGroup: ViewGroup
+    private val fullScreenViewGroup: ViewGroup
         get() = mView as ViewGroup
 
     val isNetworkConnected: Boolean
@@ -138,6 +138,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         //register fragment so we can determine should we show full screen loading by consume screen status
         mViewModel!!.registerFragment(fragmentTag)
 
+
         return mView
     }
 
@@ -175,15 +176,14 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         mViewModel!!.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
 
-        mViewModel!!.mEnableSensitiveInputs.observe(viewLifecycleOwner, Observer {enableSensitiveInputs(it)})
+        mViewModel!!.mEnableSensitiveInputs.observe(viewLifecycleOwner, Observer { enableSensitiveInputs(it) })
 
     }
 
     protected fun observeScreenStatus() {
 
 
-
-        mViewModel!!.mShowLoadingFullScreen.observe(viewLifecycleOwner, Observer {
+        mViewModel?.mShowLoadingFullScreen?.observe(viewLifecycleOwner, Observer {
 
             if (it) {
                 inflateLoadingFullScreenView()
@@ -192,12 +192,18 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
                 ActivityManager.setVisibility(View.GONE, mLoadingView)
 
         })
-        mViewModel!!.mShowErrorFullScreen.observe(viewLifecycleOwner, Observer {
+        mViewModel?.mShowErrorFullScreen?.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 inflateErrorFullScreenView(it)
                 ActivityManager.setVisibility(View.VISIBLE, mErrorView)
             } else
                 ActivityManager.setVisibility(View.GONE, mErrorView)
+        })
+
+        //TODO a better way to do this without needing to find view by id through all the list ( set list of this view in the fragment)
+        mViewModel?.mLoadingViews?.observe(viewLifecycleOwner, Observer {
+            for (viewId in it)
+                (mView?.findViewById<View>(viewId.key) as OnViewStatusChange).showLoading(viewId.value)
         })
 
     }
@@ -236,9 +242,9 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         if (mViewModel != null)
             mViewModel!!.unRegister(fragmentTag)
         sensitiveInputViews.clear()
-        mView=null
-        mLoadingView=null
-        mErrorView=null
+        mView = null
+        mLoadingView = null
+        mErrorView = null
         super.onDestroyView()
     }
 
@@ -263,12 +269,12 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         baseActivity?.enableBackButton(enableBackButton)
     }
 
-    fun pickImage(onImagePicked: (imageFile: File?) -> Unit){
-        ImagePicker.pickImage(this,onImagePicked)
+    fun pickImage(onImagePicked: (imageFile: File?) -> Unit) {
+        ImagePicker.pickImage(this, onImagePicked)
     }
 
-    fun toast(msg :String,lenght :Int = Toast.LENGTH_LONG){
-        ActivityManager.showToast(msg,lenght)
+    fun toast(msg: String, lenght: Int = Toast.LENGTH_LONG) {
+        ActivityManager.showToast(msg, lenght)
     }
 
     fun navigate(cls: Class<*>, bundle: Bundle? = null, clearBackStack: Boolean = false) {

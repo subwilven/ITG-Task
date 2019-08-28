@@ -6,7 +6,6 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.ImageHandler.loadImage
-import com.islam.basepropject.project_base.utils.PermissionsManager
 import kotlinx.android.synthetic.main.fragment_fragment5.*
 
 
@@ -19,16 +18,16 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
     }
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
-        //   if (instance == null)
+        if (instance == null)
+            pickImage { imageView2.loadImage(it) }
 //            showDialogListMultiChoice(R.string.title1,listOf("asdfasd", "asfdsafd", "asfdasdf")){dialog,index,text ->
 //
 //            }
 
-         requestPermission(PermissionsManager.CAMERA,PermissionsManager.CONTACTS) { toast("dfgdg")}
+        // requestPermission(PermissionsManager.CAMERA,PermissionsManager.CONTACTS) { toast("dfgdg")}
         //imageView2.loadImage("http://www.effigis.com/wp-content/uploads/2015/02/Airbus_Pleiades_50cm_8bit_RGB_Yogyakarta.jpg")
-       // pickImage {imageView2.loadImage(it)}
-    }
 
+    }
 
 
     override fun setUpObservers() {

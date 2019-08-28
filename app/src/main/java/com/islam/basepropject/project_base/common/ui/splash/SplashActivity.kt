@@ -11,11 +11,7 @@ import com.islam.basepropject.ui.MainActivity
 
 class SplashActivity : BaseActivity() {
 
-
-    override fun onLaunch() {
-        initContentView(R.layout.activity_splash)
-    }
-
+    override val layoutId = R.layout.activity_splash
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
