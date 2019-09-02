@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.textfield.TextInputLayout
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.POJO.Message
 
@@ -39,5 +40,7 @@ object ActivityManager {
         return false
     }
 
-
+    fun TextInputLayout.getText():String{
+         return this.editText?.text.toString()
+    }
 }

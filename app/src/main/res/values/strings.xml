@@ -44,4 +44,8 @@
     <string name="skip">SKIP</string>
     <string name="permission_needed">Permission Needed</string>
     <string name="server_error">Server Error</string>
+    <string name="all_fields_are_required">All fields are required</string>
+    <string name="email_not_valid">Email not valid</string>
+    <string name="password_should_be_at_least_6_charachter">password_should_be_at_least_6_charachter</string>
+    <string name="user_name_not_valid">User name is not valid</string>
 </resources>

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 /**
  * A simple [Fragment] subclass.
  */
-class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
+class Fragment1 : BaseFragment<ViewModel>() {
     override var fragmentTag = "Fragment1"
 
     override fun onLaunch() {
@@ -31,51 +31,15 @@ class Fragment1 : BaseFragment<Fragment1.ViewModel>() {
     }
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
-        //markScreenAsCompleted()
-        btnFetch.setOnClickListener {
-            viewModel!!.loadProviders(btnFetch.id)
-        }
+
+        btnFetch.setOnClickListener { viewModel!!.loadProviders(btnFetch.id) }
         addSensitiveInputs(editText)
-        activity?.findViewById<View>(R.id.fab)?.setOnClickListener {
-
-        }
         view.setOnClickListener { navigate(Fragment5(), addToBackStack = true) }
-
     }
 
 
-    override fun setUpObservers() {
-
-    }
-
-    class ViewModel : BaseViewModel() {
-        val repository = Repository()
-
-        override fun loadInitialData() {
-            loadProviders(null)
-        }
-
-        var providersList: Result<ApiResponse<List<Article>>>? = null
-        fun loadProviders(viewId: Int?) {
-                viewModelScope.launch {
-                    providersList = networkCall(viewId) { repository.getProvidersList() }
-                    markAsCompleted(listOf(providersList!!))
-                }
-
-            //
-//            addDisposable(repository.providresList
-//                    .subscribeOn(schedulerProvider.io())
-//                    .observeOn(schedulerProvider.ui())
-//                    .subscribeWith(object : RetrofitObserver<JsonElement>(this, onViewStatusChange) {
-//                        override fun onResultSuccess(o: JsonElement) {
-//
-//                        }
-//                    }))
-
-        }
-
-    }
-}// Required empty public constructor
+    override fun setUpObservers() {}
+}
 
 
 

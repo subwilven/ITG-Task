@@ -37,6 +37,10 @@
         </activity>
         <activity android:name=".project_base.common.ui.language.LanguageActivity" />
         <activity android:name=".project_base.common.ui.intro.IntroActivity" />
+        <activity android:name=".project_base.common.ui.Authentication.login.AuthenticationActivity" />
+        <activity android:name=".project_base.utils.LocationUtils$LocationActivity" />
+
+
     </application>
 
 </manifest>

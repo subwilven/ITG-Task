@@ -38,7 +38,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     private var mLoadingView: View? = null
     private var mErrorView: View? = null
     private var savedInstanceState: Bundle? = null
-    private val sensitiveInputViews = mutableListOf<View>()
+    private val sensitiveInputViews = mutableListOf<View?>()
 
 
     //used to spicify this fragment should observe screen status or its children will take this responsibility
@@ -73,7 +73,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         mViewModel?.loadInitialData()
     }
 
-    protected fun addSensitiveInputs(vararg views: View) {
+    protected fun addSensitiveInputs(vararg views: View?) {
         for (view in views) {
             sensitiveInputViews.add(view)
         }
@@ -81,7 +81,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     protected fun enableSensitiveInputs(shouldEnable: Boolean) {
         for (view in sensitiveInputViews)
-            view.isEnabled = shouldEnable
+            view?.isEnabled = shouldEnable
     }
 
     @JvmOverloads

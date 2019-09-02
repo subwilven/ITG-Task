@@ -1,7 +1,10 @@
 package com.islam.basepropject.project_base.base.other
 
 //import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
@@ -9,8 +12,14 @@ import com.islam.basepropject.project_base.POJO.ScreenStatus
 import com.islam.basepropject.project_base.base.other.network.Failure
 import com.islam.basepropject.project_base.base.other.network.Result
 import com.islam.basepropject.project_base.base.other.network.RetrofitCorounites
-import com.islam.basepropject.project_base.views.OnViewStatusChange
+import com.islam.basepropject.project_base.utils.navigation.Navigator
 import java.util.*
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.get
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.toMutableMap
 
 abstract class BaseViewModel : ViewModel() {
 
@@ -21,15 +30,14 @@ abstract class BaseViewModel : ViewModel() {
     */
 
     val appScope = ProcessLifecycleOwner.get().lifecycleScope
-
-    val mLoadingViews  = MutableLiveData<MutableMap<Int,Boolean>>()//list of view that may show loading instead show full screen loading
+    val mLoadingViews = MutableLiveData<MutableMap<Int, Boolean>>()//list of view that may show loading instead show full screen loading
     val mSnackBarMessage = SingleLiveEvent<Message>()
-    val mEnableSensitiveInputs= MutableLiveData<Boolean>()
+    val mEnableSensitiveInputs = MutableLiveData<Boolean>()
     val mToastMessage = SingleLiveEvent<Message>()
     val mDialogMessage = SingleLiveEvent<Message>()
     val mShowLoadingFullScreen = MutableLiveData<Boolean>()
-    val mShowErrorFullScreen= MutableLiveData<ErrorModel>()
-    private val registeredFragments =  HashMap<String, ScreenStatus>()
+    val mShowErrorFullScreen = MutableLiveData<ErrorModel>()
+    private val registeredFragments = HashMap<String, ScreenStatus>()
     private var lastRegisteredFragment: String? = null
 
     val lastRegisterdFragmentStatus: ScreenStatus?
@@ -39,7 +47,8 @@ abstract class BaseViewModel : ViewModel() {
         this.loadInitialData()
         mLoadingViews.value = mutableMapOf()
     }
-    open fun loadInitialData(){}
+
+    open fun loadInitialData() {}
 
     fun registerFragment(fragmentClassName: String) {
 
@@ -54,7 +63,7 @@ abstract class BaseViewModel : ViewModel() {
             if (result is Failure)
                 return
         }
-        lastRegisteredFragment?.let {   registeredFragments[it] = ScreenStatus.COMPLETED }
+        lastRegisteredFragment?.let { registeredFragments[it] = ScreenStatus.COMPLETED }
 
     }
 
@@ -103,23 +112,23 @@ abstract class BaseViewModel : ViewModel() {
     private val isStartingFragment: Boolean
         get() = lastRegisterdFragmentStatus == ScreenStatus.STARTING
 
-    fun showLoading(viewId : Int?) {
+    fun showLoading(viewId: Int?) {
         enableSensitiveInputs(false)
         if (isStartingFragment) {
             showNoConnectionFullScreen(null)
             showLoadingFullScreen(true)
-        } else if (viewId!=null){
-            mLoadingViews.value?.put(viewId,true)
+        } else if (viewId != null) {
+            mLoadingViews.value?.put(viewId, true)
             mLoadingViews.value = mLoadingViews.value?.toMutableMap()
         }
     }
 
-    fun hideLoading(viewId : Int?) {
+    fun hideLoading(viewId: Int?) {
         enableSensitiveInputs(true)
         if (isStartingFragment)
             showLoadingFullScreen(false)
-        else if (viewId!=null){
-            mLoadingViews.value?.put(viewId,false)
+        else if (viewId != null) {
+            mLoadingViews.value?.put(viewId, false)
             mLoadingViews.value = mLoadingViews.value
         }
     }

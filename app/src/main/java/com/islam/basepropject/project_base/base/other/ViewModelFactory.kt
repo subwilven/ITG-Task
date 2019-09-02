@@ -16,8 +16,8 @@ class ViewModelFactory private constructor() : ViewModelProvider.NewInstanceFact
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        if (modelClass.isAssignableFrom(Fragment1.ViewModel::class.java)) {
-            return Fragment1.ViewModel() as T
+        if (modelClass.isAssignableFrom(ViewModel::class.java)) {
+
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

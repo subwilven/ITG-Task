@@ -5,9 +5,9 @@ import android.os.Handler
 import android.view.WindowManager
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.activities.BaseActivity
+import com.islam.basepropject.project_base.common.ui.Authentication.login.AuthenticationActivity
 import com.islam.basepropject.project_base.common.ui.language.LanguageActivity
 import com.islam.basepropject.project_base.utils.PrefManager
-import com.islam.basepropject.ui.MainActivity
 
 class SplashActivity : BaseActivity() {
 
@@ -29,7 +29,7 @@ class SplashActivity : BaseActivity() {
         if (PrefManager.isFristLaunch(this)) {
             navigate(LanguageActivity::class.java)
         } else {
-            navigate(MainActivity::class.java)
+            navigate(AuthenticationActivity::class.java)
         }
         finish()
 

@@ -137,7 +137,6 @@ class MyButton : MaterialButton, OnViewStatusChange {
         val dynamicDrawableSpan = initDrawableSpan()
 
         spannableString = SpannableString(mLoadingText)
-        //spannableString = new SpannableString("Loading");
         spannableString?.setSpan(dynamicDrawableSpan, spannableString?.length?.minus(1)!!,
                 spannableString?.length!!, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
@@ -148,13 +147,13 @@ class MyButton : MaterialButton, OnViewStatusChange {
         initProgressBar()
         mButtonText = text.toString()
         text = spannableString
-        mProgressDrawable!!.start()
+        mProgressDrawable?.start()
 
 
     }
 
     private fun stopLoading() {
-        mProgressDrawable!!.stop()
+        mProgressDrawable?.stop()
         mButtonText?.let { text = mButtonText}
         mOnClickListener?.let{ super.setOnClickListener(mOnClickListener)}
     }

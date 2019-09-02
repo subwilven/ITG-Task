@@ -18,12 +18,12 @@ interface DialogManager {
     val _context: Context
 
     private fun buildDialog(@StringRes title: Int,
-                            @StringRes positiveButton: Int=-1,
-                            @StringRes negativeButton: Int=-1,
+                            @StringRes positiveButton: Int = -1,
+                            @StringRes negativeButton: Int = -1,
                             cancelable: Boolean = true,
                             cancelOnTouchOutside: Boolean = true,
-                            onPositiveClick: (() -> Unit)?=null,
-                            onNegativeClick: (() -> Unit)?=null): MaterialDialog {
+                            onPositiveClick: (() -> Unit)? = null,
+                            onNegativeClick: (() -> Unit)? = null): MaterialDialog {
         val dialog = MaterialDialog(_context)
                 .title(title)
 
@@ -49,9 +49,9 @@ interface DialogManager {
                    @StringRes negativeButton: Int = -1,
                    cancelable: Boolean = true,
                    cancelOnTouchOutside: Boolean = true,
-                   onPositiveClick: (() -> Unit)? = null,
-                   onNegativelick: (() -> Unit)? = null) {
-        val dialog = buildDialog(title, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onPositiveClick, onNegativelick)
+                   onNegativeClick: (() -> Unit)? = null,
+                   onPositiveClick: (() -> Unit)? = null) {
+        val dialog = buildDialog(title, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onPositiveClick, onNegativeClick)
         dialog.message(text = message.getValue(_context))
         show(dialog, _fragmentManager!!)
     }
@@ -60,8 +60,8 @@ interface DialogManager {
                        items: List<String>,
                        cancelable: Boolean = true,
                        cancelOnTouchOutside: Boolean = true,
-                       onItemSelectedListener:  ((dialog: MaterialDialog, index: Int, text: String) -> Unit)?=null) {
-        var dialog = buildDialog(title, cancelable = cancelable,cancelOnTouchOutside =  cancelOnTouchOutside)
+                       onItemSelectedListener: ((dialog: MaterialDialog, index: Int, text: String) -> Unit)? = null) {
+        var dialog = buildDialog(title, cancelable = cancelable, cancelOnTouchOutside = cancelOnTouchOutside)
         dialog = dialog.listItems(
                 waitForPositiveButton = false,
                 items = items,
@@ -79,7 +79,7 @@ interface DialogManager {
                                    initialSelection: Int = -1,
                                    onNegativeClick: (() -> Unit)? = null,
                                    onPositiveClick: ((dialog: MaterialDialog, index: Int, text: String) -> Unit)? = null) {
-        var dialog = buildDialog(title, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onNegativeClick=onNegativeClick)
+        var dialog = buildDialog(title, positiveButton, negativeButton, cancelable, cancelOnTouchOutside, onNegativeClick = onNegativeClick)
 
         dialog = dialog.listItemsSingleChoice(
                 items = items,

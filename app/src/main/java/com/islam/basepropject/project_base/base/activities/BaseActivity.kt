@@ -1,12 +1,12 @@
 package com.islam.basepropject.project_base.base.activities
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,16 +17,16 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.common.boradcast.AlerterReceiver
 import com.islam.basepropject.project_base.common.boradcast.ConnectivityReceiver
-import com.islam.basepropject.project_base.common.ui.settings.TagedFragment
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
 import com.islam.basepropject.project_base.utils.LocalManager
+import com.islam.basepropject.project_base.utils.LocationUtils
 import com.islam.basepropject.project_base.utils.NetworkManager
 import com.tapadoo.alerter.Alerter
 
 
-abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener ,AlerterReceiver.AlerterReceiverListener{
+abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener, AlerterReceiver.AlerterReceiverListener {
 
-    abstract val layoutId :Int
+    abstract val layoutId: Int
 
     val isNetworkConnected: Boolean
         get() = NetworkManager.isNetworkConnected(this)
@@ -114,6 +114,18 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
         supportActionBar?.setDisplayShowHomeEnabled(enableBackButton)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode == 50) {
+            when (resultCode) {
+                Activity.RESULT_OK -> LocationUtils.instance?.checkPermissionAndStartTrack()
+                else -> LocationUtils.instance?.onFailed?.invoke()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     fun navigate(cls: Class<*>, bundle: Bundle? = null, clearBackStack: Boolean = false) {
         val intent = Intent(this, cls)
         if (clearBackStack)
@@ -138,7 +150,7 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
 
     fun navigate(fragmentManager: FragmentManager,
                  fragment: Fragment,
-                 tag :String,
+                 tag: String,
                  bundle: Bundle? = null,
                  @IdRes container: Int = R.id.container,
                  addToBackStack: Boolean = false) {
