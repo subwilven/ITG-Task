@@ -8,24 +8,22 @@ import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.POJO.ScreenStatus
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.views.OnViewStatusChange
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Exception
 import java.net.SocketTimeoutException
 
 open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
 
     private var viewId: Int? = null
+    private lateinit var fragmentTag: String
 
     private val isStartingFragment: Boolean
         get() = baseViewModel.lastRegisterdFragmentStatus == ScreenStatus.STARTING
 
-    constructor(baseViewModel: BaseViewModel, viewId: Int?) : this(baseViewModel) {
+    constructor(baseViewModel: BaseViewModel,fragmentTag: String, viewId: Int?) : this(baseViewModel) {
         this.viewId = viewId
+        this.fragmentTag = fragmentTag
     }
 
     //handel errors like validation error or authentication error
@@ -43,7 +41,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     private fun handelNetworkError(e: Throwable) {
         e.printStackTrace()
         when (e) {
-            is CancellationException ->{}
+            is CancellationException -> {}
             is HttpException ->
                 onErrorReceived(getHttpErrorMessage(e))
             is SocketTimeoutException ->
@@ -59,7 +57,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
         }
     }
 
-    open fun onErrorReceived(errorMsg :String){
+    open fun onErrorReceived(errorMsg: String) {
         showError(Message(errorMsg), ErrorModel.serverError(Message(errorMsg)))
     }
 
@@ -67,7 +65,7 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     private fun showError(msg: Message, errorModel: ErrorModel = ErrorModel.serverError(msg)) {
 
         if (isStartingFragment)
-            baseViewModel.showNoConnectionFullScreen(errorModel)
+            baseViewModel.showNoConnectionFullScreen(fragmentTag,errorModel)
         else
             baseViewModel.showToastMessage(msg)
     }
@@ -76,14 +74,31 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     suspend fun <T> networkCall(block: suspend () -> T): Result<T> {
         return withContext(Dispatchers.Main) {
             try {
-                baseViewModel.showLoading(viewId)
+                baseViewModel.showLoading(fragmentTag,viewId)
                 withContext(Dispatchers.IO) { Success(block.invoke()) }
             } catch (e: Throwable) {
                 handelNetworkError(e)
                 Failure()
             } finally {
-               baseViewModel.hideLoading(viewId)
+                baseViewModel.hideLoading(fragmentTag,viewId)
             }
         }
     }
+
+//    suspend fun <T> multipleNetworkCall(blocks: List<Pair<suspend () -> T,(T)->Unit>>): Result<Any> {
+//        return withContext(Dispatchers.Main) {
+//            try {
+//                baseViewModel.showLoading(viewId)
+//                val results :MutableList<Deferred<Any>> = mutableListOf()
+//                blocks.forEach { results.add(async(Dispatchers.IO) { it.second(it.first.invoke()) })}
+//                results.forEach { it.await()}
+//                Success("")
+//            } catch (e: Throwable) {
+//                handelNetworkError(e)
+//                Failure()
+//            } finally {
+//                baseViewModel.hideLoading(viewId)
+//            }
+//        }
+//    }
 }

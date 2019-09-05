@@ -17,8 +17,9 @@ class ViewModel : BaseViewModel() {
 
     var providersList: Result<ApiResponse<List<Article>>>? = null
     fun loadProviders(viewId: Int?) {
-        viewModelScope.launch {
+        appScope.launch {
             providersList = networkCall(viewId) { repository.getProvidersList() }
+           // providersList = networkCall(viewId) { repository.getProvidersList() }
             markAsCompleted(listOf(providersList!!))
         }
     }

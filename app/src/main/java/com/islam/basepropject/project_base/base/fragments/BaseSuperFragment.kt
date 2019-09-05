@@ -96,8 +96,7 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
     }
 
 
-    fun createViewPagerWithTabLayout(fragmentsClass: Array<Class<*>>,
-                                     tabsNames: Array<String>,
+    fun createViewPagerWithTabLayout(fragmentsWithTabsNames : Array<Pair<Class<*>,String>>,
                                      tabLayoutId: Int = R.id.tabLayout,
                                      viewPagerId: Int = R.id.viewPager) {
 
@@ -105,14 +104,14 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
 
         initViewPager(viewPagerId)
 
-        val adapter = ViewPagerAdapter(this, fragmentsClass)
+        val adapter = ViewPagerAdapter(this, fragmentsWithTabsNames.map {it.first}.toTypedArray())
 
         setViewPagerAdapter(adapter)
 
         attachViewPagerWithTabLayout()
 
-        for (i in tabsNames.indices) {
-            tabLayout?.getTabAt(i)!!.text = tabsNames[i]
+        for (i in fragmentsWithTabsNames.indices) {
+            tabLayout?.getTabAt(i)!!.text = fragmentsWithTabsNames[i].second
         }
 
     }

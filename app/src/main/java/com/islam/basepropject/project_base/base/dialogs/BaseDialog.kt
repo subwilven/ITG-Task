@@ -11,7 +11,7 @@ abstract class BaseDialog : DialogFragment() {
 
     abstract override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
 
-    fun show(fragmentManager: FragmentManager) {
+    open fun show(fragmentManager: FragmentManager) {
 
         val tag = javaClass.name
 

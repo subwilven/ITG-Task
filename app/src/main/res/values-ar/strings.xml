@@ -44,10 +44,13 @@
     <string name="no_network_available">لا يوجد اتصال بالشبكة الرجاء التحقق</string>
     <string name="cannot_reach_the_server">لا نستيطع الوصول للخادم حاول مرة اخري</string>
     <string name="skip">تخطي</string>
-    <string name="permission_needed">Permission Needed</string>
+    <string name="permission_needed">أذن السماح مطلوب</string>
     <string name="server_error">خطأ ف الخادم</string>
-    <string name="all_fields_are_required">All fields are required</string>
-    <string name="email_not_valid">Email not valid</string>
-    <string name="password_should_be_at_least_6_charachter">password_should_be_at_least_6_charachter</string>
+    <string name="all_fields_are_required">كل الحقول مطلوبة</string>
+    <string name="email_not_valid">البريد الالكتروني غير صحيح</string>
+    <string name="password_should_be_at_least_6_charachter">كلمة المرور يجب علي الاقل ان تكون 6 رموز</string>
     <string name="user_name_not_valid">User name is not valid</string>
+    <string name="you_are_offline">انت غير متصل بالانترنت</string>
+    <string name="connected">متصل</string>
+    <string name="important">Important</string>
 </resources>

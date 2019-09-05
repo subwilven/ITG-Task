@@ -1,13 +1,22 @@
 package com.islam.basepropject.ui.ExRecyclerView
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.base.adapters.BaseAdapter
+import com.islam.basepropject.project_base.base.adapters.BaseListAdapter
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder
 import kotlinx.android.synthetic.main.item_string.*
 
 
-class Adapter : BaseAdapter<String, Adapter.ViewHolder>() {
+class Adapter : BaseListAdapter<String, Adapter.ViewHolder>(object : DiffUtil.ItemCallback<String>() {
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem == newItem
+    }
+}) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(parent, R.layout.item_string)

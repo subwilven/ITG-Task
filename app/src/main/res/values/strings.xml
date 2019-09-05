@@ -48,4 +48,7 @@
     <string name="email_not_valid">Email not valid</string>
     <string name="password_should_be_at_least_6_charachter">password_should_be_at_least_6_charachter</string>
     <string name="user_name_not_valid">User name is not valid</string>
+    <string name="you_are_offline">You are offline</string>
+    <string name="connected">Connected</string>
+    <string name="important">Important</string>
 </resources>

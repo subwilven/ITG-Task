@@ -13,4 +13,11 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+    <TextView
+        android:id="@+id/tv_connectivity_state"
+        android:visibility="gone"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </com.google.android.material.appbar.AppBarLayout>

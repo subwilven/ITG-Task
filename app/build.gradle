@@ -88,6 +88,9 @@ dependencies {
     // Permissions Utils
     implementation 'gun0912.ted:tedpermission:2.2.2'
 
+    //check for updates
+    implementation 'com.google.android.play:core:1.6.1'
+
     //--------------------------------------Secondary dependencies----------------------------------------------
 
 

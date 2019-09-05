@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
+class Fragment3 : BaseSuperFragment<ViewModel>() {
     override var fragmentTag = "Fragment3"
     private var mAdapter: Adapter? = null
     private var myRecyclerView: MyRecyclerView? = null
@@ -23,41 +24,20 @@ class Fragment3 : BaseSuperFragment<Fragment3.ViewModel>() {
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
         initToolbar(R.string.title2)
-        initViewModel(this, Fragment3.ViewModel::class.java)
+        initViewModel(this, ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: Fragment3.ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
         mAdapter = Adapter()
         myRecyclerView = createRecyclerView(mAdapter!!)
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
+            AddStringDialog().show(childFragmentManager)
+        }
 
     }
 
     override fun setUpObservers() {
-        mViewModel!!.getData().observe(viewLifecycleOwner, Observer { strings -> mAdapter?.setData(strings) })
-    }
-
-    class ViewModel : BaseViewModel() {
-
-        internal var data = MutableLiveData<MutableList<String>>()
-        override fun loadInitialData() {
-            loadProviders(null)
-        }
-
-        fun loadProviders(onViewStatusChange: OnViewStatusChange?) {
-            viewModelScope.launch(Dispatchers.IO) {
-                delay(2500)
-                val strings = ArrayList<String>()
-                strings.add("dsdsd")
-                strings.add("sdsdsdsdsd")
-                data.postValue(strings)
-
-            }
-
-        }
-
-        fun getData(): LiveData<MutableList<String>> {
-            return data
-        }
+        mViewModel!!.getData().observe(viewLifecycleOwner, Observer { strings -> mAdapter?.submitList(strings) })
     }
 
 

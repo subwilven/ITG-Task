@@ -1,6 +1,7 @@
 package com.islam.basepropject.project_base.base.fragments
 
 import android.content.Context
+import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -18,10 +19,7 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.base.activities.BaseActivity
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.utils.ActivityManager
-import com.islam.basepropject.project_base.utils.DialogManager
-import com.islam.basepropject.project_base.utils.ImagePicker
-import com.islam.basepropject.project_base.utils.PermissionsManager
+import com.islam.basepropject.project_base.utils.*
 import com.islam.basepropject.project_base.views.OnViewStatusChange
 import java.io.File
 
@@ -29,10 +27,10 @@ import java.io.File
 abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
 
-    protected var mViewModel: V? = null
+    var mViewModel: V? = null
         protected set
 
-    private var mView: View? = null
+    private var mViewRoot: View? = null
     abstract var fragmentTag: String
     private var baseActivity: BaseActivity? = null
     private var mLoadingView: View? = null
@@ -53,7 +51,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     //override this method if you need to indetif another view group if the
     // loading full screen overlap on another view
     private val fullScreenViewGroup: ViewGroup
-        get() = mView as ViewGroup
+        get() = mViewRoot as ViewGroup
 
     val isNetworkConnected: Boolean
         get() = baseActivity != null && baseActivity!!.isNetworkConnected
@@ -84,7 +82,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
             view?.isEnabled = shouldEnable
     }
 
-    @JvmOverloads
     protected fun initContentView(@LayoutRes layoutId: Int, hasChildrenFragments: Boolean = false) {
         this.layoutId = layoutId
         this.hasChildrenFragments = hasChildrenFragments
@@ -133,13 +130,13 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.savedInstanceState = savedInstanceState
-        mView = inflater.inflate(layoutId, container, false)
+        mViewRoot = inflater.inflate(layoutId, container, false)
 
         //register fragment so we can determine should we show full screen loading by consume screen status
         mViewModel!!.registerFragment(fragmentTag)
 
 
-        return mView
+        return mViewRoot
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -165,7 +162,9 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     private fun observeDefaults() {
         if (mViewModel == null) return
 
-        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {})
+        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {
+            showDialog(R.string.important,it)
+        })
 
         //TODO need to be implemented
         mViewModel!!.mSnackBarMessage.observes(viewLifecycleOwner, Observer {})
@@ -182,19 +181,20 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     protected fun observeScreenStatus() {
 
-
         mViewModel?.mShowLoadingFullScreen?.observe(viewLifecycleOwner, Observer {
-
-            if (it) {
+            if (it.first != fragmentTag) return@Observer
+            if (it.second) {
                 inflateLoadingFullScreenView()
                 ActivityManager.setVisibility(View.VISIBLE, mLoadingView)
             } else
                 ActivityManager.setVisibility(View.GONE, mLoadingView)
 
         })
+
         mViewModel?.mShowErrorFullScreen?.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                inflateErrorFullScreenView(it)
+            if (it.first != fragmentTag) return@Observer
+            if (it.second != null) {
+                inflateErrorFullScreenView(it.second!!)
                 ActivityManager.setVisibility(View.VISIBLE, mErrorView)
             } else
                 ActivityManager.setVisibility(View.GONE, mErrorView)
@@ -202,10 +202,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         //TODO a better way to do this without needing to find view by id through all the list ( set list of this view in the fragment)
         mViewModel?.mLoadingViews?.observe(viewLifecycleOwner, Observer {
-            for (viewId in it)
-                (mView?.findViewById<View>(viewId.key) as OnViewStatusChange).showLoading(viewId.value)
+            if (it.first != fragmentTag) return@Observer
+            for (viewId in it.second)
+                (mViewRoot?.findViewById<View>(viewId.key) as OnViewStatusChange).showLoading(viewId.value)
         })
-
     }
 
     private fun inflateLoadingFullScreenView() {
@@ -232,7 +232,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
             viewGroup.addView(mErrorView)
         }
-
         (mErrorView!!.findViewById<View>(R.id.tv_title) as TextView).text = errorModel.title.getValue(context)
         (mErrorView!!.findViewById<View>(R.id.tv_message) as TextView).text = errorModel.message.getValue(context)
     }
@@ -242,7 +241,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         if (mViewModel != null)
             mViewModel!!.unRegister(fragmentTag)
         sensitiveInputViews.clear()
-        mView = null
+        mViewRoot = null
         mLoadingView = null
         mErrorView = null
         super.onDestroyView()
@@ -255,7 +254,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     override fun onDetach() {
         baseActivity = null
-        mView = null
+        mViewRoot = null
         super.onDetach()
     }
 
@@ -271,6 +270,20 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     fun pickImage(onImagePicked: (imageFile: File?) -> Unit) {
         ImagePicker.pickImage(this, onImagePicked)
+    }
+
+    fun getUserLocationSingle(priority: Int = LocationUtils.DEFAULT_PRIORITY,
+                              onFailed: (() -> Unit) = {},
+                              onLocation: (location: Location) -> Unit) {
+        LocationUtils.instance?.getUserLocationSingle(this, priority, onFailed, onLocation)
+    }
+
+    fun getUserLocationUpdates(priority: Int = LocationUtils.DEFAULT_PRIORITY,
+                               interval: Long = LocationUtils.DEFAULT_INTERVAL,
+                               fastestInterval: Long = LocationUtils.DEFAULT_FASTEST_INTERVAL,
+                               onFailed: (() -> Unit) = {},
+                               onLocation: (location: Location) -> Unit) {
+        LocationUtils.instance?.getUserLocationUpdates(this, priority, interval, fastestInterval, onFailed, onLocation)
     }
 
     fun toast(msg: String, lenght: Int = Toast.LENGTH_LONG) {

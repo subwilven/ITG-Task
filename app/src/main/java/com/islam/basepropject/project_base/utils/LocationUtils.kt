@@ -1,9 +1,6 @@
 package com.islam.basepropject.project_base.utils
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.location.Location
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -16,6 +13,12 @@ import com.islam.basepropject.project_base.base.fragments.BaseFragment
 class LocationUtils : LifecycleObserver {
 
     companion object {
+
+        const val REQUEST_CODE = 549
+        const val DEFAULT_INTERVAL = 5000L
+        const val DEFAULT_FASTEST_INTERVAL = 2000L
+        const val DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
+
         var instance: LocationUtils? = null
             get() {
                 if (field == null)
@@ -27,33 +30,32 @@ class LocationUtils : LifecycleObserver {
     private var locationRequest: LocationRequest? = null
     var fragment: BaseFragment<*>? = null
     private var mFusedLocationClient: FusedLocationProviderClient? = null
-    var onLocation: ((location: Location) -> Unit)? =null
-    var onFailed: (()->Unit)? =null
+    var onLocation: ((location: Location) -> Unit)? = null
+    var onFailed: (() -> Unit)? = null
     var singleRequest = false // when user need the location just once this should be true
 
     fun getUserLocationSingle(fragment: BaseFragment<*>,
-                               priority: Int = LocationRequest.PRIORITY_HIGH_ACCURACY,
-                               onFailed: (()->Unit) ={},
-                               onLocation: (location: Location) -> Unit) {
+                              priority: Int = DEFAULT_PRIORITY,
+                              onFailed: (() -> Unit) = {},
+                              onLocation: (location: Location) -> Unit) {
         this.onLocation = onLocation
         this.onFailed = onFailed
         this.fragment = fragment
-        this.singleRequest= true
+        this.singleRequest = true
 
         locationRequest = LocationRequest.create()?.apply {
             this.priority = priority
         }
 
-      initfusedClient()
+        initfusedClient()
     }
 
 
-
     fun getUserLocationUpdates(fragment: BaseFragment<*>,
-                               priority: Int = LocationRequest.PRIORITY_HIGH_ACCURACY,
-                               interval: Long = 5000,
-                               fastestInterval: Long = 2000,
-                               onFailed: (()->Unit) ={},
+                               priority: Int = DEFAULT_PRIORITY,
+                               interval: Long = DEFAULT_INTERVAL,
+                               fastestInterval: Long = DEFAULT_FASTEST_INTERVAL,
+                               onFailed: (() -> Unit) = {},
                                onLocation: (location: Location) -> Unit) {
         this.onLocation = onLocation
         this.onFailed = onFailed
@@ -68,7 +70,7 @@ class LocationUtils : LifecycleObserver {
         initfusedClient()
     }
 
-    fun initfusedClient(){
+    fun initfusedClient() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(fragment!!.context!!)
         createLocationRequest()
     }
@@ -76,14 +78,14 @@ class LocationUtils : LifecycleObserver {
 
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
-            if (locationResult == null)  return
+            if (locationResult == null) return
             onLocation?.invoke(locationResult.lastLocation)
-            if(singleRequest) release()
+            if (singleRequest) release()
         }
 
         override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
             super.onLocationAvailability(locationAvailability)
-            locationAvailability?.isLocationAvailable?.run {onFailed?.invoke()}
+            locationAvailability?.isLocationAvailable?.run { onFailed?.invoke() }
         }
     }
 
@@ -129,18 +131,18 @@ class LocationUtils : LifecycleObserver {
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun release(){
+    fun release() {
         mFusedLocationClient?.removeLocationUpdates(mLocationCallback)
         mFusedLocationClient = null
         fragment = null
-        onFailed= null
-        onLocation=null
+        onFailed = null
+        onLocation = null
     }
 
     private fun registerGpsBroadcastReceiver(e: Exception) {
         runCatching {
             val resolvable = e as ResolvableApiException
-            resolvable.startResolutionForResult(fragment?.activity, 50)
+            resolvable.startResolutionForResult(fragment?.activity, REQUEST_CODE)
         }
     }
 

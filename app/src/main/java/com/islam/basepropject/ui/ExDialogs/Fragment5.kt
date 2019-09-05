@@ -5,7 +5,7 @@ import android.view.View
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.project_base.utils.LocationUtils
+import com.islam.basepropject.ui.ExCustomDialog.PasswordDialog
 
 
 class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
@@ -17,15 +17,21 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
     }
 
     override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
-        if (instance == null)
-           // pickImage { imageView2.loadImage(it) }
+      //  if (instance == null)
+        // pickImage { imageView2.loadImage(it) }
 //            showDialogListMultiChoice(R.string.title1,listOf("asdfasd", "asfdsafd", "asfdasdf")){dialog,index,text ->
 //
 //            }
 
         // requestPermission(PermissionsManager.CAMERA,PermissionsManager.CONTACTS) { toast("dfgdg")}
         //imageView2.loadImage("http://www.effigis.com/wp-content/uploads/2015/02/Airbus_Pleiades_50cm_8bit_RGB_Yogyakarta.jpg")
-            LocationUtils.instance?.getUserLocationSingle(this,onFailed = {toast("failed")}){toast(it.toString()) }
+        //      LocationUtils.instance?.getUserLocationSingle(this,onFailed = {toast("failed")}){toast(it.toString()) }
+//
+//            getUserLocationSingle {
+//
+//            }
+
+        PasswordDialog().show(childFragmentManager)
     }
 
 

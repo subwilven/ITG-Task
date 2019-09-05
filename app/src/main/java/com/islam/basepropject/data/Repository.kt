@@ -1,5 +1,6 @@
 package com.islam.basepropject.data
 
+import android.util.Log
 import com.islam.basepropject.BuildConfig
 import com.islam.basepropject.pojo.Article
 import com.islam.basepropject.pojo.Auth
@@ -14,12 +15,12 @@ import kotlinx.coroutines.withContext
 class Repository{
 
     suspend fun getProvidersList(): ApiResponse<List<Article>> {
-        //delay(5000)
+        delay(4000)
         return NetworkModel.clientApi!!.getProviders("sources", BuildConfig.NEWS_API_KEY)
-        // return NetworkModel.clientApi!!.getProviders()
     }
 
     suspend fun login(email: String, password: String): ApiResponse<Auth> {
+        Log.i("NETWORKING","start Loing")
         return withContext(Dispatchers.IO) {
             delay(2000)
             ApiResponse(status = "",sources = Auth(isLogged = true))

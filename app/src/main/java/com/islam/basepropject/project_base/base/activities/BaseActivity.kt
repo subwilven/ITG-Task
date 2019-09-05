@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.IdRes
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.islam.basepropject.MyApplication
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
@@ -22,6 +24,10 @@ import com.islam.basepropject.project_base.utils.LocalManager
 import com.islam.basepropject.project_base.utils.LocationUtils
 import com.islam.basepropject.project_base.utils.NetworkManager
 import com.tapadoo.alerter.Alerter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener, AlerterReceiver.AlerterReceiverListener {
@@ -68,7 +74,25 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean?) {
+        val tvConnectivityState = findViewById<TextView>(R.id.tv_connectivity_state)
+        if(tvConnectivityState!=null &&isConnected !=null){
+            if (isConnected) {
+                lifecycleScope.launch {
+                    tvConnectivityState.text = getString(R.string.connected)
+                    tvConnectivityState.setBackgroundColor(resources.getColor(R.color.green))
+                    tvConnectivityState.setTextColor(resources.getColor(R.color.green1))
+                    withContext(Dispatchers.IO){delay(2800)}
+                    tvConnectivityState.visibility = View.GONE
+                }
+            } else {
+                tvConnectivityState.text = getString(R.string.you_are_offline)
+                tvConnectivityState.setBackgroundColor(resources.getColor(R.color.red))
+                tvConnectivityState.setTextColor(resources.getColor(R.color.red1))
+                tvConnectivityState.visibility = View.VISIBLE
+            }
+        }
     }
+
 
     override fun onAlertReceived(msg: String) {
         Alerter.create(this)
@@ -114,9 +138,10 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
         supportActionBar?.setDisplayShowHomeEnabled(enableBackButton)
     }
 
+    //to receive result of locaion fused dialog
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (requestCode == 50) {
+        if (requestCode == LocationUtils.REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> LocationUtils.instance?.checkPermissionAndStartTrack()
                 else -> LocationUtils.instance?.onFailed?.invoke()

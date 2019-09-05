@@ -30,13 +30,13 @@ abstract class BaseViewModel : ViewModel() {
     */
 
     val appScope = ProcessLifecycleOwner.get().lifecycleScope
-    val mLoadingViews = MutableLiveData<MutableMap<Int, Boolean>>()//list of view that may show loading instead show full screen loading
+    val mLoadingViews = MutableLiveData<Pair<String,MutableMap<Int, Boolean>>>()//list of view that may show loading instead show full screen loading
     val mSnackBarMessage = SingleLiveEvent<Message>()
     val mEnableSensitiveInputs = MutableLiveData<Boolean>()
     val mToastMessage = SingleLiveEvent<Message>()
     val mDialogMessage = SingleLiveEvent<Message>()
-    val mShowLoadingFullScreen = MutableLiveData<Boolean>()
-    val mShowErrorFullScreen = MutableLiveData<ErrorModel>()
+    val mShowLoadingFullScreen = MutableLiveData<Pair<String,Boolean>>()
+    val mShowErrorFullScreen = MutableLiveData<Pair<String,ErrorModel?>>()
     private val registeredFragments = HashMap<String, ScreenStatus>()
     private var lastRegisteredFragment: String? = null
 
@@ -45,7 +45,7 @@ abstract class BaseViewModel : ViewModel() {
 
     init {
         this.loadInitialData()
-        mLoadingViews.value = mutableMapOf()
+        mLoadingViews.value = Pair("", mutableMapOf())
     }
 
     open fun loadInitialData() {}
@@ -69,9 +69,12 @@ abstract class BaseViewModel : ViewModel() {
 
 
     suspend fun <T> networkCall(viewId: Int? = null, block: suspend () -> T): Result<T> {
-        return RetrofitCorounites(this, viewId).networkCall(block)
+        return RetrofitCorounites(this,lastRegisteredFragment!!, viewId).networkCall(block)
     }
 
+//    suspend fun <T> multipleNetworkCall(viewId: Int? = null, blocks: List<Pair<suspend () -> T,(T)->Unit>>): Result<Any> {
+//        return RetrofitCorounites(this, viewId).multipleNetworkCall(blocks)
+//    }
 
     fun markAsCompleted(name: String) {
         registeredFragments[name] = ScreenStatus.COMPLETED
@@ -97,12 +100,12 @@ abstract class BaseViewModel : ViewModel() {
         mEnableSensitiveInputs.value = b
     }
 
-    fun showLoadingFullScreen(b: Boolean) {
-        mShowLoadingFullScreen.value = b
+    fun showLoadingFullScreen(fragmentTag: String?,b: Boolean) {
+        mShowLoadingFullScreen.value = Pair(fragmentTag!!,b)
     }
 
-    fun showNoConnectionFullScreen(errorModel: ErrorModel?) {
-        mShowErrorFullScreen.value = errorModel
+    fun showNoConnectionFullScreen(fragmentTag: String?,errorModel: ErrorModel?) {
+        mShowErrorFullScreen.value = Pair(fragmentTag!!,errorModel)
     }
 
     fun showAlertBar(message: Message) {
@@ -112,31 +115,31 @@ abstract class BaseViewModel : ViewModel() {
     private val isStartingFragment: Boolean
         get() = lastRegisterdFragmentStatus == ScreenStatus.STARTING
 
-    fun showLoading(viewId: Int?) {
+    fun showLoading(fragmentTag :String ,viewId: Int?) {
         enableSensitiveInputs(false)
         if (isStartingFragment) {
-            showNoConnectionFullScreen(null)
-            showLoadingFullScreen(true)
+            showNoConnectionFullScreen(fragmentTag,null)
+            showLoadingFullScreen(fragmentTag,true)
         } else if (viewId != null) {
-            mLoadingViews.value?.put(viewId, true)
-            mLoadingViews.value = mLoadingViews.value?.toMutableMap()
+            mLoadingViews.value?.second?.put(viewId, true)
+            mLoadingViews.value = Pair(fragmentTag,mLoadingViews.value?.second?.toMutableMap()!!)
         }
     }
 
-    fun hideLoading(viewId: Int?) {
+    fun hideLoading(fragmentTag :String ,viewId: Int?) {
         enableSensitiveInputs(true)
         if (isStartingFragment)
-            showLoadingFullScreen(false)
+            showLoadingFullScreen(fragmentTag,false)
         else if (viewId != null) {
-            mLoadingViews.value?.put(viewId, false)
-            mLoadingViews.value = mLoadingViews.value
+            mLoadingViews.value?.second?.put(viewId, false)
+            mLoadingViews.value = Pair(fragmentTag,mLoadingViews.value?.second?.toMutableMap()!!)
         }
     }
 
 
-    fun unRegister(fragmentClassName: String) {
+    fun unRegister(fragmentTag: String) {
         //registeredFragments.remove(fragmentClassName)
-        if (fragmentClassName == lastRegisteredFragment)
+        if (fragmentTag == lastRegisteredFragment)
             lastRegisteredFragment = null // MAY CAUSE PROBLEM
     }
 

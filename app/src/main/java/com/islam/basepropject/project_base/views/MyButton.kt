@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 
 import com.google.android.material.button.MaterialButton
 import com.islam.basepropject.R
+import kotlin.math.max
 
 //TODO need to register to to fragment/Activity lifecycle
 class MyButton : MaterialButton, OnViewStatusChange {
@@ -70,7 +71,7 @@ class MyButton : MaterialButton, OnViewStatusChange {
                 val lineHeight = fontMetrics.bottom - fontMetrics.top
 
                 //make sure our drawable has height >= font height
-                val drHeight = Math.max(lineHeight, (rect.bottom - rect.top).toFloat())
+                val drHeight = max(lineHeight, (rect.bottom - rect.top).toFloat())
 
                 val centerY = fontMetrics.top + lineHeight / 2
 
