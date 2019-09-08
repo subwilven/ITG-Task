@@ -9,7 +9,7 @@ import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 
 class ExFragment : BaseSuperFragment<ExViewModel>() {
     override var fragmentTag = "ExFragment"
-    private var mAdapter = ExAdapter()
+    private var mAdapter :ExAdapter? =null
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)
@@ -18,12 +18,17 @@ class ExFragment : BaseSuperFragment<ExViewModel>() {
     }
 
 
-    override fun onViewCreated(view: View, viewModel: ExViewModel?, instance: Bundle?) {
-        mViewModel?.loadOrders(createRecyclerView(mAdapter).id)
+    override fun onViewCreated(view: View, viewModel: ExViewModel, instance: Bundle?) {
+        mAdapter = ExAdapter(mViewModel)
+        mViewModel.loadOrders(createRecyclerView(mAdapter!!).id)
     }
 
     override fun setUpObservers() {
-        mViewModel!!.orders?.observe(viewLifecycleOwner, Observer {mAdapter.submitList(it)})
+        mViewModel.orders?.observe(viewLifecycleOwner, Observer {mAdapter?.submitList(it)})
+
+        mViewModel.notifyItemChanged.observes(viewLifecycleOwner, Observer {
+            mAdapter?.notifyItemChanged(it)
+        })
     }
 
 }

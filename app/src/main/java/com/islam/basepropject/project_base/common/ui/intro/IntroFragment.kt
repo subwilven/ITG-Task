@@ -23,7 +23,7 @@ class IntroFragment : BaseSuperFragment<IntroViewModel>() {
         initViewModel(activity!!, IntroViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: IntroViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: IntroViewModel, instance: Bundle?) {
 
         val introList = mutableListOf(Intro(), Intro(), Intro())
         mAdapter = IntroAdapter(introList)

@@ -27,8 +27,7 @@ import java.io.File
 abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
 
-    var mViewModel: V? = null
-        protected set
+    lateinit var mViewModel: V
 
     private var mViewRoot: View? = null
     abstract var fragmentTag: String
@@ -63,12 +62,12 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     protected abstract fun onLaunch()
 
-    protected abstract fun onViewCreated(view: View, viewModel: V?, instance: Bundle?)
+    protected abstract fun onViewCreated(view: View, viewModel: V, instance: Bundle?)
 
     protected abstract fun setUpObservers()
 
     protected fun onRetry() {
-        mViewModel?.loadInitialData()
+        mViewModel.loadInitialData()
     }
 
     protected fun addSensitiveInputs(vararg views: View?) {
@@ -119,7 +118,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     }
 
     protected fun markScreenAsCompleted() {
-        mViewModel!!.markAsCompleted(fragmentTag)
+        mViewModel.markAsCompleted(fragmentTag)
         tag
     }
 
@@ -133,7 +132,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         mViewRoot = inflater.inflate(layoutId, container, false)
 
         //register fragment so we can determine should we show full screen loading by consume screen status
-        mViewModel!!.registerFragment(fragmentTag)
+        mViewModel.registerFragment(fragmentTag)
 
 
         return mViewRoot
@@ -162,26 +161,26 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     private fun observeDefaults() {
         if (mViewModel == null) return
 
-        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {
+        mViewModel.mDialogMessage.observes(viewLifecycleOwner, Observer {
             showDialog(R.string.important,it)
         })
 
         //TODO need to be implemented
-        mViewModel!!.mSnackBarMessage.observes(viewLifecycleOwner, Observer {})
+        mViewModel.mSnackBarMessage.observes(viewLifecycleOwner, Observer {})
 
-        mViewModel!!.mDialogMessage.observes(viewLifecycleOwner, Observer {
+        mViewModel.mDialogMessage.observes(viewLifecycleOwner, Observer {
             showDialog(R.string.title1, it)
         })
 
-        mViewModel!!.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
+        mViewModel.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
 
-        mViewModel!!.mEnableSensitiveInputs.observe(viewLifecycleOwner, Observer { enableSensitiveInputs(it) })
+        mViewModel.mEnableSensitiveInputs.observe(viewLifecycleOwner, Observer { enableSensitiveInputs(it) })
 
     }
 
     protected fun observeScreenStatus() {
 
-        mViewModel?.mShowLoadingFullScreen?.observe(viewLifecycleOwner, Observer {
+        mViewModel.mShowLoadingFullScreen?.observe(viewLifecycleOwner, Observer {
             if (it.first != fragmentTag) return@Observer
             if (it.second) {
                 inflateLoadingFullScreenView()
@@ -191,7 +190,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
         })
 
-        mViewModel?.mShowErrorFullScreen?.observe(viewLifecycleOwner, Observer {
+        mViewModel.mShowErrorFullScreen?.observe(viewLifecycleOwner, Observer {
             if (it.first != fragmentTag) return@Observer
             if (it.second != null) {
                 inflateErrorFullScreenView(it.second!!)
@@ -201,7 +200,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         })
 
         //TODO a better way to do this without needing to find view by id through all the list ( set list of this view in the fragment)
-        mViewModel?.mLoadingViews?.observe(viewLifecycleOwner, Observer {
+        mViewModel.mLoadingViews?.observe(viewLifecycleOwner, Observer {
             if (it.first != fragmentTag) return@Observer
             for (viewId in it.second)
                 (mViewRoot?.findViewById<View>(viewId.key) as OnViewStatusChange).showLoading(viewId.value)
@@ -239,7 +238,7 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     override fun onDestroyView() {
         if (mViewModel != null)
-            mViewModel!!.unRegister(fragmentTag)
+            mViewModel.unRegister(fragmentTag)
         sensitiveInputViews.clear()
         mViewRoot = null
         mLoadingView = null

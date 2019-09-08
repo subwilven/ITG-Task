@@ -26,7 +26,7 @@ class Fragment2 : BaseFragment<Fragment2.ViewModel>() {
     }
 
 
-    override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: ViewModel, instance: Bundle?) {
 
     }
 

@@ -22,7 +22,7 @@ class Fragment1 : BaseFragment<ViewModel>() {
         initViewModel(this, ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: ViewModel, instance: Bundle?) {
 
         btnFetch.setOnClickListener { viewModel!!.loadProviders(btnFetch.id) }
         addSensitiveInputs(editText)

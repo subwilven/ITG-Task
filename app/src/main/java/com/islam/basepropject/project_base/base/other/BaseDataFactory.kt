@@ -5,12 +5,9 @@ import androidx.paging.DataSource
 
 abstract class BaseDataFactory<T>(private val baseViewModel: BaseViewModel) : DataSource.Factory<Long, T>() {
 
-    val mutableDataSource: MutableLiveData<BaseDataSource<T>>
-    abstract fun onCreateDataSource(baseViewModel: BaseViewModel): BaseDataSource<T>
+    private val mutableDataSource: MutableLiveData<BaseDataSource<T>> = MutableLiveData()
 
-    init {
-        this.mutableDataSource = MutableLiveData()
-    }
+    abstract fun onCreateDataSource(baseViewModel: BaseViewModel): BaseDataSource<T>
 
     override fun create(): DataSource<Long,T> {
         val dataSource = onCreateDataSource(baseViewModel)

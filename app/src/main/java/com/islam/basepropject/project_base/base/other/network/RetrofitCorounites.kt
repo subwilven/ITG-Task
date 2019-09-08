@@ -3,10 +3,7 @@ package com.islam.basepropject.project_base.base.other.network
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.islam.basepropject.R
-import com.islam.basepropject.project_base.POJO.ApiError
-import com.islam.basepropject.project_base.POJO.ErrorModel
-import com.islam.basepropject.project_base.POJO.Message
-import com.islam.basepropject.project_base.POJO.ScreenStatus
+import com.islam.basepropject.project_base.POJO.*
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import kotlinx.coroutines.*
 import retrofit2.HttpException
@@ -16,6 +13,7 @@ import java.net.SocketTimeoutException
 open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
 
     private var viewId: Int? = null
+    private var adapterItem: AdatperItemLoading? = null
     private lateinit var fragmentTag: String
 
     private val isStartingFragment: Boolean
@@ -23,6 +21,11 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
 
     constructor(baseViewModel: BaseViewModel,fragmentTag: String, viewId: Int?) : this(baseViewModel) {
         this.viewId = viewId
+        this.fragmentTag = fragmentTag
+    }
+
+    constructor(baseViewModel: BaseViewModel,fragmentTag: String, adapterItem: AdatperItemLoading?) : this(baseViewModel) {
+        this.adapterItem = adapterItem
         this.fragmentTag = fragmentTag
     }
 
@@ -74,13 +77,13 @@ open class RetrofitCorounites(private val baseViewModel: BaseViewModel) {
     suspend fun <T> networkCall(block: suspend () -> T): Result<T> {
         return withContext(Dispatchers.Main) {
             try {
-                baseViewModel.showLoading(fragmentTag,viewId)
+                baseViewModel.showLoading(fragmentTag,viewId,adapterItem)
                 withContext(Dispatchers.IO) { Success(block.invoke()) }
             } catch (e: Throwable) {
                 handelNetworkError(e)
                 Failure()
             } finally {
-                baseViewModel.hideLoading(fragmentTag,viewId)
+                baseViewModel.hideLoading(fragmentTag,viewId,adapterItem)
             }
         }
     }

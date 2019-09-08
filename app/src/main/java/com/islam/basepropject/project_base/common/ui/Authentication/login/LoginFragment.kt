@@ -20,7 +20,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
         initViewModel(this, LoginViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: LoginViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: LoginViewModel, instance: Bundle?) {
         initViews()
         addSensitiveInputs(et_email,et_password,tv_forget_password,tv_sign_up)
         markScreenAsCompleted()

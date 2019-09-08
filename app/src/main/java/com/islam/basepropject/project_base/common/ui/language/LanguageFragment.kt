@@ -21,8 +21,8 @@ class LanguageFragment : BaseSuperFragment<LanguageViewModel>() {
         initViewModel(activity!!, LanguageViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: LanguageViewModel?, instance: Bundle?) {
-        mAdapter = LanguageAdapter(viewModel!!, resources.getStringArray(R.array.languages))
+    override fun onViewCreated(view: View, viewModel: LanguageViewModel, instance: Bundle?) {
+        mAdapter = LanguageAdapter(viewModel, resources.getStringArray(R.array.languages))
         createRecyclerView(mAdapter!!, recyclerViewId = R.id.recyclerView554)
     }
 

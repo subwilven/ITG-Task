@@ -27,7 +27,7 @@ class Fragment3 : BaseSuperFragment<ViewModel>() {
         initViewModel(this, ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: ViewModel, instance: Bundle?) {
         mAdapter = Adapter()
         myRecyclerView = createRecyclerView(mAdapter!!)
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {

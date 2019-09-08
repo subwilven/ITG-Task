@@ -24,7 +24,7 @@ class MyButton : MaterialButton, OnViewStatusChange {
 
     private var mProgressDrawable: CircularProgressDrawable? = null
     private var spannableString: SpannableString? =null
-    private var mButtonText = ""
+    private var mButtonText: String? =null
     private var mLoadingText: String? = ""
     private var mOnClickListener: View.OnClickListener? = null
 

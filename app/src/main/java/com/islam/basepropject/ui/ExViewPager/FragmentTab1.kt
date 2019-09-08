@@ -20,7 +20,7 @@ class FragmentTab1 : BaseSuperFragment<Fragment4.ViewModel>() {
         initViewModel(parentFragment!!, Fragment4.ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: Fragment4.ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: Fragment4.ViewModel, instance: Bundle?) {
         markScreenAsCompleted()
         btn_fetch2.setOnClickListener {viewModel!!.loadProviders(it.id)}
     }

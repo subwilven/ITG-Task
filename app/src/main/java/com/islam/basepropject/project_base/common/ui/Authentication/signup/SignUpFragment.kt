@@ -22,7 +22,7 @@ class SignUpFragment : BaseFragment<SignUpViewModel>() {
         initViewModel(this, SignUpViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: SignUpViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: SignUpViewModel, instance: Bundle?) {
         initView()
         addSensitiveInputs(et_user_name,et_email,et_password,tv_forget_password)
         markScreenAsCompleted()

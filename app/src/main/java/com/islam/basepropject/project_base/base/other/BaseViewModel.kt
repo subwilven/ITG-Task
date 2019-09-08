@@ -6,20 +6,15 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.islam.basepropject.MyApplication
+import com.islam.basepropject.project_base.POJO.AdatperItemLoading
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.POJO.ScreenStatus
 import com.islam.basepropject.project_base.base.other.network.Failure
 import com.islam.basepropject.project_base.base.other.network.Result
 import com.islam.basepropject.project_base.base.other.network.RetrofitCorounites
-import com.islam.basepropject.project_base.utils.navigation.Navigator
 import java.util.*
-import kotlin.collections.List
-import kotlin.collections.MutableMap
-import kotlin.collections.get
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
-import kotlin.collections.toMutableMap
 
 abstract class BaseViewModel : ViewModel() {
 
@@ -30,13 +25,13 @@ abstract class BaseViewModel : ViewModel() {
     */
 
     val appScope = ProcessLifecycleOwner.get().lifecycleScope
-    val mLoadingViews = MutableLiveData<Pair<String,MutableMap<Int, Boolean>>>()//list of view that may show loading instead show full screen loading
+    val mLoadingViews = MutableLiveData<Pair<String, MutableMap<Int, Boolean>>>()//list of view that may show loading instead show full screen loading
     val mSnackBarMessage = SingleLiveEvent<Message>()
     val mEnableSensitiveInputs = MutableLiveData<Boolean>()
     val mToastMessage = SingleLiveEvent<Message>()
     val mDialogMessage = SingleLiveEvent<Message>()
-    val mShowLoadingFullScreen = MutableLiveData<Pair<String,Boolean>>()
-    val mShowErrorFullScreen = MutableLiveData<Pair<String,ErrorModel?>>()
+    val mShowLoadingFullScreen = MutableLiveData<Pair<String, Boolean>>()
+    val mShowErrorFullScreen = MutableLiveData<Pair<String, ErrorModel?>>()
     private val registeredFragments = HashMap<String, ScreenStatus>()
     private var lastRegisteredFragment: String? = null
 
@@ -69,8 +64,13 @@ abstract class BaseViewModel : ViewModel() {
 
 
     suspend fun <T> networkCall(viewId: Int? = null, block: suspend () -> T): Result<T> {
-        return RetrofitCorounites(this,lastRegisteredFragment!!, viewId).networkCall(block)
+        return RetrofitCorounites(this, lastRegisteredFragment!!, viewId).networkCall(block)
     }
+
+    suspend fun <T> networkCall(adapterItem: AdatperItemLoading? = null, block: suspend () -> T): Result<T> {
+        return RetrofitCorounites(this, lastRegisteredFragment!!, adapterItem).networkCall(block)
+    }
+
 
 //    suspend fun <T> multipleNetworkCall(viewId: Int? = null, blocks: List<Pair<suspend () -> T,(T)->Unit>>): Result<Any> {
 //        return RetrofitCorounites(this, viewId).multipleNetworkCall(blocks)
@@ -100,12 +100,12 @@ abstract class BaseViewModel : ViewModel() {
         mEnableSensitiveInputs.value = b
     }
 
-    fun showLoadingFullScreen(fragmentTag: String?,b: Boolean) {
-        mShowLoadingFullScreen.value = Pair(fragmentTag!!,b)
+    fun showLoadingFullScreen(fragmentTag: String?, b: Boolean) {
+        mShowLoadingFullScreen.value = Pair(fragmentTag!!, b)
     }
 
-    fun showNoConnectionFullScreen(fragmentTag: String?,errorModel: ErrorModel?) {
-        mShowErrorFullScreen.value = Pair(fragmentTag!!,errorModel)
+    fun showNoConnectionFullScreen(fragmentTag: String?, errorModel: ErrorModel?) {
+        mShowErrorFullScreen.value = Pair(fragmentTag!!, errorModel)
     }
 
     fun showAlertBar(message: Message) {
@@ -115,24 +115,41 @@ abstract class BaseViewModel : ViewModel() {
     private val isStartingFragment: Boolean
         get() = lastRegisterdFragmentStatus == ScreenStatus.STARTING
 
-    fun showLoading(fragmentTag :String ,viewId: Int?) {
+    fun showLoading(fragmentTag: String, viewId: Int?, adapterItem: AdatperItemLoading?) {
         enableSensitiveInputs(false)
-        if (isStartingFragment) {
-            showNoConnectionFullScreen(fragmentTag,null)
-            showLoadingFullScreen(fragmentTag,true)
-        } else if (viewId != null) {
-            mLoadingViews.value?.second?.put(viewId, true)
-            mLoadingViews.value = Pair(fragmentTag,mLoadingViews.value?.second?.toMutableMap()!!)
+        when {
+            isStartingFragment -> {
+                showNoConnectionFullScreen(fragmentTag, null)
+                showLoadingFullScreen(fragmentTag, true)
+            }
+            viewId != null -> {
+                mLoadingViews.value?.second?.put(viewId, true)
+                mLoadingViews.value = Pair(fragmentTag, mLoadingViews.value?.second?.toMutableMap()!!)
+            }
+            adapterItem != null -> {
+                adapterItem.isLoading = true
+                notifyItemChanges(adapterItem)
+            }
         }
     }
 
-    fun hideLoading(fragmentTag :String ,viewId: Int?) {
+    //used when there is a recycler view and each item can make network request  so by this fun we can change the status of loading views in the item
+    open fun notifyItemChanges(adapterItem: AdatperItemLoading) {
+
+    }
+
+    fun hideLoading(fragmentTag: String, viewId: Int?, adapterItem: AdatperItemLoading?) {
         enableSensitiveInputs(true)
-        if (isStartingFragment)
-            showLoadingFullScreen(fragmentTag,false)
-        else if (viewId != null) {
-            mLoadingViews.value?.second?.put(viewId, false)
-            mLoadingViews.value = Pair(fragmentTag,mLoadingViews.value?.second?.toMutableMap()!!)
+        when {
+            isStartingFragment -> showLoadingFullScreen(fragmentTag, false)
+            viewId != null -> {
+                mLoadingViews.value?.second?.put(viewId, false)
+                mLoadingViews.value = Pair(fragmentTag, mLoadingViews.value?.second?.toMutableMap()!!)
+            }
+            adapterItem != null -> {
+                adapterItem.isLoading = false
+                notifyItemChanges(adapterItem)
+            }
         }
     }
 

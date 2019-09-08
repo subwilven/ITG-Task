@@ -19,7 +19,7 @@ class Fragment4 : BaseSuperFragment<Fragment4.ViewModel>() {
         initViewModel(this, Fragment4.ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: Fragment4.ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: Fragment4.ViewModel, instance: Bundle?) {
         createViewPagerWithTabLayout(
                 arrayOf(Pair(FragmentTab2::class.java, "fragment2"),
                         Pair(FragmentTab1::class.java, "fragment1"),

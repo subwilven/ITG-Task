@@ -16,7 +16,7 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
         initViewModel(this, ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: ViewModel?, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: ViewModel, instance: Bundle?) {
       //  if (instance == null)
         // pickImage { imageView2.loadImage(it) }
 //            showDialogListMultiChoice(R.string.title1,listOf("asdfasd", "asfdsafd", "asfdasdf")){dialog,index,text ->
