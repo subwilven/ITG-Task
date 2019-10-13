@@ -11,8 +11,6 @@ import com.islam.basepropject.project_base.base.other.BaseViewModel
 
 abstract class BaseCustomDialog : BaseDialog() {
 
-
-
     protected open var toolbarTitle: Int = -1
     protected abstract var layoutId: Int
     protected open var cancelOnTouchOutside: Boolean = true
@@ -39,5 +37,7 @@ abstract class BaseCustomDialog : BaseDialog() {
 
         return dialog
     }
+
+
 
 }

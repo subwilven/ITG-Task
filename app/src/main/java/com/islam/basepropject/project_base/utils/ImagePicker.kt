@@ -46,8 +46,6 @@ object ImagePicker : LifecycleObserver {
             super.onActivityResult(requestCode, resultCode, data)
             handleActivityResult(requestCode, resultCode, data, activity!!, object : DefaultCallback() {
                 override fun onImagePicked(imageFile: File?, source: EasyImage.ImageSource?, type: Int) {
-//                    val myBitmap = BitmapFactory.decodeFile(imageFile?.getAbsolutePath())
-//                    Bitmap.createScaledBitmap(myBitmap, 200, 200, false)
                     onPicked?.invoke(imageFile)
                     fragmentManager?.beginTransaction()?.remove(this@ImagePickerFragment)?.commitNow()
                 }

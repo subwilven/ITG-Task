@@ -30,10 +30,10 @@ object IntentManager {
 
 
     private fun isPackageInstalledAndEnabled(packageName: String, packageManager: PackageManager): Boolean {
-        try {
-            return packageManager.getApplicationInfo(packageName, 0).enabled
+        return try {
+            packageManager.getApplicationInfo(packageName, 0).enabled
         } catch (e: PackageManager.NameNotFoundException) {
-            return false
+            false
         }
 
     }
@@ -63,7 +63,7 @@ object IntentManager {
     fun openAppSettings(context: Context) {
         val intent = Intent()
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        val uri = Uri.fromParts("package", context.getPackageName(), null)
+        val uri = Uri.fromParts("package", context.packageName, null)
         intent.data = uri
         context.startActivity(intent)
     }

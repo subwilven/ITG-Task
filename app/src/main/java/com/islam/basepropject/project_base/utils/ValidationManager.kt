@@ -18,12 +18,11 @@ object ValidationManager {
     }
 
     fun isValidPassword(target: CharSequence): Int {
-        return if (TextUtils.isEmpty(target)) {
-            R.string.all_fields_are_required
-        } else if (target.length < 6) {
-            R.string.password_should_be_at_least_6_charachter
-        } else
-            -1
+        return when {
+            TextUtils.isEmpty(target) -> R.string.all_fields_are_required
+            target.length < 6 -> R.string.password_should_be_at_least_6_charachter
+            else -> -1
+        }
     }
 
 }
