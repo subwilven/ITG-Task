@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExFetchData
+package com.islam.basepropject.ui.examples.ExFetchData
 
 import androidx.lifecycle.viewModelScope
 import com.islam.basepropject.data.Repository

@@ -1,20 +1,17 @@
-package com.islam.basepropject.ui.ExPaging
+package com.islam.basepropject.ui.examples.ExPaging
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.pojo.Order
 import com.islam.basepropject.project_base.POJO.AdatperItemLoading
-import com.islam.basepropject.project_base.POJO.NetworkRequestState
 import com.islam.basepropject.project_base.base.other.BaseDataFactory
 import com.islam.basepropject.project_base.base.other.BaseDataSource
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.base.other.SingleLiveEvent
 import com.islam.basepropject.project_base.base.other.network.Success
-import com.islam.basepropject.project_base.views.OnViewStatusChange
 import kotlinx.coroutines.launch
 
 class ExViewModel : BaseViewModel() {
@@ -35,7 +32,7 @@ class ExViewModel : BaseViewModel() {
         if (dataFactory == null)
             dataFactory = object : BaseDataFactory<Order>(this) {
                 override fun onCreateDataSource(baseViewModel: BaseViewModel): BaseDataSource<Order> {
-                    return ExDataSource(this@ExViewModel,viewId)
+                    return ExDataSource(this@ExViewModel, viewId)
                 }
             }
 

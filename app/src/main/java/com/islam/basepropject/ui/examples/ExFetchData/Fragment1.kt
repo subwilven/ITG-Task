@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExFetchData
+package com.islam.basepropject.ui.examples.ExFetchData
 
 
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
-import com.islam.basepropject.ui.ExDialogs.Fragment5
+import com.islam.basepropject.ui.examples.ExDialogs.Fragment5
 import kotlinx.android.synthetic.main.fragment_fragment1.*
 
 

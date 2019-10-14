@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExRecyclerView
+package com.islam.basepropject.ui.examples.ExRecyclerView
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

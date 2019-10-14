@@ -7,8 +7,6 @@ import androidx.preference.PreferenceFragmentCompat
 
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.activities.BaseActivity
-import com.islam.basepropject.project_base.base.fragments.BaseFragment
-import com.islam.basepropject.ui.ExFetchData.Fragment1
 
 class SettingsFragment : PreferenceFragmentCompat(),TagedFragment {
 

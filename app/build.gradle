@@ -55,7 +55,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'com.google.android.material:material:1.1.0-beta01'
 
     //Kotlin
     implementation "androidx.core:core-ktx:1.1.0"
@@ -68,10 +68,10 @@ dependencies {
 
 
     //lifecycle
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha03" //this only to get ProcessLifecycle i conot find an alternative in kotlin libraries
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha03'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha03'
-    kapt  "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha03"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-beta01" //this only to get ProcessLifecycle i conot find an alternative in kotlin libraries
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-beta01'
+    kapt  "androidx.lifecycle:lifecycle-compiler:2.2.0-beta01"
 
 
     //network
@@ -81,7 +81,7 @@ dependencies {
 
 
     //view pager
-    implementation 'androidx.viewpager2:viewpager2:1.0.0-beta04'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0-beta05'
 
     //dialog
     implementation 'com.afollestad.material-dialogs:core:3.1.0'

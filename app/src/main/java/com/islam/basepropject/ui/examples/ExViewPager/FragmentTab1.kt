@@ -1,16 +1,12 @@
-package com.islam.basepropject.ui.ExViewPager
+package com.islam.basepropject.ui.examples.ExViewPager
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.viewModelScope
 
 import com.islam.basepropject.R
-import com.islam.basepropject.data.Repository
-import com.islam.basepropject.project_base.POJO.Message
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
-import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.ui.examples.Fragment4
 import kotlinx.android.synthetic.main.fragment_tab1.*
-import kotlinx.coroutines.launch
 
 class FragmentTab1 : BaseSuperFragment<Fragment4.ViewModel>() {
 

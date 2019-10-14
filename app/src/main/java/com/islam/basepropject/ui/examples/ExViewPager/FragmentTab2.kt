@@ -1,11 +1,11 @@
-package com.islam.basepropject.ui.ExViewPager
+package com.islam.basepropject.ui.examples.ExViewPager
 
 import android.os.Bundle
 import android.view.View
 
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
-import com.islam.basepropject.ui.Fragment2
+import com.islam.basepropject.ui.examples.Fragment4
 
 class FragmentTab2 : BaseSuperFragment<Fragment4.ViewModel>() {
 

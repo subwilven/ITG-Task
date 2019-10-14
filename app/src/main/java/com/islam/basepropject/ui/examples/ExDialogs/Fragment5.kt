@@ -1,11 +1,11 @@
-package com.islam.basepropject.ui.ExDialogs
+package com.islam.basepropject.ui.examples.ExDialogs
 
 import android.os.Bundle
 import android.view.View
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
-import com.islam.basepropject.ui.ExCustomDialog.PasswordDialog
+import com.islam.basepropject.ui.examples.ExCustomDialog.PasswordDialog
 
 
 class Fragment5 : BaseFragment<Fragment5.ViewModel>() {

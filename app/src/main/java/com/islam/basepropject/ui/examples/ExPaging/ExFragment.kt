@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExPaging
+package com.islam.basepropject.ui.examples.ExPaging
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,7 @@ import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 
 class ExFragment : BaseSuperFragment<ExViewModel>() {
     override var fragmentTag = "ExFragment"
-    private var mAdapter :ExAdapter? =null
+    private var mAdapter : ExAdapter? =null
 
     override fun onLaunch() {
         initContentView(R.layout.fragment_fragment2)

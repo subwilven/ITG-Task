@@ -15,8 +15,6 @@ import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.fragments.BaseFragment
 import com.islam.basepropject.project_base.common.ui.settings.TagedFragment
 import com.islam.basepropject.project_base.utils.FragmentManagerUtil
-import com.islam.basepropject.ui.ExDialogs.Fragment5
-import java.util.*
 
 abstract class BaseNavigationActivity : BaseActivity() {
 

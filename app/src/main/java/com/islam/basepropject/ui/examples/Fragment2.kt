@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui
+package com.islam.basepropject.ui.examples
 
 
 import android.os.Bundle

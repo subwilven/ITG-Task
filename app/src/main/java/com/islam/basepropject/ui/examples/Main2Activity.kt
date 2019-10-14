@@ -1,10 +1,9 @@
-package com.islam.basepropject.ui
+package com.islam.basepropject.ui.examples
 
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity
-import com.islam.basepropject.ui.ExFetchData.Fragment1
-import com.islam.basepropject.ui.ExViewPager.Fragment4
+import com.islam.basepropject.ui.examples.ExFetchData.Fragment1
 
 class Main2Activity : BaseNavigationActivity() {
     override val layoutId = R.layout.activity_main2

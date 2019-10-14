@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExCustomDialog
+package com.islam.basepropject.ui.examples.ExCustomDialog
 
 import android.os.Bundle
 import android.view.View
@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.TextView
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.dialogs.BaseCustomDialog
-import kotlinx.android.synthetic.main.dialog_custom.*
 
 class PasswordDialog : BaseCustomDialog() {
 

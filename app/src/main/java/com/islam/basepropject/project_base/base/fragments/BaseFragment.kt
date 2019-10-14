@@ -134,6 +134,8 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         //register fragment so we can determine should we show full screen loading by consume screen status
         mViewModel.registerFragment(fragmentTag)
 
+        if(savedInstanceState==null)
+            mViewModel.loadInitialData()
 
         return mViewRoot
     }

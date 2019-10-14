@@ -4,10 +4,10 @@ import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.NavigationType
 import com.islam.basepropject.project_base.base.activities.BaseNavigationActivity
 import com.islam.basepropject.project_base.common.ui.settings.SettingsFragment
-import com.islam.basepropject.ui.ExFetchData.Fragment1
-import com.islam.basepropject.ui.ExPaging.ExFragment
-import com.islam.basepropject.ui.ExRecyclerView.Fragment3
-import com.islam.basepropject.ui.ExViewPager.Fragment4
+import com.islam.basepropject.ui.examples.ExFetchData.Fragment1
+import com.islam.basepropject.ui.examples.ExPaging.ExFragment
+import com.islam.basepropject.ui.examples.ExRecyclerView.Fragment3
+import com.islam.basepropject.ui.examples.Fragment4
 
 class MainActivity : BaseNavigationActivity() {
 

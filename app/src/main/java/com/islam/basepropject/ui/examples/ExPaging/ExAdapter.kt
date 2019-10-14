@@ -1,10 +1,9 @@
-package com.islam.basepropject.ui.ExPaging
+package com.islam.basepropject.ui.examples.ExPaging
 
 import android.view.View
 import android.view.ViewGroup
 import com.islam.basepropject.R
 import com.islam.basepropject.pojo.Order
-import com.islam.basepropject.project_base.POJO.AdatperItemLoading
 import com.islam.basepropject.project_base.base.adapters.BasePagingAdapter
 import com.islam.basepropject.project_base.base.adapters.BaseViewHolder
 import com.islam.basepropject.project_base.views.OnViewStatusChange

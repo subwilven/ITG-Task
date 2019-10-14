@@ -1,4 +1,4 @@
-package com.islam.basepropject.ui.ExRecyclerView
+package com.islam.basepropject.ui.examples.ExRecyclerView
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

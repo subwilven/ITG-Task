@@ -2,15 +2,6 @@ package com.islam.basepropject.project_base.base.other
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.islam.basepropject.project_base.common.ui.intro.IntroViewModel
-import com.islam.basepropject.project_base.common.ui.language.LanguageViewModel
-import com.islam.basepropject.ui.ExDialogs.Fragment5
-
-import com.islam.basepropject.ui.ExFetchData.Fragment1
-import com.islam.basepropject.ui.ExRecyclerView.Fragment3
-import com.islam.basepropject.ui.ExViewPager.FragmentTab1
-import com.islam.basepropject.ui.Fragment2
-import com.islam.basepropject.ui.ExPaging.ExViewModel
 
 class ViewModelFactory private constructor() : ViewModelProvider.NewInstanceFactory() {
 

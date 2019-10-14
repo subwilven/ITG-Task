@@ -1,20 +1,12 @@
-package com.islam.basepropject.ui.ExRecyclerView
+package com.islam.basepropject.ui.examples.ExRecyclerView
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
-import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.views.MyRecyclerView
-import com.islam.basepropject.project_base.views.OnViewStatusChange
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class Fragment3 : BaseSuperFragment<ViewModel>() {
     override var fragmentTag = "Fragment3"

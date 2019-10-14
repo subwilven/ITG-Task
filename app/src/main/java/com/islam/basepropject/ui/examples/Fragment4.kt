@@ -1,6 +1,5 @@
-package com.islam.basepropject.ui.ExViewPager
+package com.islam.basepropject.ui.examples
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,8 @@ import com.islam.basepropject.R
 import com.islam.basepropject.data.Repository
 import com.islam.basepropject.project_base.base.fragments.BaseSuperFragment
 import com.islam.basepropject.project_base.base.other.BaseViewModel
+import com.islam.basepropject.ui.examples.ExViewPager.FragmentTab1
+import com.islam.basepropject.ui.examples.ExViewPager.FragmentTab2
 import kotlinx.coroutines.launch
 
 class Fragment4 : BaseSuperFragment<Fragment4.ViewModel>() {
@@ -16,10 +17,10 @@ class Fragment4 : BaseSuperFragment<Fragment4.ViewModel>() {
     override fun onLaunch() {
         initContentView(R.layout.fragment4, true)
         initToolbar(R.string.title2, true)
-        initViewModel(this, Fragment4.ViewModel::class.java)
+        initViewModel(this, ViewModel::class.java)
     }
 
-    override fun onViewCreated(view: View, viewModel: Fragment4.ViewModel, instance: Bundle?) {
+    override fun onViewCreated(view: View, viewModel: ViewModel, instance: Bundle?) {
         createViewPagerWithTabLayout(
                 arrayOf(Pair(FragmentTab2::class.java, "fragment2"),
                         Pair(FragmentTab1::class.java, "fragment1"),

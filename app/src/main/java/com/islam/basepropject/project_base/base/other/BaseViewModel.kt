@@ -38,11 +38,9 @@ abstract class BaseViewModel : ViewModel() {
     val lastRegisterdFragmentStatus: ScreenStatus?
         get() = registeredFragments[lastRegisteredFragment]
 
-    init {
-        this.loadInitialData()
-        mLoadingViews.value = Pair("", mutableMapOf())
-    }
+    init { mLoadingViews.value = Pair("", mutableMapOf()) }
 
+    //becarfull when useing this fun if more than one fragment share the same viewmodel
     open fun loadInitialData() {}
 
     fun registerFragment(fragmentClassName: String) {
