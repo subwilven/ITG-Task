@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.islam.basepropject.R
 import com.islam.basepropject.project_base.POJO.ErrorModel
 import com.islam.basepropject.project_base.base.activities.BaseActivity
+import com.islam.basepropject.project_base.base.dialogs.BaseDialog
 import com.islam.basepropject.project_base.base.other.BaseViewModel
 import com.islam.basepropject.project_base.utils.*
 import com.islam.basepropject.project_base.views.OnViewStatusChange
@@ -209,6 +210,16 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         })
     }
 
+    //set fragment root view to be the dialog view so when searching for loading views we can find it
+    fun exchangeRootViewToDialogView(view: View) {
+        mViewRoot = view
+    }
+
+    //set fragment root view to be the dialog view so when searching for loading views we can find it
+    fun exchangeRootViewToFragmentView() {
+        mViewRoot = view
+    }
+
     private fun inflateLoadingFullScreenView() {
         //   baseActivity!!.runOnUiThread {
         val viewGroup = fullScreenViewGroup
@@ -285,6 +296,10 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
                                onFailed: (() -> Unit) = {},
                                onLocation: (location: Location) -> Unit) {
         LocationUtils.instance?.getUserLocationUpdates(this, priority, interval, fastestInterval, onFailed, onLocation)
+    }
+
+    fun showDialog(dialog: BaseDialog){
+        dialog.show(childFragmentManager)
     }
 
     fun toast(msg: String, lenght: Int = Toast.LENGTH_LONG) {

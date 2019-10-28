@@ -1,6 +1,7 @@
 package com.islam.basepropject.project_base.base.dialogs
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -33,11 +34,18 @@ abstract class BaseCustomDialog : BaseDialog() {
             dialog.title(toolbarTitle)
         mView =dialog.getCustomView()
 
+        //set fragment root view to be the dialog view so when searching for loading views we can find it
+        (parentFragment as BaseFragment<*>).exchangeRootViewToDialogView(mView!!)
+
         onDialogCreated(mView,savedInstanceState)
 
         return dialog
     }
 
-
+    //set fragment root view to be the dialog view so when searching for loading views we can find it
+    override fun onDismiss(dialog: DialogInterface) {
+        (parentFragment as BaseFragment<*>).exchangeRootViewToFragmentView()
+        super.onDismiss(dialog)
+    }
 
 }

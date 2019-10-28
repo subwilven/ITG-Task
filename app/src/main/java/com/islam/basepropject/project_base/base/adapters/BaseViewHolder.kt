@@ -1,5 +1,6 @@
 package com.islam.basepropject.project_base.base.adapters
 
+import android.os.Build
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,8 @@ abstract class BaseViewHolder<T>(viewGroup: ViewGroup, layoutId: Int) :
 
     private fun View.addRippleEffect() = with(TypedValue()) {
         context.theme.resolveAttribute(android.R.attr.selectableItemBackground, this, true)
-        setBackgroundResource(resourceId)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            foreground = context.getDrawable(resourceId)
+        }
     }
 }

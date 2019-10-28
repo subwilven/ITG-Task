@@ -31,7 +31,7 @@ class Fragment5 : BaseFragment<Fragment5.ViewModel>() {
 //
 //            }
 
-        PasswordDialog().show(childFragmentManager)
+        showDialog(PasswordDialog())
     }
 
 
