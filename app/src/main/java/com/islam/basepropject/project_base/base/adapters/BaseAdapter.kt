@@ -31,8 +31,12 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun disconnectListener() {
-        adapterDataObservation?.clear()
         unregisterAdapterDataObserver(adapterDataObservation!!)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun clearAdapterDataObservation(){
+        adapterDataObservation?.clear()
     }
 
     abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH

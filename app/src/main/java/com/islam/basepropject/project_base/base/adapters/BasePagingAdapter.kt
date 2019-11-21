@@ -35,8 +35,12 @@ abstract class BasePagingAdapter<T, VH : BaseViewHolder<T>> protected constructo
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun disconnectListener() {
-        adapterDataObservation?.clear()
         unregisterAdapterDataObserver(adapterDataObservation!!)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun clearAdapterDataObservation(){
+        adapterDataObservation?.clear()
     }
 
 
