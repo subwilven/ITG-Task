@@ -63,7 +63,7 @@ object NetworkModel {
             retrofit = Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(getGson()))
            //         .baseUrl("http://164.68.105.174:8069/api/")
-                    .baseUrl("https://newsapi.org/v2/")
+                    .baseUrl("https://gateway.marvel.com/v1/public/")
                     .client(getOkhttpClient())
                     .build()
 

@@ -21,7 +21,6 @@ import com.islam.task.project_base.common.boradcast.AlerterReceiver
 import com.islam.task.project_base.common.boradcast.ConnectivityReceiver
 import com.islam.task.project_base.utils.FragmentManagerUtil
 import com.islam.task.project_base.utils.LocalManager
-import com.islam.task.project_base.utils.LocationUtils
 import com.islam.task.project_base.utils.NetworkManager
 import com.tapadoo.alerter.Alerter
 import kotlinx.coroutines.Dispatchers
@@ -138,18 +137,6 @@ abstract class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connecti
         supportActionBar?.setDisplayShowHomeEnabled(enableBackButton)
     }
 
-    //to receive result of locaion fused dialog
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        if (requestCode == LocationUtils.REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> LocationUtils.instance?.checkPermissionAndStartTrack()
-                else -> LocationUtils.instance?.onFailed?.invoke()
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
 
     fun navigate(cls: Class<*>, bundle: Bundle? = null, clearBackStack: Boolean = false) {
         val intent = Intent(this, cls)

@@ -1,7 +1,6 @@
 package com.islam.task.project_base.base.fragments
 
 import android.content.Context
-import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -18,14 +17,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.islam.task.R
 import com.islam.task.project_base.POJO.ErrorModel
 import com.islam.task.project_base.base.activities.BaseActivity
-import com.islam.task.project_base.base.dialogs.BaseDialog
 import com.islam.task.project_base.base.other.BaseViewModel
-import com.islam.task.project_base.utils.*
+import com.islam.task.project_base.utils.ActivityManager
 import com.islam.task.project_base.views.OnViewStatusChange
-import java.io.File
 
 
-abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
+abstract class BaseFragment<V : BaseViewModel> : Fragment() {
 
 
     lateinit var mViewModel: V
@@ -55,11 +52,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
 
     val isNetworkConnected: Boolean
         get() = baseActivity != null && baseActivity!!.isNetworkConnected
-
-    override val _fragmentManager: FragmentManager?
-        get() = childFragmentManager
-    override val _context: Context
-        get() = context!!
 
     protected abstract fun onLaunch()
 
@@ -164,16 +156,9 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
     private fun observeDefaults() {
         if (mViewModel == null) return
 
-        mViewModel.mDialogMessage.observes(viewLifecycleOwner, Observer {
-            showDialog(R.string.important,it)
-        })
-
         //TODO need to be implemented
         mViewModel.mSnackBarMessage.observes(viewLifecycleOwner, Observer {})
 
-        mViewModel.mDialogMessage.observes(viewLifecycleOwner, Observer {
-            showDialog(R.string.title1, it)
-        })
 
         mViewModel.mToastMessage.observes(viewLifecycleOwner, Observer { ActivityManager.showToastLong(context, it) })
 
@@ -280,28 +265,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
         baseActivity?.enableBackButton(enableBackButton)
     }
 
-    fun pickImage(onImagePicked: (imageFile: File?) -> Unit) {
-        ImagePicker.pickImage(this, onImagePicked)
-    }
-
-    fun getUserLocationSingle(priority: Int = LocationUtils.DEFAULT_PRIORITY,
-                              onFailed: (() -> Unit) = {},
-                              onLocation: (location: Location) -> Unit) {
-        LocationUtils.instance?.getUserLocationSingle(this, priority, onFailed, onLocation)
-    }
-
-    fun getUserLocationUpdates(priority: Int = LocationUtils.DEFAULT_PRIORITY,
-                               interval: Long = LocationUtils.DEFAULT_INTERVAL,
-                               fastestInterval: Long = LocationUtils.DEFAULT_FASTEST_INTERVAL,
-                               onFailed: (() -> Unit) = {},
-                               onLocation: (location: Location) -> Unit) {
-        LocationUtils.instance?.getUserLocationUpdates(this, priority, interval, fastestInterval, onFailed, onLocation)
-    }
-
-    fun showDialog(dialog: BaseDialog){
-        dialog.show(childFragmentManager)
-    }
-
     fun toast(msg: String, lenght: Int = Toast.LENGTH_LONG) {
         ActivityManager.showToast(msg, lenght)
     }
@@ -316,12 +279,6 @@ abstract class BaseFragment<V : BaseViewModel> : Fragment(), DialogManager {
                  isChildToThisFragment: Boolean = false) {
         val fragmentManager = if (isChildToThisFragment) childFragmentManager else activity?.supportFragmentManager
         baseActivity?.navigate(fragmentManager!!, fragment, bundle, container, addToBackStack)
-    }
-
-    fun requestPermission(vararg permissions: String,
-                          onDenied: (() -> Unit)? = null,
-                          onGranted: (() -> Unit)? = null) {
-        PermissionsManager.requestPermission(this, *permissions, onGranted = onGranted, onDenied = onDenied)
     }
 
 }

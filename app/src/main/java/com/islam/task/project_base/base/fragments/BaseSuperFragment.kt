@@ -7,7 +7,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.islam.task.R
 import com.islam.task.project_base.base.adapters.BaseAdapter
-import com.islam.task.project_base.base.adapters.BaseListAdapter
 import com.islam.task.project_base.base.adapters.BasePagingAdapter
 import com.islam.task.project_base.base.adapters.ViewPagerAdapter
 import com.islam.task.project_base.base.other.BaseViewModel
@@ -44,7 +43,6 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
         when (baseAdapter) {
             is BaseAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(this,recyclerView)
             is BasePagingAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(this,recyclerView)
-            is BaseListAdapter<*,*> -> baseAdapter.registerAdapterDataObservertion(this,recyclerView)
         }
     }
 
@@ -82,9 +80,10 @@ abstract class BaseSuperFragment<V : BaseViewModel> : BaseFragment<V>() {
 
 
     fun createViewPager(adapter: RecyclerView.Adapter<*>,
-                        viewPagerId: Int = R.id.viewPager) {
+                        viewPagerId: Int = R.id.viewPager):ViewPager2 {
         initViewPager(viewPagerId)
         setViewPagerAdapter(adapter)
+        return viewPager!!
     }
 
     fun createViewPagerWithIndicator(adapter: RecyclerView.Adapter<*>,

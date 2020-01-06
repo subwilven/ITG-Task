@@ -4,9 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.UpdateAvailability
 
 object AppManager {
 
@@ -21,19 +18,4 @@ object AppManager {
         }
 
     }
-
-    fun checkForAppUpdates(context: Activity, onUpdateResult: (b: Boolean) -> Unit) {
-
-        // Creates instance of the manager.
-        val appUpdateManager = AppUpdateManagerFactory.create(context)
-
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            onUpdateResult(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE)
-            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, context, 102)}
-        appUpdateInfoTask.addOnFailureListener { onUpdateResult(false)}
-    }
-
-
 }

@@ -1,3 +1,6 @@
 package com.islam.task.project_base.POJO
 
-data class ApiResponse<T> (val status:String,val sources: T)
+import com.islam.task.pojo.Marvel
+
+data class ApiResponse<T> (val status:String,val data: MarvelResponse<T>)
+data class MarvelResponse<T>(val results:T)

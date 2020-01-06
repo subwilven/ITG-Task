@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:686281068747:android:66d6e5e80f68677f",
         "android_client_info": {
-          "package_name": "com.islam.basepropject"
+          "package_name": "com.islam.task"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "686281068747-lv8rk5nv3iccum0uahndojvgkjm2qr74.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.islam.basepropject",
+            "package_name": "com.islam.task",
             "certificate_hash": "74de39c8f141a051ebb243b83446316c7b19461d"
           }
         },

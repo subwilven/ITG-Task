@@ -17,7 +17,7 @@
         android:text="TextView" />
 
 
-    <com.islam.basepropject.project_base.views.MyButton
+    <com.islam.task.project_base.views.MyButton
         android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:text="add to cart"

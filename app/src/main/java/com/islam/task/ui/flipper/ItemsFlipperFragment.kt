@@ -1,16 +1,22 @@
-package com.islam.task.ui.marvel_Details
+package com.islam.task.ui.flipper
 
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.islam.task.R
 import com.islam.task.pojo.Item
 import com.islam.task.project_base.base.fragments.BaseSuperFragment
+import com.islam.task.ui.marvel_Details.MarvelDetailViewModel
 import kotlinx.android.synthetic.main.fragment_flipper.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 import java.lang.Math.abs
 
 class ItemsFlipperFragment : BaseSuperFragment<MarvelDetailViewModel>() {
@@ -18,10 +24,11 @@ class ItemsFlipperFragment : BaseSuperFragment<MarvelDetailViewModel>() {
     lateinit var mAdapter: ItemsFlipperAdapter
 
     companion object {
-        fun newInstance(items: ArrayList<Item>): ItemsFlipperFragment {
+        fun newInstance(items: ArrayList<Item>, selectedItemIndex: Int): ItemsFlipperFragment {
             val fragment = ItemsFlipperFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList("items", items)
+            bundle.putInt("selectedItemIndex", selectedItemIndex)
             fragment.arguments = bundle
             return fragment
         }
@@ -57,15 +64,25 @@ class ItemsFlipperFragment : BaseSuperFragment<MarvelDetailViewModel>() {
         val items = arguments?.getParcelableArrayList<Item>("items")
         mAdapter.setData((items as List<Item>).toMutableList())
 
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                delay(100)
+            }
+            viewPager.currentItem = arguments?.getInt("selectedItemIndex", 0)!!
+
+        }
+
+
         iv_close.setOnClickListener { activity?.onBackPressed() }
     }
 
     override fun setUpObservers() {
     }
+
     class HorizontalMarginItemDecoration(context: Context) :
             RecyclerView.ItemDecoration() {
 
-        private val horizontalMarginInPx: Int =24
+        private val horizontalMarginInPx: Int = 24
 
         override fun getItemOffsets(
                 outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State

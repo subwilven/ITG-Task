@@ -3,14 +3,15 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="tabStyle">@style/AppTabLayout</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:fontFamily">@font/font_family</item>
-        <item name="navigationViewStyle">@style/AppNavigationDrawer</item> //to set custom font for the drawer navigation
+        <item name="navigationViewStyle">@style/AppNavigationDrawer</item>
+        //to set custom font for the drawer navigation
         <item name="md_corner_radius">16dp</item>
         <item name="md_font_title">@font/font_family</item>
         <item name="md_font_body">@font/font_family</item>
@@ -39,6 +40,12 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
 
 </resources>

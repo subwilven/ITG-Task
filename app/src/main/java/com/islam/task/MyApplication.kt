@@ -14,7 +14,6 @@ import com.islam.task.project_base.POJO.Message
 import com.islam.task.project_base.common.boradcast.AlerterReceiver
 import com.islam.task.project_base.common.boradcast.ConnectivityReceiver
 import com.islam.task.project_base.utils.LocalManager
-import com.islam.task.project_base.utils.NotificationManager
 
 class MyApplication : Application() {
 
@@ -51,7 +50,6 @@ class MyApplication : Application() {
 
         initConnectivityBroadcast()
         initAlerterBroadcast()
-        NotificationManager.initNotificationChannels(this)
 
     }
 

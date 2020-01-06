@@ -46,7 +46,7 @@
             android:hint="Password" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.islam.basepropject.project_base.views.MyButton
+    <com.islam.task.project_base.views.MyButton
         android:id="@+id/btn_sign_up"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
